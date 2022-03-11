@@ -1,8 +1,7 @@
 import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Image, TextInput, StyleSheet, Text } from "react-native-web";
-import colors from "../config/colors";
+import { View, TextInput, StyleSheet, Text } from "react-native-web";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -16,7 +15,7 @@ const Register = ({ navigation }) => {
         <View>
           <TextInput
             style={styles.TextInput}
-            placeholder="Email."
+            placeholder="Email"
             placeholderTextColor="#003f5c"
             onChangeText={(email) => setEmail(email)}
           />
@@ -24,7 +23,7 @@ const Register = ({ navigation }) => {
         <View>
           <TextInput
             style={styles.TextInput}
-            placeholder="Password."
+            placeholder="Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
@@ -33,7 +32,7 @@ const Register = ({ navigation }) => {
         <View>
           <TextInput
             style={styles.TextInput}
-            placeholder="Repeat Password."
+            placeholder="Repeat Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
             onChangeText={(password2) => setPassword2(password2)}
@@ -49,13 +48,49 @@ const Register = ({ navigation }) => {
         </View>
         <Pressable
           style={styles.LoginButton}
-          onPress={() => navigation.navigate("Homepage")}
+          onPress={RegisterNow}
+          onPress={() => navigation.navigate("Login")}
         >
           <Text style={styles.ButtonText}>Register</Text>
         </Pressable>
       </View>
     </SafeAreaView>
   );
+};
+
+const RegisterNow = () => {
+  fetch("http://localhost:8010/users/register", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: {
+        uid: "ramirak111@gmail.com",
+        password: {
+          password: "123rrAvvads123@",
+          hint: "nohintstoday",
+        },
+      },
+      role: "PLAYER",
+    }),
+  })
+    .then((response) => response.json())
+    .then((responseData) => {
+      console.log("RESULTS HERE:", responseData);
+
+      this.setState(
+        {
+          isLoading: false,
+          dataSource: responseJson,
+        },
+        function () {}
+      );
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 const styles = StyleSheet.create({

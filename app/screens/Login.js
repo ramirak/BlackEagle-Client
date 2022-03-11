@@ -1,8 +1,7 @@
 import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Image, TextInput, StyleSheet, Text } from "react-native-web";
-import colors from "../config/colors";
+import { View, TextInput, StyleSheet, Text } from "react-native-web";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -14,16 +13,15 @@ const Login = ({ navigation }) => {
         <View>
           <TextInput
             style={styles.TextInput}
-            placeholder="Email."
+            placeholder="Email"
             placeholderTextColor="#003f5c"
             onChangeText={(email) => setEmail(email)}
           />
         </View>
-
         <View>
           <TextInput
             style={styles.TextInput}
-            placeholder="Password."
+            placeholder="Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
@@ -31,6 +29,7 @@ const Login = ({ navigation }) => {
         </View>
         <Pressable
           style={styles.LoginButton}
+          //onPress={LoginNow}
           onPress={() => navigation.navigate("Interface")}
         >
           <Text style={styles.ButtonText}>Login</Text>
@@ -39,6 +38,36 @@ const Login = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
+const LoginNow = () => {
+  fetch("https://localhost:8010/login", {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        uid: "ramirak111@gmail.com",
+        password: "123rrAvvads123@",
+        }),
+  })
+    .then((response) => response.json())
+    .then((responseData) => {
+      console.log("RESULTS HERE:", responseData);
+
+      this.setState(
+        {
+          isLoading: false,
+          dataSource: responseJson,
+        },
+        function () {}
+      );
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -59,7 +88,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: "center",
   },
-
   TextInput: {
     height: 50,
     flex: 1,
