@@ -112,12 +112,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: "center",
   },
-
   TextInput: {
     height: 50,
     flex: 1,
     padding: 10,
-    marginLeft: 20,
   },
   LoginButton: {
     alignItems: "center",

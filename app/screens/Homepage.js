@@ -37,6 +37,13 @@ const Homepage = ({ navigation }) => {
             onPress={() => navigation.navigate("Register", { name: "rami" })}
           />
         </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            color="#000"
+            title="Test"
+            onPress={() => navigation.navigate("Reports", { name: "rami" })}
+          />
+        </View>
       </View>
       <Text>© All Rights Reserved - Rami Rak & Liron Eli Shabtai </Text>
     </SafeAreaView>

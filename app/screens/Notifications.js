@@ -5,23 +5,23 @@ import { View, StyleSheet, FlatList } from "react-native-web";
 import colors from "../config/colors";
 import SideMenu from "../components/SideMenu";
 
-const Reports = ({ navigation }) => {
-  const [report, setReport] = useState([
-    { name: "Report number 1", id: "1" },
-    { name: "Report number 2", id: "2" },
-    { name: "Report number 3", id: "3" },
-    { name: "Report number 4", id: "4" },
-    { name: "Report number 5", id: "5" },
+const Notifications = ({ navigation }) => {
+  const [Notification, setReport] = useState([
+    { name: "Notification number 1", id: "1" },
+    { name: "Notification number 2", id: "2" },
+    { name: "Notification number 3", id: "3" },
+    { name: "Notification number 4", id: "4" },
+    { name: "Notification number 5", id: "5" },
   ]);
 
   return (
     <SafeAreaView style={styles.pageContainer}>
       <SideMenu navigation={navigation} />
-      <View style={styles.Reports}>
+      <View style={styles.Notifications}>
         <View style={styles.ListView}>
           <FlatList
             keyExtractor={(item) => item.id}
-            data={report}
+            data={Notification}
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => navigation.navigate("Homepage")}
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     padding: 30,
   },
-  Reports: {
+  Notifications: {
     flex: 1,
     flexDirection: "col",
     backgroundColor: colors.secondary,
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Reports;
+export default Notifications;

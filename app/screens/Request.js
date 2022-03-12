@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
   RequestMenu: {
     flex: 1,
     flexDirection: "col",
+    backgroundColor: colors.secondary,
+    marginLeft: 20,
+    borderRadius: 10
   },
   ButtonList: {
     fontSize: 15,

@@ -3,37 +3,30 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
 
-const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+const SecondLogin = ({ navigation, email }) => {
   const [password, setPassword] = useState("");
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <Text style={styles.HeaderText}>Black Eagle</Text>
-      <View style={styles.loginContainer}>
-        <View>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Email"
-            placeholderTextColor="#003f5c"
-            onChangeText={(email) => setEmail(email)}
-          />
+      <View style={styles.loginView}>
+        <Text style={styles.HeaderText}>We have sent you one time key via email</Text>
+        <View style={styles.loginContainer}>
+          <View>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="One Time Key"
+              placeholderTextColor="#003f5c"
+              secureTextEntry={true}
+              onChangeText={(password) => setPassword(password)}
+            />
+          </View>
+          <Pressable
+            style={styles.LoginButton}
+            //onPress={LoginNow}
+            onPress={() => navigation.navigate("Interface")}
+          >
+            <Text style={styles.ButtonText}>Login</Text>
+          </Pressable>
         </View>
-        <View>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Password"
-            placeholderTextColor="#003f5c"
-            secureTextEntry={true}
-            onChangeText={(password) => setPassword(password)}
-          />
-        </View>
-        <Pressable
-          style={styles.LoginButton}
-          //onPress={LoginNow}
-          onPress={() => navigation.navigate("Interface")}
-        >
-          <Text style={styles.ButtonText}>Login</Text>
-        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -43,13 +36,13 @@ const LoginNow = () => {
   fetch("https://localhost:8010/login", {
     method: "POST",
     headers: {
-      "Accept": "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-        uid: "ramirak111@gmail.com",
-        password: "123rrAvvads123@",
-        }),
+      uid: "ramirak111@gmail.com",
+      password: "123rrAvvads123@",
+    }),
   })
     .then((response) => response.json())
     .then((responseData) => {
@@ -68,17 +61,21 @@ const LoginNow = () => {
     });
 };
 
-
 const styles = StyleSheet.create({
   pageContainer: {
     alignItems: "center",
     justifyContent: "space-evenly",
   },
+  loginView:{
+    flex: 1,
+    flexDirection:"col",
+    marginTop:10,
+  },
   loginContainer: {
     flex: 1,
-    width: "25%",
     backgroundColor: "#fff",
     justifyContent: "center",
+    marginTop: 10,
   },
   inputView: {
     backgroundColor: "#FFC0CB",
@@ -116,4 +113,4 @@ const styles = StyleSheet.create({
     color: "black",
   },
 });
-export default Login;
+export default SecondLogin;

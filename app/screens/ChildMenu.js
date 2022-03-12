@@ -95,6 +95,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "col",
     alignItems: "center",
+    backgroundColor: colors.secondary,
+    marginLeft: 20,
+    borderRadius: 10,
   },
   MenuRow: {
     flex: 1,
@@ -108,7 +111,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
-    elevation: 3,
     margin: 5,
     backgroundColor: colors.primary,
   },
