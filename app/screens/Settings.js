@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "col",
     alignItems: "center",
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.borderRightColor,
     marginLeft: 20,
     borderRadius: 10,
   },
@@ -99,14 +99,14 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "white",
+    color: colors.secondary,
     textAlign: "center" 
   },
   HeaderText: {
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: 0.5,
-    color: "black",
+    color: colors.primary,
   },
 });
 

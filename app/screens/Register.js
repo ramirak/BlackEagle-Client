@@ -2,6 +2,7 @@ import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
+import colors from "../config/colors";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
     width: "25%",
-    backgroundColor: "#fff",
+    backgroundColor: colors.secondary,
     justifyContent: "center",
   },
   inputView: {
@@ -124,20 +125,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "black",
+    backgroundColor: colors.primary,
   },
   ButtonText: {
     fontSize: 12,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: colors.secondary,
   },
   HeaderText: {
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: 0.5,
-    color: "black",
+    color: colors.primary,
   },
 });
 export default Register;

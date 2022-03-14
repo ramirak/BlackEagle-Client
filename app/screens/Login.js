@@ -2,10 +2,13 @@ import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
+import colors from "../config/colors";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [requestFailed, setRequestFailed] = useState("");
+
   return (
     <SafeAreaView style={styles.pageContainer}>
       <Text style={styles.HeaderText}>Black Eagle</Text>
@@ -29,8 +32,7 @@ const Login = ({ navigation }) => {
         </View>
         <Pressable
           style={styles.LoginButton}
-          //onPress={LoginNow}
-          onPress={() => navigation.navigate("Interface")}
+          onPress={() => [LoginNow(email, password, requestFailed), navigate2fa(requestFailed, navigation)]}
         >
           <Text style={styles.ButtonText}>Login</Text>
         </Pressable>
@@ -39,35 +41,34 @@ const Login = ({ navigation }) => {
   );
 };
 
-const LoginNow = () => {
+const LoginNow = (email, password, requestFailed) => {
   fetch("https://localhost:8010/login", {
     method: "POST",
+    credentials: "include",
     headers: {
-      "Accept": "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-        uid: "ramirak111@gmail.com",
-        password: "123rrAvvads123@",
-        }),
+      uid: email,
+      password: password,
+    }),
   })
-    .then((response) => response.json())
-    .then((responseData) => {
-      console.log("RESULTS HERE:", responseData);
-
-      this.setState(
-        {
-          isLoading: false,
-          dataSource: responseJson,
-        },
-        function () {}
-      );
+    .then((response) => {
+      if (!response.ok) throw new Error(response.status);
+      else return response.json();
     })
     .catch((error) => {
-      console.error(error);
+      console.log("error: " + error);
+      requestFailed = true;
     });
 };
 
+function navigate2fa(requestFailed, navigation) {
+  if (requestFailed == false) {
+    navigation.navigate("Second Login");
+  }
+}
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -77,11 +78,10 @@ const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
     width: "25%",
-    backgroundColor: "#fff",
+    backgroundColor: colors.secondary,
     justifyContent: "center",
   },
   inputView: {
-    backgroundColor: "#FFC0CB",
     borderRadius: 30,
     width: "70%",
     height: 45,
@@ -100,20 +100,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "black",
+    backgroundColor: colors.primary,
   },
   ButtonText: {
     fontSize: 12,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: colors.secondary,
   },
   HeaderText: {
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: 0.5,
-    color: "black",
+    color: colors.primary,
   },
 });
 export default Login;

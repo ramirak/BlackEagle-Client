@@ -1,7 +1,7 @@
-import { React, useState } from "react";
+import { React } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Image, TextInput, StyleSheet, Text } from "react-native-web";
+import { View, StyleSheet } from "react-native-web";
 import colors from "../config/colors";
 
 const SideMenu = ({ navigation }) => {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   ParentMenu: {
     flex: 1,
     flexDirection: "col",
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.sideMenuBorder,
     alignItems: "center",
     justifyContent: "space-around",
     borderRadius: 10,
@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 6,
-    borderColor: colors.borderColor,
-    backgroundColor: colors.backgroundButton,
+    borderColor: colors.sideMenuBorder,
+    backgroundColor: colors.primary,
     fontSize: 15,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "white",
+    color: colors.secondary,
   },
 });
 export default SideMenu;

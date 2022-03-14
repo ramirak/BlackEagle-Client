@@ -34,22 +34,22 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 6,
-    borderColor: colors.borderColor,
+    borderColor: colors.primary,
     elevation: 3,
-    backgroundColor: colors.backgroundButton,
+    backgroundColor: colors.secondary,
   },
   ButtonText: {
     fontSize: 15,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "black",
+    color: colors.primary,
   },
   HeaderText: {
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: 0.5,
-    color: "black",
+    color: colors.primary,
   },
 });
 

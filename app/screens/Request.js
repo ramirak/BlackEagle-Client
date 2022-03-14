@@ -47,14 +47,14 @@ const styles = StyleSheet.create({
   ParentMenu: {
     flex: 1,
     flexDirection: "col",
-    backgroundColor: "grey",
+    backgroundColor: colors.sideMenuBorder,
     alignItems: "center",
     justifyContent: "center",
   },
   RequestMenu: {
     flex: 1,
     flexDirection: "col",
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.borderRightColor,
     marginLeft: 20,
     borderRadius: 10
   },
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "white",
+    color: colors.secondary,
     textAlign: "left",
     borderRadius: 6,
     borderWidth: 1,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     margin: 5,
     paddingLeft: 10,
     justifyContent: "center",
-    backgroundColor: "black",
+    backgroundColor: colors.primary,
   },
   AddRequestButton: {
     height: 50,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "white",
+    color: colors.secondary,
     margin: 5,
     paddingLeft: 10,
   },

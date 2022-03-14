@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   Notifications: {
     flex: 1,
     flexDirection: "col",
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.borderRightColor,
     marginLeft: 20,
     borderRadius: 10,
   },
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "white",
+    color: colors.secondary,
     textAlign: "left",
     borderRadius: 6,
     borderWidth: 1,
@@ -78,21 +78,21 @@ const styles = StyleSheet.create({
     margin: 5,
     paddingLeft: 10,
     justifyContent: "center",
-    backgroundColor: "black",
+    backgroundColor: colors.primary,
   },
   ButtonText: {
     fontSize: 15,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "white",
+    color: colors.secondary,
     textAlign: "center",
   },
   HeaderText: {
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: 0.5,
-    color: "black",
+    color: colors.primary,
   },
 });
 

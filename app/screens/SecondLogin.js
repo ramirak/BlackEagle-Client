@@ -2,6 +2,8 @@ import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
+import colors from "../config/colors";
+
 
 const SecondLogin = ({ navigation, email }) => {
   const [password, setPassword] = useState("");
@@ -73,12 +75,12 @@ const styles = StyleSheet.create({
   },
   loginContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.secondary,
     justifyContent: "center",
     marginTop: 10,
   },
   inputView: {
-    backgroundColor: "#FFC0CB",
+    //backgroundColor: "#FFC0CB",
     borderRadius: 30,
     width: "70%",
     height: 45,
@@ -97,20 +99,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "black",
+    backgroundColor: colors.primary,
   },
   ButtonText: {
     fontSize: 12,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: colors.secondary,
   },
   HeaderText: {
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: 0.5,
-    color: "black",
+    color: colors.primary,
   },
 });
 export default SecondLogin;

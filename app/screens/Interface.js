@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
@@ -6,13 +6,23 @@ import colors from "../config/colors";
 import SideMenu from "../components/SideMenu";
 
 const Interface = ({ navigation }) => {
-  const [enteredChild, setChild] = useState([
-    { name: "Liron", id: "1" },
-    { name: "Rami", id: "2" },
-    { name: "Yarden", id: "3" },
-    { name: "Avi", id: "4" },
-    { name: "Michal", id: "5" },
+  const [data, setData] = useState([
+    { name: "Report number 1", id: "1" },
   ]);
+
+  useEffect(() => {
+    fetch("https://localhost:8010/device/getAll", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setData(responseJson); // your JSON response is here
+      });
+  }, []);
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -30,14 +40,16 @@ const Interface = ({ navigation }) => {
         </View>
         <View style={styles.ListView}>
           <FlatList
-            keyExtractor={(item) => item.id}
-            data={enteredChild}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+            data={data}
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => navigation.navigate("Child Menu")}
                 style={styles.ButtonList}
               >
-                {item.name}
+                <Text style={styles.ButtonList}>{item.name}</Text>
               </Pressable>
             )}
           />
@@ -57,7 +69,7 @@ const styles = StyleSheet.create({
   ChildrenMenu: {
     flex: 1,
     flexDirection: "col",
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.borderRightColor,
     marginLeft: 20,
     borderRadius: 10,
   },
@@ -73,7 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "white",
+    color: colors.secondary,
     textAlign: "left",
     borderRadius: 20,
     borderWidth: 1,
@@ -81,14 +93,14 @@ const styles = StyleSheet.create({
     margin: 5,
     paddingLeft: 10,
     justifyContent: "center",
-    backgroundColor: "black",
+    backgroundColor: colors.primary,
   },
   ButtonText: {
     fontSize: 15,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: "white",
+    color: colors.secondary,
   },
   AddChildButton: {
     height: 50,
@@ -96,11 +108,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 6,
-    borderColor: colors.borderColor,
-    backgroundColor: colors.backgroundButton,
+    borderColor: colors.primary,
+    backgroundColor: colors.primary,
   },
   TextInputStyle: {
-    borderColor: "black",
+    borderColor: colors.primary,
     borderWidth: 2,
     borderRadius: 3,
     height: 50,
