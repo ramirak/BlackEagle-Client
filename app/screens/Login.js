@@ -32,7 +32,7 @@ const Login = ({ navigation }) => {
         </View>
         <Pressable
           style={styles.LoginButton}
-          onPress={() => [LoginNow(email, password, requestFailed), navigate2fa(requestFailed, navigation)]}
+          onPress={() => [LoginNow(email, password, requestFailed)]}
         >
           <Text style={styles.ButtonText}>Login</Text>
         </Pressable>
@@ -40,7 +40,7 @@ const Login = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
+// navigate2fa(requestFailed, navigation)
 const LoginNow = (email, password, requestFailed) => {
   fetch("https://localhost:8010/login", {
     method: "POST",

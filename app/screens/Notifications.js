@@ -1,9 +1,10 @@
 import { React, useState } from "react";
-import { Pressable } from "react-native";
+import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, FlatList } from "react-native-web";
 import colors from "../config/colors";
 import SideMenu from "../components/SideMenu";
+import global from "../config/global";
 
 const Notifications = ({ navigation }) => {
   const [Notification, setReport] = useState([
@@ -15,22 +16,25 @@ const Notifications = ({ navigation }) => {
   ]);
 
   return (
-    <SafeAreaView style={styles.pageContainer}>
+    <SafeAreaView style={global.pageContainer}>
       <SideMenu navigation={navigation} />
-      <View style={styles.Notifications}>
-        <View style={styles.ListView}>
-          <FlatList
-            keyExtractor={(item) => item.id}
-            data={Notification}
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() => navigation.navigate("Homepage")}
-                style={styles.ButtonList}
-              >
-                {item.name}
-              </Pressable>
-            )}
-          />
+      <View style={global.rightContainer}>
+        <View style={global.headerMenu}>
+          <Text style={global.headerText}>My Notifications</Text>
+        </View>
+        <View style={global.rightMenu}>
+          <View style={global.ListView}>
+            <FlatList
+              keyExtractor={(item) => item.id}
+              data={Notification}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => navigation.navigate("Homepage")}
+                  style={global.ButtonList}
+                ><Text style={global.ButtonText}>{item.name}</Text></Pressable>
+              )}
+            />
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -38,22 +42,6 @@ const Notifications = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    padding: 30,
-  },
-  Notifications: {
-    flex: 1,
-    flexDirection: "col",
-    backgroundColor: colors.borderRightColor,
-    marginLeft: 20,
-    borderRadius: 10,
-  },
-  ListView: {
-    flex: 1,
-  },
   Button: {
     height: 100,
     width: 150,
@@ -64,20 +52,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     margin: 5,
-    backgroundColor: colors.primary,
-  },
-  ButtonList: {
-    fontSize: 15,
-    fontWeight: "bold",
-    letterSpacing: 0.5,
-    color: colors.secondary,
-    textAlign: "left",
-    borderRadius: 6,
-    borderWidth: 1,
-    height: 50,
-    margin: 5,
-    paddingLeft: 10,
-    justifyContent: "center",
     backgroundColor: colors.primary,
   },
   ButtonText: {

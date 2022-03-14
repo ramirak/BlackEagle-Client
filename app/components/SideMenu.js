@@ -1,48 +1,45 @@
 import { React } from "react";
-import { Pressable } from "react-native";
+import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet } from "react-native-web";
 import colors from "../config/colors";
-
+import global from "../config/global";
 const SideMenu = ({ navigation }) => {
   return (
     <SafeAreaView>
-      <View style={styles.ParentMenu}>
+      <View style={global.leftMenu}>
         <View>
           <Pressable
             style={styles.MenuButton}
             onPress={() => navigation.navigate("Interface")}
-          >
-            Interface
-          </Pressable>
-
+          ><Text style={global.ButtonText}>Homepage</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Settings")}
-          >
-            Settings
-          </Pressable>
-
-          <Pressable
-            style={styles.MenuButton}
-            onPress={() => navigation.navigate("Reports")}
-          >
-            Reports
-          </Pressable>
-
+            onPress={() => navigation.navigate("Interface")}
+          ><Text style={global.ButtonText}>Devices</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
             onPress={() => navigation.navigate("Notifications")}
-          >
-            Notifications
-          </Pressable>
+          ><Text style={global.ButtonText}>Notifications</Text></Pressable>
+          <Pressable
+            style={styles.MenuButton}
+            onPress={() => navigation.navigate("Reports")}
+            ><Text style={global.ButtonText}>Reports</Text></Pressable>
+          <Pressable
+            style={styles.MenuButton}
+            onPress={() => navigation.navigate("Settings")}
+          ><Text style={global.ButtonText}>Settings</Text></Pressable>
+          <Pressable
+            style={styles.MenuButton}
+            onPress={() => navigation.navigate("Settings")}
+          ><Text style={global.ButtonText}>About</Text></Pressable>
         </View>
         <View>
           <Pressable
             style={styles.MenuButton}
             onPress={() => navigation.navigate("Homepage")}
-          >
-            Logout
+          ><Text style={global.ButtonText}>Logout</Text>
+
           </Pressable>
         </View>
       </View>
@@ -51,17 +48,9 @@ const SideMenu = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  ParentMenu: {
-    flex: 1,
-    flexDirection: "col",
-    backgroundColor: colors.sideMenuBorder,
-    alignItems: "center",
-    justifyContent: "space-around",
-    borderRadius: 10,
-  },
   MenuButton: {
     height: 50,
-    width: 300,
+    width: 350,
     margin: 5,
     alignItems: "center",
     justifyContent: "center",
@@ -72,7 +61,7 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.5,
-    color: colors.secondary,
+    color: colors.fontColor,
   },
 });
 export default SideMenu;

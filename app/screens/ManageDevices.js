@@ -3,11 +3,11 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Text } from "react-native-web";
 import colors from "../config/colors";
-
+import global from "../config/global";
 const ManageDevices = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.pageContainer}>
-      <View style={styles.Test}>
+    <SafeAreaView style={global.pageContainer}>
+      <View>
         <Pressable
           style={styles.Button}
           onPress={() => navigation.navigate("Homepage")}
@@ -20,11 +20,6 @@ const ManageDevices = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    alignItems: "left",
-    justifyContent: "space-evenly",
-  },
-  Test: { flex: 1, flexDirection: "col", left: 700},
   Button: {
     height: 100,
     width: 150,

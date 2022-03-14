@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Homepage from "./app/screens/Homepage";
 import Login from "./app/screens/Login";
@@ -12,12 +12,20 @@ import Settings from "./app/screens/Settings";
 import ChildMenu from "./app/screens/ChildMenu";
 import Request from "./app/screens/Request";
 import Notifications from "./app/screens/Notifications";
-
+import colors from "./app/config/colors";
 const Stack = createNativeStackNavigator();
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'transparent'
+  },
+};
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <Stack.Navigator>
         <Stack.Screen name="Homepage" component={Homepage} />
         <Stack.Screen name="Login" component={Login} />

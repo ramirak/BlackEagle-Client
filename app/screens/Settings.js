@@ -4,59 +4,64 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Text } from "react-native-web";
 import colors from "../config/colors";
 import SideMenu from "../components/SideMenu";
-
+import global from "../config/global";
 const Settings = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.pageContainer}>
+    <SafeAreaView style={global.pageContainer}>
       <SideMenu navigation={navigation} />
-      <View style={styles.Settings}>
-      <View style={styles.MenuRow}>
-          <Pressable
-            style={styles.Button}
-            onPress={() => navigation.navigate("Request")}
-          >
-            <Text style={styles.ButtonText}>Update Password</Text>
-          </Pressable>
-          <Pressable
-            style={styles.Button}
-            onPress={() => navigation.navigate("Request")}
-          >
-            <Text style={styles.ButtonText}>Update Name</Text>
-          </Pressable>
-          <Pressable
-            style={styles.Button}
-            onPress={() => navigation.navigate("Request")}
-          >
-            <Text style={styles.ButtonText}>Notification Settings</Text>
-          </Pressable>
+      <View style={global.rightContainer}>
+        <View style={global.headerMenu}>
+          <Text style={global.headerText}>Account Settings</Text>
         </View>
-        <View style={styles.MenuRow}>
-          <Pressable
-            style={styles.Button}
-            onPress={() => navigation.navigate("Request")}
-          >
-            <Text style={styles.ButtonText}>Security</Text>
-          </Pressable>
-          <Pressable
-            style={styles.Button}
-            onPress={() => navigation.navigate("Request")}
-          >
-            <Text style={styles.ButtonText}>Logs</Text>
-          </Pressable>
-          <Pressable
-            style={styles.Button}
-            onPress={() => navigation.navigate("Request")}
-          >
-            <Text style={styles.ButtonText}>Suspend Account</Text>
-          </Pressable>
-        </View>
-        <View style={styles.MenuRow}>
-          <Pressable
-            style={styles.Button}
-            onPress={() => navigation.navigate("Request")}
-          >
-            <Text style={styles.ButtonText}>Delete Account</Text>
-          </Pressable>
+        <View style={global.rightMenu}>
+          <View style={styles.MenuRow}>
+            <Pressable
+              style={styles.Button}
+              onPress={() => navigation.navigate("Request")}
+            >
+              <Text style={styles.ButtonText}>Update Password</Text>
+            </Pressable>
+            <Pressable
+              style={styles.Button}
+              onPress={() => navigation.navigate("Request")}
+            >
+              <Text style={styles.ButtonText}>Update Name</Text>
+            </Pressable>
+            <Pressable
+              style={styles.Button}
+              onPress={() => navigation.navigate("Request")}
+            >
+              <Text style={styles.ButtonText}>Notification Settings</Text>
+            </Pressable>
+          </View>
+          <View style={styles.MenuRow}>
+            <Pressable
+              style={styles.Button}
+              onPress={() => navigation.navigate("Request")}
+            >
+              <Text style={styles.ButtonText}>Security</Text>
+            </Pressable>
+            <Pressable
+              style={styles.Button}
+              onPress={() => navigation.navigate("Request")}
+            >
+              <Text style={styles.ButtonText}>Logs</Text>
+            </Pressable>
+            <Pressable
+              style={styles.Button}
+              onPress={() => navigation.navigate("Request")}
+            >
+              <Text style={styles.ButtonText}>Suspend Account</Text>
+            </Pressable>
+          </View>
+          <View style={styles.MenuRow}>
+            <Pressable
+              style={styles.Button}
+              onPress={() => navigation.navigate("Request")}
+            >
+              <Text style={styles.ButtonText}>Delete Account</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -64,23 +69,11 @@ const Settings = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    padding: 30,
-  },
-  Settings: {
-    flex: 1,
-    flexDirection: "col",
-    alignItems: "center",
-    backgroundColor: colors.borderRightColor,
-    marginLeft: 20,
-    borderRadius: 10,
-  },
   MenuRow: {
     flex: 1,
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   Button: {
     height: 100,
@@ -100,7 +93,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.5,
     color: colors.secondary,
-    textAlign: "center" 
+    textAlign: "center"
   },
   HeaderText: {
     fontSize: 18,

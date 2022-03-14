@@ -4,11 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
 import colors from "../config/colors";
 import SideMenu from "../components/SideMenu";
+import global from "../config/global";
+import Header from "../components/Header";
 
 const Interface = ({ navigation }) => {
-  const [data, setData] = useState([
-    { name: "Report number 1", id: "1" },
-  ]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetch("https://localhost:8010/device/getAll", {
@@ -25,34 +25,37 @@ const Interface = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.pageContainer}>
+    <SafeAreaView style={global.pageContainer}>
       <SideMenu navigation={navigation} />
-      <View style={styles.ChildrenMenu}>
-        <View style={styles.AddChildView}>
-          <Pressable style={styles.AddChildButton}>
-            <Text style={styles.ButtonText}>Add Child</Text>
-          </Pressable>
-          <TextInput
-            style={styles.TextInputStyle}
-            placeholder="Enter Name"
-            onChangeText={(name) => setName(name)}
-          />
+      <View style={global.rightContainer}>
+        <View style={global.headerMenu}>
+          <Text style={global.headerText}>My children devices</Text>
         </View>
-        <View style={styles.ListView}>
-          <FlatList
-            keyExtractor={(item, index) => {
-              return index.toString();
-            }}
-            data={data}
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() => navigation.navigate("Child Menu")}
-                style={styles.ButtonList}
-              >
-                <Text style={styles.ButtonList}>{item.name}</Text>
-              </Pressable>
-            )}
-          />
+        <View style={global.rightMenu}>
+          <View style={styles.AddChildView}>
+            <Pressable style={styles.AddChildButton}>
+              <Text style={global.ButtonText}>Add Child</Text>
+            </Pressable>
+            <TextInput
+              style={styles.TextInputStyle}
+              placeholder="Enter Name"
+              onChangeText={(name) => setName(name)}
+            />
+          </View>
+          <View style={global.ListView}>
+            <FlatList
+              keyExtractor={(item, index) => {
+                return index.toString();
+              }}
+              data={data}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => navigation.navigate("Child Menu", { uid: item.userId.uid, name: item.name })}
+                  style={global.ButtonList}
+                ><Text style={global.ButtonText}>{item.name} - {item.userId.uid}</Text></Pressable>
+              )}
+            />
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -60,47 +63,10 @@ const Interface = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    padding: 30,
-  },
-  ChildrenMenu: {
-    flex: 1,
-    flexDirection: "col",
-    backgroundColor: colors.borderRightColor,
-    marginLeft: 20,
-    borderRadius: 10,
-  },
   AddChildView: {
     flexDirection: "row",
     padding: 20,
     justifyContent: "center",
-  },
-  ListView: {
-    flex: 1,
-  },
-  ButtonList: {
-    fontSize: 15,
-    fontWeight: "bold",
-    letterSpacing: 0.5,
-    color: colors.secondary,
-    textAlign: "left",
-    borderRadius: 20,
-    borderWidth: 1,
-    height: 50,
-    margin: 5,
-    paddingLeft: 10,
-    justifyContent: "center",
-    backgroundColor: colors.primary,
-  },
-  ButtonText: {
-    fontSize: 15,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.5,
-    color: colors.secondary,
   },
   AddChildButton: {
     height: 50,
