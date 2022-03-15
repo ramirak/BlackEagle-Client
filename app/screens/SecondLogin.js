@@ -5,7 +5,9 @@ import { View, TextInput, StyleSheet, Text } from "react-native-web";
 import colors from "../config/colors";
 
 
-const SecondLogin = ({ navigation, email }) => {
+const SecondLogin = ({ navigation, route }) => {
+  const { email } = route.params;
+
   const [password, setPassword] = useState("");
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -24,7 +26,7 @@ const SecondLogin = ({ navigation, email }) => {
           <Pressable
             style={styles.LoginButton}
             //onPress={LoginNow}
-            onPress={() => navigation.navigate("Interface")}
+            onPress={() => [LoginNow(email, password, navigation)]}
           >
             <Text style={styles.ButtonText}>Login</Text>
           </Pressable>
@@ -34,32 +36,26 @@ const SecondLogin = ({ navigation, email }) => {
   );
 };
 
-const LoginNow = () => {
+const LoginNow = (email, password, navigation) => {
   fetch("https://localhost:8010/login", {
     method: "POST",
+    credentials: "include",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      uid: "ramirak111@gmail.com",
-      password: "123rrAvvads123@",
+      uid: email,
+      password: password,
     }),
   })
-    .then((response) => response.json())
-    .then((responseData) => {
-      console.log("RESULTS HERE:", responseData);
-
-      this.setState(
-        {
-          isLoading: false,
-          dataSource: responseJson,
-        },
-        function () {}
-      );
+    .then((response) => {
+      if (response.ok)
+        navigation.navigate("Interface");
+      else throw new Error(response.status);
     })
     .catch((error) => {
-      console.error(error);
+      console.log("error: " + error);
     });
 };
 

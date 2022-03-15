@@ -7,7 +7,6 @@ import colors from "../config/colors";
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [requestFailed, setRequestFailed] = useState("");
 
   return (
     <SafeAreaView style={styles.pageContainer}>
@@ -32,7 +31,7 @@ const Login = ({ navigation }) => {
         </View>
         <Pressable
           style={styles.LoginButton}
-          onPress={() => [LoginNow(email, password, requestFailed)]}
+          onPress={() => [LoginNow(email, password, navigation)]}
         >
           <Text style={styles.ButtonText}>Login</Text>
         </Pressable>
@@ -40,8 +39,8 @@ const Login = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-// navigate2fa(requestFailed, navigation)
-const LoginNow = (email, password, requestFailed) => {
+
+const LoginNow = (email, password, navigation) => {
   fetch("https://localhost:8010/login", {
     method: "POST",
     credentials: "include",
@@ -55,20 +54,14 @@ const LoginNow = (email, password, requestFailed) => {
     }),
   })
     .then((response) => {
-      if (!response.ok) throw new Error(response.status);
-      else return response.json();
+      if (response.ok)
+        navigation.navigate("Second Login", { email: email});
+      else throw new Error(response.status);
     })
     .catch((error) => {
       console.log("error: " + error);
-      requestFailed = true;
     });
 };
-
-function navigate2fa(requestFailed, navigation) {
-  if (requestFailed == false) {
-    navigation.navigate("Second Login");
-  }
-}
 
 const styles = StyleSheet.create({
   pageContainer: {

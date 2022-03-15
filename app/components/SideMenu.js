@@ -37,7 +37,7 @@ const SideMenu = ({ navigation }) => {
         <View>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Homepage")}
+            onPress={() => Logout(navigation)}
           ><Text style={global.ButtonText}>Logout</Text>
 
           </Pressable>
@@ -46,6 +46,22 @@ const SideMenu = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
+const Logout = (navigation) => {
+  fetch("https://localhost:8010/logout", {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (response.ok)
+        navigation.navigate("Homepage");
+      else throw new Error(response.status);
+    })
+    .catch((error) => {
+      console.log("error: " + error);
+    });
+};
+
 
 const styles = StyleSheet.create({
   MenuButton: {
