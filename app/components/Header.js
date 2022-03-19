@@ -2,9 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   SafeAreaView,
-  TouchableOpacity,
 } from "react-native";
 import global from "../config/global";
 const Header = () => {

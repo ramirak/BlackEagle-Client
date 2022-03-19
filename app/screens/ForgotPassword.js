@@ -3,33 +3,38 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
 import colors from "../config/colors";
-import { Feather } from '@expo/vector-icons';
+import global from "../config/global";
+import { MaterialIcons } from '@expo/vector-icons';
 
-const SecondLogin = ({ navigation, route }) => {
+const ForgotPassword = ({ navigation, route }) => {
   const { email } = route.params;
 
   const [password, setPassword] = useState("");
   return (
     <SafeAreaView style={styles.pageContainer}>
       <View style={styles.loginView}>
-        <Text style={styles.HeaderText}>We have sent you one time key via email</Text>
+        <Text style={styles.HeaderText}>Please enter your account email to reset your password</Text>
         <View style={styles.loginContainer}>
           <View>
-          <Feather style={styles.icon} name="key" size={24} color="pink" />
-            <TextInput
-              style={styles.TextInput}
-              placeholder="One Time Key"
-              placeholderTextColor="#003f5c"
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
-            />
-          </View>
+          <MaterialIcons
+            style={global.icon}
+            name="email"
+            size={26}
+            color="pink"
+          />
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Email account"
+            placeholderTextColor="#003f5c"
+            onChangeText={(email) => setEmail(email)}
+          />
+        </View>
           <Pressable
             style={styles.LoginButton}
-            //onPress={LoginNow}
-            onPress={() => [LoginNow(email, password, navigation)]}
+              //onPress={LoginNow}
+            //onPress={() => [LoginNow(email, password, navigation)]}
           >
-            <Text style={styles.ButtonText}>Login</Text>
+            <Text style={styles.ButtonText}>Password Reset</Text>
           </Pressable>
         </View>
       </View>
@@ -109,10 +114,7 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     letterSpacing: 0.5,
     color: colors.primary,
-  },
-  icon: {
-    position: 'absolute',
-    right: 10,
+    fontWeight: "bold",
   },
 });
-export default SecondLogin;
+export default ForgotPassword;

@@ -3,6 +3,8 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
 import colors from "../config/colors";
+import global from "../config/global";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -13,6 +15,12 @@ const Login = ({ navigation }) => {
       <Text style={styles.HeaderText}>Black Eagle</Text>
       <View style={styles.loginContainer}>
         <View>
+          <MaterialIcons
+            style={global.icon}
+            name="email"
+            size={26}
+            color="pink"
+          />
           <TextInput
             style={styles.TextInput}
             placeholder="Email"
@@ -21,6 +29,12 @@ const Login = ({ navigation }) => {
           />
         </View>
         <View>
+          <Ionicons
+            style={global.icon}
+            name="key-outline"
+            size={26}
+            color="pink"
+          />
           <TextInput
             style={styles.TextInput}
             placeholder="Password"
@@ -35,6 +49,18 @@ const Login = ({ navigation }) => {
         >
           <Text style={styles.ButtonText}>Login</Text>
         </Pressable>
+        <Pressable
+            style={global.smallButton}
+            onPress={() => navigation.navigate("Register")}
+          >
+          <Text style={global.smallButtonText}>Don't have an account? Sign Up</Text>
+          </Pressable>
+        <Pressable
+            style={global.smallButton}
+            onPress={() => navigation.navigate("Forgot Password")}
+          >
+          <Text style={global.smallButtonText}>Forgot Password?</Text>
+          </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -45,7 +71,7 @@ const LoginNow = (email, password, navigation) => {
     method: "POST",
     credentials: "include",
     headers: {
-      Accept: "application/json",
+      "Accept": "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -54,8 +80,7 @@ const LoginNow = (email, password, navigation) => {
     }),
   })
     .then((response) => {
-      if (response.ok)
-        navigation.navigate("Second Login", { email: email});
+      if (response.ok) navigation.navigate("Second Login", { email: email });
       else throw new Error(response.status);
     })
     .catch((error) => {
@@ -71,6 +96,7 @@ const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
     width: "25%",
+    margin: 5,
     backgroundColor: colors.secondary,
     justifyContent: "center",
   },
@@ -85,6 +111,7 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
+    paddingRight: 40,
   },
   LoginButton: {
     alignItems: "center",
@@ -94,6 +121,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: colors.primary,
+    margin: 10,
   },
   ButtonText: {
     fontSize: 12,
@@ -107,6 +135,8 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     letterSpacing: 0.5,
     color: colors.primary,
+    fontWeight: "bold",
+    marginTop: 5,
   },
 });
 export default Login;

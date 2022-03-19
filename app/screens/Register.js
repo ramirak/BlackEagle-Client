@@ -3,17 +3,50 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
 import colors from "../config/colors";
+import global from "../config/global";
+import { Ionicons, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [hint, setHint] = useState("");
+  const [error, setErrors] = useState("");
+
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    isValidEmail: true,
+    isValidPassword: true,
+    isValidConfirmPassword: true,
+  });
+
+  const handleValidPassword = (password) => {
+    if(password.trim().length >= 8) {
+      setData({
+        ...data,
+        isValidPassword: true
+      });
+    }else{
+      setData({
+        ...data,
+        isValidPassword: false
+      });
+    }
+  }
+
   return (
     <SafeAreaView style={styles.pageContainer}>
       <Text style={styles.HeaderText}>New User</Text>
       <View style={styles.loginContainer}>
         <View>
+          <MaterialIcons
+            style={global.icon}
+            name="email"
+            size={26}
+            color="pink"
+          />
           <TextInput
             style={styles.TextInput}
             placeholder="Email"
@@ -21,25 +54,53 @@ const Register = ({ navigation }) => {
             onChangeText={(email) => setEmail(email)}
           />
         </View>
+        {data.isValidEmail ? null:        
+        <Text style={global.errorMsg}>Invalid email</Text>
+        }
         <View>
+          <Ionicons
+            style={global.icon}
+            name="key-outline"
+            size={26}
+            color="pink"
+          />
           <TextInput
             style={styles.TextInput}
             placeholder="Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
+            onEndEditing={(e)=>handleValidPassword(e.nativeEvent.Text)}
           />
         </View>
+        {data.isValidPassword ? null:
+        <Text style={global.errorMsg}>Password must be at least 8 characters long</Text>
+        }
         <View>
+          <Ionicons
+            style={global.icon}
+            name="key-outline"
+            size={26}
+            color="pink"
+          />
           <TextInput
             style={styles.TextInput}
-            placeholder="Repeat Password"
+            placeholder="Confirm Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
-            onChangeText={(password2) => setPassword2(password2)}
+            onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
           />
+          {data.isValidConfirmPassword ? null:  
+          <Text style={global.errorMsg}>Invalid ConfrimPassword</Text>
+          }
         </View>
         <View>
+          <MaterialCommunityIcons
+            style={global.icon}
+            name="lightbulb-on-outline"
+            size={26}
+            color="pink"
+          />
           <TextInput
             style={styles.TextInput}
             placeholder="Password Hint"
@@ -48,49 +109,46 @@ const Register = ({ navigation }) => {
           />
         </View>
         <Pressable
-          style={styles.LoginButton}
-          onPress={RegisterNow}
-          onPress={() => navigation.navigate("Login")}
+          style={styles.RegisterButton}
+          onPress={RegisterNow(email, password, hint, navigation)}
         >
           <Text style={styles.ButtonText}>Register</Text>
         </Pressable>
+        <Pressable
+            style={global.smallButton}
+            onPress={() => navigation.navigate("Login")}
+          >
+          <Text style={global.smallButtonText}>Already have an account? Login</Text>
+          </Pressable>
       </View>
     </SafeAreaView>
   );
 };
 
-const RegisterNow = () => {
+const RegisterNow = (email, password, hint, navigation) => {
   fetch("http://localhost:8010/users/register", {
     method: "POST",
     headers: {
-      Accept: "application/json",
+      "Accept": "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       userId: {
-        uid: "ramirak111@gmail.com",
+        uid: email,
         password: {
-          password: "123rrAvvads123@",
-          hint: "nohintstoday",
+          password: password,
+          hint: hint,
         },
       },
       role: "PLAYER",
     }),
   })
-    .then((response) => response.json())
-    .then((responseData) => {
-      console.log("RESULTS HERE:", responseData);
-
-      this.setState(
-        {
-          isLoading: false,
-          dataSource: responseJson,
-        },
-        function () {}
-      );
+    .then((response) => {
+      if (response.ok) navigation.navigate("Login");
+      else throw new Error(response.status);
     })
     .catch((error) => {
-      console.error(error);
+      console.log("error: " + error);
     });
 };
 
@@ -106,7 +164,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   inputView: {
-    backgroundColor: "#FFC0CB",
     borderRadius: 30,
     width: "70%",
     height: 45,
@@ -117,8 +174,9 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
+    paddingRight: 40,
   },
-  LoginButton: {
+  RegisterButton: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
@@ -126,6 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: colors.primary,
+    margin: 10,
   },
   ButtonText: {
     fontSize: 12,
@@ -139,6 +198,8 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     letterSpacing: 0.5,
     color: colors.primary,
+    fontWeight: "bold",
+    marginTop: 5,
   },
 });
 export default Register;

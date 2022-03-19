@@ -1,54 +1,106 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, StyleSheet, FlatList } from "react-native-web";
-import colors from "../config/colors";
+import { View, FlatList } from "react-native-web";
 import SideMenu from "../components/SideMenu";
 import global from "../config/global";
-import Header from "../components/Header";
+
 const Reports = ({ navigation }) => {
-  const [report, setReport] = useState([
-    { name: "Report number 1", id: "1" },
-    { name: "Report number 2", id: "2" },
-    { name: "Report number 3", id: "3" },
-    { name: "Report number 4", id: "4" },
-    { name: "Report number 5", id: "5" },
-  ]);
+  const [report, setReport] = useState([]);
+  const [pageCurrent, setpageCurrent] = useState(1);
+
+  /*
+  useEffect(() => {
+    (async () => {
+      fetch("https://localhost:8010/data/get_page=${pageCurrent}", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((resJson) => {
+          setReport(resJson);
+        });
+    })();
+  }, [pageCurrent]); // <-- Makes pageCurrent a dependency
+
+  const handlePreviousPage = () => {
+    console.log("previous page clicked", pageCurrent);
+    // Do this so your page can't go negative
+    setpageCurrent(pageCurrent - 1 < 1 ? 1 : pageCurrent - 1);
+  };
+
+  const handleNextPage = () => {
+    console.log("next page clicked", pageCurrent);
+    setpageCurrent(pageCurrent + 1);
+  };
+
+  */
 
   return (
-    <SafeAreaView style={global.pageContainer} >
-
+    <SafeAreaView style={global.pageContainer}>
       <SideMenu navigation={navigation} />
       <View style={global.rightContainer}>
-          <View style={global.headerMenu}>
-            <Text style={global.headerText}>My Reports</Text>
+        <View style={global.headerMenu}>
+          <Text style={global.headerText}>My Reports</Text>
+        </View>
+        <View style={global.rightMenu}>
+          <View>
+            <Pressable
+              style={global.smallButton}
+              onPress={() => handlePreviousPage()}
+            >
+              <Text style={global.ButtonText}>Previous Page</Text>
+            </Pressable>
+            <Pressable
+              style={global.smallButton}
+              onPress={() => handleNextPage()}
+            >
+              <Text style={global.ButtonText}>Next Page</Text>
+            </Pressable>
           </View>
-          <View style={global.rightMenu}>
-            <View style={global.ListView}>
-              <FlatList
-                keyExtractor={(item) => item.id}
-                data={report}
-                renderItem={({ item }) => (
-                  <Pressable
-                    onPress={() => navigation.navigate("Homepage")}
-                    style={global.ButtonList}
-                  ><Text style={global.ButtonText}>{item.name}</Text></Pressable>
-                )}
-              />
-            </View>
+          <View style={global.ListView}>
+            <FlatList
+              keyExtractor={(item) => item.id}
+              data={report}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => navigation.navigate("Homepage")}
+                  style={global.ButtonList}
+                >
+                  <Text style={global.ButtonText}>{item.name}</Text>
+                </Pressable>
+              )}
+            />
           </View>
         </View>
+      </View>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  HeaderText: {
-    fontSize: 18,
-    lineHeight: 25,
-    letterSpacing: 0.5,
-    color: colors.primary,
-  },
-});
+/*
+const getReports = (deviceId, dataId, navigation) => {
+  fetch("https://localhost:8010/data/getAll_page=${pageCurrent}", {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Accept": "application/json",
+    },
+    body: JSON.stringify({
+      uid: deviceId,
+      password: dataId,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) navigation.navigate("Second Login", { email: email });
+      else throw new Error(response.status);
+    })
+    .catch((error) => {
+      console.log("error: " + error);
+    });
+};
+*/
 
 export default Reports;

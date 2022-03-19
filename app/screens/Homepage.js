@@ -28,21 +28,21 @@ const Homepage = ({ navigation }) => {
             style={styles.buttonContainer}
             color="#000"
             title="Login"
-            onPress={() => navigation.navigate("Login", { name: "rami" })}
+            onPress={() => navigation.navigate("Login")}
           />
         </View>
         <View style={styles.buttonContainer}>
           <Button
             color="#000"
             title="Register"
-            onPress={() => navigation.navigate("Register", { name: "rami" })}
+            onPress={() => navigation.navigate("Register")}
           />
         </View>
         <View style={styles.buttonContainer}>
           <Button
             color="#000"
             title="Test"
-            onPress={() => navigation.navigate("Reports", { name: "rami" })}
+            onPress={() => navigation.navigate("Child Menu", { name: "rami" })} //TODOOOOOOOOOOOOOOOOOOOOOOOO
           />
         </View>
       </View>

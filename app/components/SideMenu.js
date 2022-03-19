@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet } from "react-native-web";
 import colors from "../config/colors";
 import global from "../config/global";
+
 const SideMenu = ({ navigation }) => {
   return (
     <SafeAreaView>
@@ -53,8 +54,7 @@ const Logout = (navigation) => {
     credentials: "include",
   })
     .then((response) => {
-      if (response.ok)
-        navigation.navigate("Homepage");
+      if (response.status == 404) navigation.navigate("Homepage");
       else throw new Error(response.status);
     })
     .catch((error) => {
