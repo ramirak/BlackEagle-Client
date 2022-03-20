@@ -1,10 +1,7 @@
 export default {
   primary: "#212121", //Black
-  secondary: "#FFF",  //White
+  secondary: "#fff",  //White
   sideMenuBorder:"#eeeee", //Grey
-  borderRightColor: "#eeeee", //Light Blue
+  borderRightColor: "#eeeee", //Grey
   fontColor: "white",
 };
-
-//sideMenuBorder:"#ccb9bc", //Grey
-//borderRightColor: "#ccb9bc", //Light Blue

@@ -5,8 +5,9 @@ import { StyleSheet, Text, View } from "react-native-web";
 import colors from "../config/colors";
 import SideMenu from "../components/SideMenu";
 import global from "../config/global";
+import sizes from "../config/sizes";
+import RightPanel from "../components/RightPanel";
 import { Ionicons, FontAwesome5, Feather, MaterialCommunityIcons, Entypo, AntDesign } from "@expo/vector-icons";
-
 
 const ChildMenu = ({ navigation, route }) => {
   const { uid } = route.params;
@@ -16,6 +17,7 @@ const ChildMenu = ({ navigation, route }) => {
     <SafeAreaView style={global.pageContainer}>
       <SideMenu navigation={navigation} />
       <View style={global.rightContainer}>
+     <RightPanel/>
         <View style={global.headerMenu}>
           <Text style={global.headerText}>{name}</Text>
         </View>
@@ -26,14 +28,14 @@ const ChildMenu = ({ navigation, route }) => {
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "SCREENSHOT" })}
             >
-              <MaterialCommunityIcons name="monitor-screenshot" size={26} color="white" />
+              <MaterialCommunityIcons name="monitor-screenshot" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Screenshots</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "KEYLOG" })}
             >
-              <Entypo name="keyboard" size={26} color="white" />
+              <Entypo name="keyboard" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Keylogs</Text>
             </Pressable>
 
@@ -41,7 +43,7 @@ const ChildMenu = ({ navigation, route }) => {
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "CAMERA" })}
             >
-              <Feather name="camera" size={26} color="white" />
+              <Feather name="camera" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Camera</Text>
             </Pressable>
           </View>
@@ -50,21 +52,21 @@ const ChildMenu = ({ navigation, route }) => {
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "AUDIO" })}
             >
-              <FontAwesome5 name="audio-description" size={26} color="white" />
+              <FontAwesome5 name="audio-description" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Audio</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "LOCKDOWN" })}
             >
-              <MaterialCommunityIcons name="account-lock" size={26} color="white" />
+              <MaterialCommunityIcons name="account-lock" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Lockdown</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "COMMAND" })}
             >
-              <Ionicons name="terminal" size={26} color="white" />
+              <Ionicons name="terminal" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>CMD</Text>
             </Pressable>
           </View>
@@ -73,21 +75,21 @@ const ChildMenu = ({ navigation, route }) => {
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "LOCATION" })}
             >
-              <Ionicons name="location" size={26} color="white" />
+              <Ionicons name="location" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Locations</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "LOCATION" })}
             >
-              <Ionicons name="stats-chart" size={26} color="white" />
+              <Ionicons name="stats-chart" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Statistics</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request", { uid: uid, type: "LOCATION" })}
             >
-              <AntDesign name="filter" size={26} color="white" />
+              <AntDesign name="filter" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Filtering</Text>
             </Pressable>
           </View>

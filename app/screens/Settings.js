@@ -5,6 +5,7 @@ import { View, StyleSheet, Text } from "react-native-web";
 import colors from "../config/colors";
 import SideMenu from "../components/SideMenu";
 import global from "../config/global";
+import sizes from "../config/sizes";
 import { AntDesign, Ionicons, MaterialIcons, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 
 
@@ -22,21 +23,21 @@ const Settings = ({ navigation }) => {
               style={styles.Button}
               onPress={() => navigation.navigate("Request")}
             >
-              <MaterialCommunityIcons name="rename-box" size={26} color="white" />
+              <MaterialCommunityIcons name="rename-box" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Update Name</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request")}
             >
-              <MaterialCommunityIcons name="form-textbox-password" size={26} color="white" />
+              <MaterialCommunityIcons name="form-textbox-password" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Update Password</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request")}
             >
-              <Ionicons name="md-notifications-circle" size={26} color="white" />
+              <Ionicons name="md-notifications-circle" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Notification Settings</Text>
             </Pressable>
           </View>
@@ -45,21 +46,21 @@ const Settings = ({ navigation }) => {
               style={styles.Button}
               onPress={() => navigation.navigate("Request")}
             >
-              <MaterialIcons name="security" size={26} color="white" />
+              <MaterialIcons name="security" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Security</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request")}
             >
-              <Entypo name="text-document" size={26} color="white" />
+              <Entypo name="text-document" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Logs</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() => navigation.navigate("Request")}
             >
-              <MaterialCommunityIcons name="account-cancel-outline" size={26} color="white" />
+              <MaterialCommunityIcons name="account-cancel-outline" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Suspend Account</Text>
             </Pressable>
           </View>
@@ -68,7 +69,7 @@ const Settings = ({ navigation }) => {
               style={styles.Button}
               onPress={() => navigation.navigate("Request")}
             >
-              <AntDesign name="deleteuser" size={26} color="white" />
+              <AntDesign name="deleteuser" size={sizes.iconSize} color="white" />
               <Text style={styles.ButtonText}>Delete Account</Text>
             </Pressable>
           </View>

@@ -1,28 +1,67 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, StyleSheet, FlatList } from "react-native-web";
-import colors from "../config/colors";
+import { View, FlatList } from "react-native-web";
 import SideMenu from "../components/SideMenu";
 import global from "../config/global";
+import RightPanel from "../components/RightPanel";
 
-const Notifications = ({ navigation }) => {
-  const [Notification, setReport] = useState([
-    { name: "Notification number 1", id: "1" },
-    { name: "Notification number 2", id: "2" },
-    { name: "Notification number 3", id: "3" },
-    { name: "Notification number 4", id: "4" },
-    { name: "Notification number 5", id: "5" },
-  ]);
+const Notifications =({ route, navigation }) => {
+  const [Notification, setNotification] = useState([]);
+  const [pageCurrent, setpageCurrent] = useState([]);
+
+  useEffect(() => {
+    const { email } = route.params;
+        fetch("https://localhost:8010/data/getAll/" + email + "/NOTIFICATION?page=" + {pageCurrent} ,{
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            setNotification(responseJson);
+          })
+          .catch((error) => {
+            console.log("error: " + error);
+          });
+      }, [pageCurrent]); // <-- Makes pageCurrent a dependency
+
+  const handlePreviousPage = () => {
+    console.log("previous page clicked", pageCurrent);
+    // Do this so your page can't go negative
+    setpageCurrent(pageCurrent - 1 < 1 ? 1 : pageCurrent - 1);
+  };
+
+  const handleNextPage = () => {
+    console.log("next page clicked", pageCurrent);
+    setpageCurrent(pageCurrent + 1);
+  };
 
   return (
     <SafeAreaView style={global.pageContainer}>
       <SideMenu navigation={navigation} />
       <View style={global.rightContainer}>
+      <RightPanel/>
         <View style={global.headerMenu}>
           <Text style={global.headerText}>My Notifications</Text>
         </View>
         <View style={global.rightMenu}>
+        <View>
+            <Pressable
+              style={global.smallButton}
+              onPress={() => handlePreviousPage()}
+            >
+              <Text style={global.smallButtonText}>Previous Page</Text>
+            </Pressable>
+            <Pressable
+              style={global.smallButton}
+              onPress={() => handleNextPage()}
+            >
+              <Text style={global.smallButtonText}>Next Page</Text>
+            </Pressable>
+          </View>
           <View style={global.ListView}>
             <FlatList
               keyExtractor={(item) => item.id}
@@ -40,34 +79,5 @@ const Notifications = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  Button: {
-    height: 100,
-    width: 150,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    margin: 5,
-    backgroundColor: colors.primary,
-  },
-  ButtonText: {
-    fontSize: 15,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.5,
-    color: colors.secondary,
-    textAlign: "center",
-  },
-  HeaderText: {
-    fontSize: 18,
-    lineHeight: 25,
-    letterSpacing: 0.5,
-    color: colors.primary,
-  },
-});
 
 export default Notifications;

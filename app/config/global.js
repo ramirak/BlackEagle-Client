@@ -9,7 +9,7 @@ export default global = StyleSheet.create({
     marginTop: 15,
   },
   headerMenu: {
-    flex: 0.15,
+    flex: 0.1,
     backgroundColor: colors.sideMenuBorder,
     borderRadius: 5,
     marginBottom: 15,
@@ -18,9 +18,15 @@ export default global = StyleSheet.create({
   },
   headerText: {
     color: "black",
-    fontSize: 42,
+    fontSize: 35,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  refreshButton: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    margin: 10,
   },
   leftMenu: {
     flex: 1,
@@ -84,7 +90,7 @@ export default global = StyleSheet.create({
     justifyContent: "center",
   },
   smallButtonText: {
-    color: "red",
+    color: colors.primary,
     fontSize: 12,
     lineHeight: 21,
     fontWeight: "bold",

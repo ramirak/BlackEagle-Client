@@ -5,12 +5,13 @@ import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
 import colors from "../config/colors";
 import SideMenu from "../components/SideMenu";
 import global from "../config/global";
-import Header from "../components/Header";
+import RightPanel from "../components/RightPanel";
 
-const Interface = ({ navigation }) => {
+const Interface = ({ route, navigation }) => {
   const [data, setData] = useState([]);
+  const { email } = route.params;
 
-  useEffect(() => {
+  const fetchNow = () => {
     fetch("https://localhost:8010/device/getAll", {
       method: "GET",
       credentials: "include",
@@ -22,12 +23,15 @@ const Interface = ({ navigation }) => {
       .then((responseJson) => {
         setData(responseJson); // your JSON response is here
       });
-  }, []);
+  };
+  
+  useEffect(() => { fetchNow() }, []);
 
   return (
     <SafeAreaView style={global.pageContainer}>
-      <SideMenu navigation={navigation} />
+      <SideMenu navigation={navigation} email={email}/>
       <View style={global.rightContainer}>
+      <RightPanel/>
         <View style={global.headerMenu}>
           <Text style={global.headerText}>My children devices</Text>
         </View>

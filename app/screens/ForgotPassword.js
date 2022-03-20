@@ -31,7 +31,7 @@ const ForgotPassword = ({ navigation, route }) => {
         </View>
           <Pressable
             style={styles.LoginButton}
-              //onPress={LoginNow}
+            //onPress={LoginNow}
             //onPress={() => [LoginNow(email, password, navigation)]}
           >
             <Text style={styles.ButtonText}>Password Reset</Text>

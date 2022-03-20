@@ -5,26 +5,26 @@ import { View, StyleSheet } from "react-native-web";
 import colors from "../config/colors";
 import global from "../config/global";
 
-const SideMenu = ({ navigation }) => {
+const SideMenu = ({ navigation, email }) => {
   return (
     <SafeAreaView>
       <View style={global.leftMenu}>
         <View>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Interface")}
+            onPress={() => navigation.navigate("Homepage")}
           ><Text style={global.ButtonText}>Homepage</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
             onPress={() => navigation.navigate("Interface")}
-          ><Text style={global.ButtonText}>Devices</Text></Pressable>
+          ><Text style={global.ButtonText}>My Children</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Notifications")}
+            onPress={() => navigation.navigate("Notifications", {email:email})}
           ><Text style={global.ButtonText}>Notifications</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Reports")}
+            onPress={() => navigation.navigate("Reports", {email:email})}
             ><Text style={global.ButtonText}>Reports</Text></Pressable>
           <Pressable
             style={styles.MenuButton}

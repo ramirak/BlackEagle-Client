@@ -52,7 +52,7 @@ const LoginNow = (email, password, navigation) => {
   })
     .then((response) => {
       if (response.ok)
-        navigation.navigate("Interface");
+        navigation.navigate("Interface",  { email: email });
       else throw new Error(response.status);
     })
     .catch((error) => {

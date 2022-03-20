@@ -4,27 +4,29 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, FlatList } from "react-native-web";
 import SideMenu from "../components/SideMenu";
 import global from "../config/global";
+import RightPanel from "../components/RightPanel";
 
-const Reports = ({ navigation }) => {
-  const [report, setReport] = useState([]);
-  const [pageCurrent, setpageCurrent] = useState(1);
+const Reports = ({ route, navigation }) => {
+  const [report, setReport] = useState("");
+  const [pageCurrent, setpageCurrent] = useState([]);
 
-  /*
   useEffect(() => {
-    (async () => {
-      fetch("https://localhost:8010/data/get_page=${pageCurrent}", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((resJson) => {
-          setReport(resJson);
-        });
-    })();
-  }, [pageCurrent]); // <-- Makes pageCurrent a dependency
+    const { email } = route.params;
+        fetch("https://localhost:8010/data/getAll/" + email + "/REPORT?page=" + {pageCurrent} ,{
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            setReport(responseJson);
+          })
+          .catch((error) => {
+            console.log("error: " + error);
+          });
+      }, [pageCurrent]); // <-- Makes pageCurrent a dependency
 
   const handlePreviousPage = () => {
     console.log("previous page clicked", pageCurrent);
@@ -37,12 +39,11 @@ const Reports = ({ navigation }) => {
     setpageCurrent(pageCurrent + 1);
   };
 
-  */
-
   return (
     <SafeAreaView style={global.pageContainer}>
       <SideMenu navigation={navigation} />
       <View style={global.rightContainer}>
+      <RightPanel/>
         <View style={global.headerMenu}>
           <Text style={global.headerText}>My Reports</Text>
         </View>
@@ -52,13 +53,13 @@ const Reports = ({ navigation }) => {
               style={global.smallButton}
               onPress={() => handlePreviousPage()}
             >
-              <Text style={global.ButtonText}>Previous Page</Text>
+              <Text style={global.smallButtonText}>Previous Page</Text>
             </Pressable>
             <Pressable
               style={global.smallButton}
               onPress={() => handleNextPage()}
             >
-              <Text style={global.ButtonText}>Next Page</Text>
+              <Text style={global.smallButtonText}>Next Page</Text>
             </Pressable>
           </View>
           <View style={global.ListView}>
@@ -80,27 +81,5 @@ const Reports = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-/*
-const getReports = (deviceId, dataId, navigation) => {
-  fetch("https://localhost:8010/data/getAll_page=${pageCurrent}", {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept": "application/json",
-    },
-    body: JSON.stringify({
-      uid: deviceId,
-      password: dataId,
-    }),
-  })
-    .then((response) => {
-      if (response.ok) navigation.navigate("Second Login", { email: email });
-      else throw new Error(response.status);
-    })
-    .catch((error) => {
-      console.log("error: " + error);
-    });
-};
-*/
 
 export default Reports;
