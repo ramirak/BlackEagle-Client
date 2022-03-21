@@ -2,9 +2,10 @@ import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
-import colors from "../config/colors";
-import global from "../config/global";
 import { Ionicons, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import global from "../config/global";
+import colors from "../config/colors";
+import sizes from "../config/sizes";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -44,8 +45,8 @@ const Register = ({ navigation }) => {
           <MaterialIcons
             style={global.icon}
             name="email"
-            size={26}
-            color="pink"
+            size={sizes.iconSize}
+            color={colors.loginAndRegisterIconColor}
           />
           <TextInput
             style={styles.TextInput}
@@ -61,8 +62,8 @@ const Register = ({ navigation }) => {
           <Ionicons
             style={global.icon}
             name="key-outline"
-            size={26}
-            color="pink"
+            size={sizes.iconSize}
+            color={colors.loginAndRegisterIconColor}
           />
           <TextInput
             style={styles.TextInput}
@@ -80,8 +81,8 @@ const Register = ({ navigation }) => {
           <Ionicons
             style={global.icon}
             name="key-outline"
-            size={26}
-            color="pink"
+            size={sizes.iconSize}
+            color={colors.loginAndRegisterIconColor}
           />
           <TextInput
             style={styles.TextInput}
@@ -98,8 +99,8 @@ const Register = ({ navigation }) => {
           <MaterialCommunityIcons
             style={global.icon}
             name="lightbulb-on-outline"
-            size={26}
-            color="pink"
+            size={sizes.iconSize}
+            color={colors.loginAndRegisterIconColor}
           />
           <TextInput
             style={styles.TextInput}

@@ -10,7 +10,7 @@ export default global = StyleSheet.create({
   },
   headerMenu: {
     flex: 0.1,
-    backgroundColor: colors.sideMenuBorder,
+    backgroundColor: colors.parentMenuBorder,
     borderRadius: 5,
     marginBottom: 15,
     borderWidth: 0,
@@ -31,7 +31,7 @@ export default global = StyleSheet.create({
   leftMenu: {
     flex: 1,
     flexDirection: "col",
-    backgroundColor: colors.sideMenuBorder,
+    backgroundColor: colors.parentMenuBorder,
     alignItems: "center",
     justifyContent: "space-between",
     borderRadius: 5,
@@ -50,6 +50,15 @@ export default global = StyleSheet.create({
   rightMenu: {
     flex: 1,
     flexDirection: "col",
+    backgroundColor: colors.borderRightColor,
+    borderRadius: 5,
+    marginBottom: 15,
+    borderWidth: 0,
+    borderColor: colors.primary,
+  },
+  ArrowView: {
+    flex: 1,
+    flexDirection: "row",
     backgroundColor: colors.borderRightColor,
     borderRadius: 5,
     marginBottom: 15,
@@ -90,11 +99,16 @@ export default global = StyleSheet.create({
     justifyContent: "center",
   },
   smallButtonText: {
-    color: colors.primary,
+    color: colors.smallButtonTextColor,
     fontSize: 12,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
+  },
+  ArrowButton: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   errorMsg: {
     color: "red",

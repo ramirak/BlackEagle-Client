@@ -9,7 +9,7 @@ import Register from "./app/screens/Register";
 import Interface from "./app/screens/Interface";
 import Reports from "./app/screens/Reports";
 import Settings from "./app/screens/Settings";
-import ChildMenu from "./app/screens/ChildMenu";
+import ControlOptions from "./app/screens/ControlOptions";
 import Request from "./app/screens/Request";
 import Notifications from "./app/screens/Notifications";
 
@@ -34,7 +34,7 @@ export default function App() {
         <Stack.Screen name="Interface" component={Interface} />
         <Stack.Screen name="Reports" component={Reports} />
         <Stack.Screen name="Settings" component={Settings} />
-        <Stack.Screen name="Child Menu" component={ChildMenu} />
+        <Stack.Screen name="Control Options" component={ControlOptions} />
         <Stack.Screen name="Request" component={Request} />
         <Stack.Screen name="Notifications" component={Notifications} />
 

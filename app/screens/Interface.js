@@ -2,10 +2,10 @@ import { React, useState, useEffect } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
-import colors from "../config/colors";
-import SideMenu from "../components/SideMenu";
-import global from "../config/global";
+import ParentMenu from "../components/ParentMenu";
 import RightPanel from "../components/RightPanel";
+import global from "../config/global";
+import colors from "../config/colors";
 
 const Interface = ({ route, navigation }) => {
   const [data, setData] = useState([]);
@@ -29,7 +29,7 @@ const Interface = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={global.pageContainer}>
-      <SideMenu navigation={navigation} email={email}/>
+      <ParentMenu navigation={navigation} email={email}/>
       <View style={global.rightContainer}>
       <RightPanel/>
         <View style={global.headerMenu}>

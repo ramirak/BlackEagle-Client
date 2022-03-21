@@ -5,6 +5,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import global from "../config/global";
+
 const Header = () => {
   return (
     <SafeAreaView>

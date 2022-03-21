@@ -2,10 +2,12 @@ import { React, useState, useEffect } from "react";
 import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View, FlatList } from "react-native-web";
-import colors from "../config/colors";
-import SideMenu from "../components/SideMenu";
-import global from "../config/global";
+import ParentMenu from "../components/ParentMenu";
 import RightPanel from "../components/RightPanel";
+import PagingArrows from "../components/PagingArrows";
+import global from "../config/global";
+import colors from "../config/colors";
+
 
 const Request = ({ route, navigation }) => {
   const [data, setData] = useState([]);
@@ -59,6 +61,7 @@ const Request = ({ route, navigation }) => {
       });
   };
 
+  /*
   const handlePreviousPage = () => {
     console.log("previous page clicked", pageCurrent);
     // Do this so your page can't go negative
@@ -69,27 +72,15 @@ const Request = ({ route, navigation }) => {
     console.log("next page clicked", pageCurrent);
     setpageCurrent(pageCurrent + 1);
   };
+  */
 
   return (
     <SafeAreaView style={global.pageContainer}>
-      <SideMenu navigation={navigation} />
+      <ParentMenu navigation={navigation} />
       <View style={global.rightContainer}>
         <RightPanel />
         <View style={global.rightMenu}>
-          <View>
-            <Pressable
-              style={global.smallButton}
-              onPress={() => handlePreviousPage()}
-            >
-              <Text style={global.smallButtonText}>Previous Page</Text>
-            </Pressable>
-            <Pressable
-              style={global.smallButton}
-              onPress={() => handleNextPage()}
-            >
-              <Text style={global.smallButtonText}>Next Page</Text>
-            </Pressable>
-          </View>
+          <PagingArrows />
           <FlatList
             keyExtractor={(item, index) => {
               return index.toString();
@@ -117,7 +108,7 @@ const styles = StyleSheet.create({
   ParentMenu: {
     flex: 1,
     flexDirection: "col",
-    backgroundColor: colors.sideMenuBorder,
+    backgroundColor: colors.parentMenuBorder,
     alignItems: "center",
     justifyContent: "center",
   },

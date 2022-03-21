@@ -5,7 +5,7 @@ import { View, StyleSheet } from "react-native-web";
 import colors from "../config/colors";
 import global from "../config/global";
 
-const SideMenu = ({ navigation, email }) => {
+const ParentMenu = ({ navigation, email }) => {
   return (
     <SafeAreaView>
       <View style={global.leftMenu}>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 6,
-    borderColor: colors.sideMenuBorder,
+    borderColor: colors.parentMenuBorder,
     backgroundColor: colors.primary,
     fontSize: 15,
     lineHeight: 21,
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
     color: colors.fontColor,
   },
 });
-export default SideMenu;
+export default ParentMenu;

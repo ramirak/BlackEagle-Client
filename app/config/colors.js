@@ -1,7 +1,9 @@
 export default {
   primary: "#212121", //Black
   secondary: "#fff",  //White
-  sideMenuBorder:"#eeeee", //Grey
+  parentMenuBorder:"#eeeee", //Grey
   borderRightColor: "#eeeee", //Grey
-  fontColor: "white",
+  fontColor: "#fff", //White
+  smallButtonTextColor: "#ff0000", //Red
+  loginAndRegisterIconColor: "#ffc0cb" //pink
 };

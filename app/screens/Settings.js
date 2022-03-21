@@ -2,18 +2,19 @@ import { React } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StyleSheet, Text } from "react-native-web";
-import colors from "../config/colors";
-import SideMenu from "../components/SideMenu";
-import global from "../config/global";
-import sizes from "../config/sizes";
 import { AntDesign, Ionicons, MaterialIcons, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
-
+import ParentMenu from "../components/ParentMenu";
+import RightPanel from "../components/RightPanel";
+import global from "../config/global";
+import colors from "../config/colors";
+import sizes from "../config/sizes";
 
 const Settings = ({ navigation }) => {
   return (
     <SafeAreaView style={global.pageContainer}>
-      <SideMenu navigation={navigation} />
+      <ParentMenu navigation={navigation} />
       <View style={global.rightContainer}>
+      <RightPanel/>
         <View style={global.headerMenu}>
           <Text style={global.headerText}>Account Settings</Text>
         </View>

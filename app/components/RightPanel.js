@@ -5,6 +5,7 @@ import { View } from "react-native-web";
 import { FontAwesome } from "@expo/vector-icons";
 import global from "../config/global";
 import sizes from "../config/sizes";
+import colors from "../config/colors";
 
 const RightPanel = () => {
   return (
@@ -14,7 +15,7 @@ const RightPanel = () => {
           style={global.refreshButton}
           onPress={() => navigation.navigate("Homepage")}
         >
-          <FontAwesome style={global.icon} name="refresh" size={sizes.refreshIconSize} color="black" />
+          <FontAwesome style={global.icon} name="refresh" size={sizes.refreshIconSize} color={colors.primary} />
         </Pressable>
       </View>
     </SafeAreaView>

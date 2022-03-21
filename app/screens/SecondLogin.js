@@ -2,8 +2,9 @@ import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
-import colors from "../config/colors";
 import { Feather } from '@expo/vector-icons';
+import colors from "../config/colors";
+import sizes from "../config/sizes";
 
 const SecondLogin = ({ navigation, route }) => {
   const { email } = route.params;
@@ -15,7 +16,7 @@ const SecondLogin = ({ navigation, route }) => {
         <Text style={styles.HeaderText}>We have sent you one time key via email</Text>
         <View style={styles.loginContainer}>
           <View>
-          <Feather style={styles.icon} name="key" size={24} color="pink" />
+          <Feather style={styles.icon} name="key" size={sizes.iconSize} color={colors.loginAndRegisterIconColor} />
             <TextInput
               style={styles.TextInput}
               placeholder="One Time Key"
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
+    paddingRight: 40,
   },
   LoginButton: {
     alignItems: "center",

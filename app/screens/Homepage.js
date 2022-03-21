@@ -42,7 +42,7 @@ const Homepage = ({ navigation }) => {
           <Button
             color="#000"
             title="Test"
-            onPress={() => navigation.navigate("Interface", { name: "rami" })} //TODOOOOOOOOOOOOOOOOOOOOOOOO
+            onPress={() => navigation.navigate("Control Options", { name: "rami" })} //TODOOOOOOOOOOOOOOOOOOOOOOOO
           />
         </View>
       </View>

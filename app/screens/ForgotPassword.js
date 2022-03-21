@@ -2,14 +2,15 @@ import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, StyleSheet, Text } from "react-native-web";
-import colors from "../config/colors";
-import global from "../config/global";
 import { MaterialIcons } from '@expo/vector-icons';
+import global from "../config/global";
+import colors from "../config/colors";
+import sizes from "../config/sizes";
 
 const ForgotPassword = ({ navigation, route }) => {
   const { email } = route.params;
-
   const [password, setPassword] = useState("");
+  
   return (
     <SafeAreaView style={styles.pageContainer}>
       <View style={styles.loginView}>
@@ -19,8 +20,8 @@ const ForgotPassword = ({ navigation, route }) => {
           <MaterialIcons
             style={global.icon}
             name="email"
-            size={26}
-            color="pink"
+            size={sizes.iconSize}
+            color={colors.loginAndRegisterIconColor}
           />
           <TextInput
             style={styles.TextInput}
