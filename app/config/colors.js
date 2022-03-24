@@ -5,5 +5,5 @@ export default {
   borderRightColor: "#eeeee", //Grey
   fontColor: "#fff", //White
   smallButtonTextColor: "#ff0000", //Red
-  loginAndRegisterIconColor: "#ffc0cb" //pink
+  loginAndRegisterIconColor: "#ffc0cb", //pink
 };

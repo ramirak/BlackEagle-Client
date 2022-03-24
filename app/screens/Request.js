@@ -1,17 +1,17 @@
 import { React, useState, useEffect } from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleSheet, View, FlatList } from "react-native-web";
+import { View, FlatList } from "react-native-web";
 import ParentMenu from "../components/ParentMenu";
 import RightPanel from "../components/RightPanel";
 import PagingArrows from "../components/PagingArrows";
 import global from "../config/global";
-import colors from "../config/colors";
-
 
 const Request = ({ route, navigation }) => {
   const [data, setData] = useState([]);
+  const [specificData, setSpecificData] = useState([]);
   const [pageCurrent, setpageCurrent] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const { uid } = route.params;
@@ -21,7 +21,7 @@ const Request = ({ route, navigation }) => {
       method: "GET",
       credentials: "include",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
       },
     })
       .then((response) => response.json())
@@ -34,27 +34,40 @@ const Request = ({ route, navigation }) => {
     const { uid } = route.params;
     const { type } = route.params;
 
-    let formData = new FormData();
-    formData.append(
-      "newData",
-      JSON.stringify({
-        dataType: "REQUEST",
-        dataAttributes: { REQUEST_TYPE: { type } },
-      })
-    );
-
     fetch("https://localhost:8010/data/add/" + uid, {
       method: "POST",
       credentials: "include",
       headers: {
-        "Accept": "application/json",
-        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
-      body: formData,
+      body: JSON.stringify({
+        dataType: "REQUEST",
+        dataAttributes: { REQUEST_TYPE: type },
+      }),
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        setData(responseJson);
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.log("error: " + error);
+      });
+  };
+
+  const getSpecificData = (dataId) => {
+    const { uid } = route.params;
+
+    fetch("https://localhost:8010/data/get/" + uid + "/" + dataId, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
       })
       .catch((error) => {
         console.log("error: " + error);
@@ -87,14 +100,44 @@ const Request = ({ route, navigation }) => {
             }}
             data={data}
             renderItem={({ item }) => (
-              <Pressable style={global.ButtonList}>
-                {item.dataType} : {item.createdTimestamp} : {item.dataId}
+              <Pressable
+                style={global.ButtonList}
+                onPress={() => setModalVisible(true), () => getSpecificData(item.dataId)}
+              >
+                <Text style={global.ButtonText}>
+                  {item.dataType} : {item.createdTimestamp} : {item.dataId}
+                </Text>
               </Pressable>
             )}
           />
+          <Modal
+            style={global.ModalContainer}
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={global.ModalView}>
+              <View style={global.ModalContainer}>
+                <View style={global.TopModalView}>
+
+                </View>
+                <View style={global.BottomModalView}>
+                  <Pressable
+                    style={global.buttonClose}
+                    onPress={() => setModalVisible(!modalVisible)}
+                  >
+                    <Text style={global.ButtonText}>Close</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
           <Pressable
             onPress={() => addRequest()}
-            style={styles.AddRequestButton}
+            style={global.AddRequestButton}
           >
             <Text style={global.ButtonText}>Add Request</Text>
           </Pressable>
@@ -103,30 +146,5 @@ const Request = ({ route, navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  ParentMenu: {
-    flex: 1,
-    flexDirection: "col",
-    backgroundColor: colors.parentMenuBorder,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  AddRequestButton: {
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 6,
-    borderColor: colors.borderRightColor,
-    backgroundColor: colors.primary,
-    fontSize: 15,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.5,
-    color: colors.secondary,
-    margin: 5,
-    paddingLeft: 10,
-  },
-});
 
 export default Request;

@@ -54,7 +54,7 @@ const Interface = ({ route, navigation }) => {
               data={data}
               renderItem={({ item }) => (
                 <Pressable
-                  onPress={() => navigation.navigate("Child Menu", { uid: item.userId.uid, name: item.name })}
+                  onPress={() => navigation.navigate("Control Options", { uid: item.userId.uid, name: item.name })}
                   style={global.ButtonList}
                 ><Text style={global.ButtonText}>{item.name} - {item.userId.uid}</Text></Pressable>
               )}

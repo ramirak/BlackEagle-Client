@@ -58,7 +58,7 @@ const Login = ({ navigation }) => {
           </Pressable>
         <Pressable
             style={global.smallButton}
-            onPress={() => navigation.navigate("Control Panelw", { email: "email" })}
+            onPress={() => navigation.navigate("Control Panel", { email: "email" })}
           >
           <Text style={global.smallButtonText}>Forgot Password?</Text>
           </Pressable>

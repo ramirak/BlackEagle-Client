@@ -85,6 +85,21 @@ export default global = StyleSheet.create({
     letterSpacing: 0.5,
     color: colors.fontColor,
   },
+  AddRequestButton: {
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 6,
+    borderColor: colors.borderRightColor,
+    backgroundColor: colors.primary,
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.5,
+    color: colors.secondary,
+    margin: 5,
+    paddingLeft: 10,
+  },
   ListView: {
     flex: 1,
     marginTop: 40,
@@ -109,6 +124,34 @@ export default global = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
+  },
+  ModalView: {
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
+  },
+  ModalContainer: {
+    flex: 0.7,
+    flexDirection: "col",
+    width: "70%",
+    shadowRadius: 20,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: colors.primary,
+    backgroundColor: colors.secondary,
+  },
+  TopModalView: {
+    flex: 1,
+  },
+  BottomModalView: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  buttonClose: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.primary,
+    height: 50,
   },
   errorMsg: {
     color: "red",
