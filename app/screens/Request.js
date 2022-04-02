@@ -1,7 +1,8 @@
 import { React, useState, useEffect } from "react";
-import { Pressable, Text, Modal } from "react-native";
+import { Pressable, Text, Modal, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, FlatList } from "react-native-web";
+import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
 import RightPanel from "../components/RightPanel";
 import PagingArrows from "../components/PagingArrows";
@@ -67,11 +68,50 @@ const Request = ({ route, navigation }) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        //let decodedData = base64.decode(responseJson.dataAttributes.DATA);
+        //setSpecificData(decodedData);
+        setSpecificData(responseJson.dataAttributes.DATA);
       })
       .catch((error) => {
         console.log("error: " + error);
       });
+  };
+
+  const setComponentType = () => {
+    const { type } = route.params;
+    switch (type) {
+      case "SCREENSHOT": //bmp
+        return (
+          <Image
+            style={{ width: "100%", height: "100%", resizeMode: "stretch" }}
+            source={{ uri: "data:image/bmp;base64," + specificData }}
+          />
+        );
+      case "CAMERA": //png
+        return (
+          <Image
+            style={{ width: "100%", height: "100%", resizeMode: "stretch" }}
+            source={{ uri: "data:image/png;base64," + specificData }}
+          />
+        );
+      case "AUDIO": //wav
+        break;
+      default: {
+        //text
+        let decodedData = base64.decode(specificData.toString());
+        console.log(decodedData);
+        return <Text>{removeNonAscii(decodedData)}</Text>;
+      }
+    }
+  };
+
+  const removeNonAscii = (decodedData) => {
+    return decodedData
+      .replace(
+        /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\[\]`~]*/g,
+        ""
+      )
+      .replace(/,/g, "\n");
   };
 
   /*
@@ -102,7 +142,9 @@ const Request = ({ route, navigation }) => {
             renderItem={({ item }) => (
               <Pressable
                 style={global.ButtonList}
-                onPress={() => setModalVisible(true), () => getSpecificData(item.dataId)}
+                onPress={() => {
+                  setModalVisible(true), getSpecificData(item.dataId);
+                }}
               >
                 <Text style={global.ButtonText}>
                   {item.dataType} : {item.createdTimestamp} : {item.dataId}
@@ -121,9 +163,7 @@ const Request = ({ route, navigation }) => {
           >
             <View style={global.ModalView}>
               <View style={global.ModalContainer}>
-                <View style={global.TopModalView}>
-
-                </View>
+                <View style={global.TopModalView}>{setComponentType()}</View>
                 <View style={global.BottomModalView}>
                   <Pressable
                     style={global.buttonClose}

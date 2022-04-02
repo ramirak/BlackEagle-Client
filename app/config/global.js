@@ -66,16 +66,19 @@ export default global = StyleSheet.create({
     borderColor: colors.primary,
   },
   ButtonList: {
+    flexDirection: "row",
     fontSize: 15,
     fontWeight: "bold",
     letterSpacing: 0.5,
     color: colors.fontColor,
     textAlign: "left",
+    alignItems: "center",
     borderRadius: 5,
     height: 50,
     margin: 5,
+    paddingRight: 10,
     paddingLeft: 10,
-    justifyContent: "center",
+    justifyContent: "space-between",
     backgroundColor: colors.primary,
   },
   ButtonText: {
@@ -84,6 +87,15 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.5,
     color: colors.fontColor,
+  },
+  ListRightButtons: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginLeft: 15
+  },
+  IconButton: {
+    marginLeft: 10
   },
   AddRequestButton: {
     height: 50,
@@ -131,7 +143,7 @@ export default global = StyleSheet.create({
     justifyContent:"center"
   },
   ModalContainer: {
-    flex: 0.7,
+    flex: 0.8,
     flexDirection: "col",
     width: "70%",
     shadowRadius: 20,
@@ -144,7 +156,6 @@ export default global = StyleSheet.create({
     flex: 1,
   },
   BottomModalView: {
-    flex: 1,
     justifyContent: "flex-end",
   },
   buttonClose: {

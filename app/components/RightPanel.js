@@ -8,12 +8,18 @@ import sizes from "../config/sizes";
 import colors from "../config/colors";
 
 const RightPanel = () => {
+
+  const handleRefresh = () => {
+    // by calling this method react re-renders the component
+    this.setState({});
+  };
+
   return (
     <SafeAreaView>
       <View>
         <Pressable
           style={global.refreshButton}
-          onPress={() => navigation.navigate("Homepage")}
+          onPress={() => handleRefresh()}
         >
           <FontAwesome style={global.icon} name="refresh" size={sizes.refreshIconSize} color={colors.primary} />
         </Pressable>
