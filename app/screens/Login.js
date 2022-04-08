@@ -23,7 +23,7 @@ const Login = ({ navigation }) => {
             color={colors.loginAndRegisterIconColor}
           />
           <TextInput
-            style={styles.TextInput}
+            style={global.TextInput}
             placeholder="Email"
             placeholderTextColor="#003f5c"
             onChangeText={(email) => setEmail(email)}
@@ -37,7 +37,7 @@ const Login = ({ navigation }) => {
             color={colors.loginAndRegisterIconColor}
           />
           <TextInput
-            style={styles.TextInput}
+            style={global.TextInput}
             placeholder="Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
@@ -107,12 +107,6 @@ const styles = StyleSheet.create({
     height: 45,
     marginBottom: 20,
     alignItems: "center",
-  },
-  TextInput: {
-    height: 50,
-    flex: 1,
-    padding: 10,
-    paddingRight: 40,
   },
   LoginButton: {
     alignItems: "center",

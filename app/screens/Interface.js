@@ -3,8 +3,8 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import fileDownload from "js-file-download";
 import ParentMenu from "../components/ParentMenu";
-import RightPanel from "../components/RightPanel";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -12,10 +12,11 @@ import sizes from "../config/sizes";
 const Interface = ({ route, navigation }) => {
   const [data, setData] = useState("");
   const [name, setName] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
+  const [refresh, setRefresh] = useState(true);
   const { email } = route.params;
 
-  const getAllChildren = () => {
+  useEffect(() => {
+    if (!refresh) return;
     fetch("https://localhost:8010/device/getAll", {
       method: "GET",
       credentials: "include",
@@ -26,12 +27,12 @@ const Interface = ({ route, navigation }) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setData(responseJson);
-        setSelectedId(responseJson);
       })
       .catch((error) => {
         console.log("error: " + error);
       });
-  };
+    setRefresh(false);
+  }, [refresh]);
 
   const addChild = (childName) => {
     fetch("https://localhost:8010/device/add", {
@@ -45,7 +46,24 @@ const Interface = ({ route, navigation }) => {
         name: childName,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status == "507") {
+          alert("You can only create up to 5 devices");
+        }else{
+          alert(
+            "Your device authentication details is being downloaded.\nPlease keep it in a secure loaction!"
+          )
+        }
+        return response.json();
+      })
+      .then((responseJson) => {
+        let deviceLoginDetails = JSON.stringify({
+          uid: responseJson.userId.uid,
+          password: responseJson.userId.passwordBoundary.password,
+        });
+        fileDownload(deviceLoginDetails, "auth.json");
+      })
+      .then(() => setRefresh(true))
       .catch((error) => {
         console.log("error: " + error);
       });
@@ -60,31 +78,22 @@ const Interface = ({ route, navigation }) => {
       },
     })
       .then((response) => response.json())
+      .then(() => setRefresh(true))
       .catch((error) => {
         console.log("error: " + error);
       });
   };
 
-  useEffect(() => {
-    getAllChildren();
-  }, []);
-
   return (
     <SafeAreaView style={global.pageContainer}>
       <ParentMenu navigation={navigation} email={email} />
       <View style={global.rightContainer}>
-        <RightPanel />
         <View style={global.headerMenu}>
           <Text style={global.headerText}>My children devices</Text>
         </View>
         <View style={global.rightMenu}>
           <View style={styles.AddChildView}>
-            <Pressable
-              style={styles.AddChildButton}
-              onPress={() => {
-                addChild(name), getAllChildren();
-              }}
-            >
+            <Pressable style={global.SendButton} onPress={() => addChild(name)}>
               <Text style={global.ButtonText}>Add Child</Text>
             </Pressable>
             <TextInput
@@ -99,7 +108,6 @@ const Interface = ({ route, navigation }) => {
                 return index.toString();
               }}
               data={data}
-              extraData={selectedId}
               renderItem={({ item }) => (
                 <View>
                   <Pressable
@@ -152,15 +160,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 20,
     justifyContent: "center",
-  },
-  AddChildButton: {
-    height: 50,
-    width: 150,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 6,
-    borderColor: colors.primary,
-    backgroundColor: colors.primary,
   },
   TextInputStyle: {
     borderColor: colors.primary,

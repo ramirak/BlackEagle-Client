@@ -2,9 +2,15 @@ import { React } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View } from "react-native-web";
-import { Ionicons, FontAwesome5, Feather, MaterialCommunityIcons, Entypo, AntDesign } from "@expo/vector-icons";
+import {
+  Ionicons,
+  FontAwesome5,
+  Feather,
+  MaterialCommunityIcons,
+  Entypo,
+  AntDesign,
+} from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
-import RightPanel from "../components/RightPanel";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -17,7 +23,6 @@ const ControlOptions = ({ navigation, route }) => {
     <SafeAreaView style={global.pageContainer}>
       <ParentMenu navigation={navigation} />
       <View style={global.rightContainer}>
-     <RightPanel/>
         <View style={global.headerMenu}>
           <Text style={global.headerText}>{name}</Text>
         </View>
@@ -26,70 +31,124 @@ const ControlOptions = ({ navigation, route }) => {
           <View style={styles.MenuRow}>
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "SCREENSHOT" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "SCREENSHOT", name:name })
+              }
             >
-              <MaterialCommunityIcons name="monitor-screenshot" size={sizes.iconSize} color={colors.secondary} />
+              <MaterialCommunityIcons
+                name="monitor-screenshot"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>Screenshots</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "KEYLOG" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "KEYLOG", name:name })
+              }
             >
-              <Entypo name="keyboard" size={sizes.iconSize} color={colors.secondary} />
+              <Entypo
+                name="keyboard"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>Keylogs</Text>
             </Pressable>
 
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "CAMERA" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "CAMERA", name:name })
+              }
             >
-              <Feather name="camera" size={sizes.iconSize} color={colors.secondary} />
+              <Feather
+                name="camera"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>Camera</Text>
             </Pressable>
           </View>
           <View style={styles.MenuRow}>
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "AUDIO" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "AUDIO", name:name })
+              }
             >
-              <FontAwesome5 name="audio-description" size={sizes.iconSize} color={colors.secondary} />
+              <FontAwesome5
+                name="audio-description"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>Audio</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "LOCKDOWN" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "LOCKDOWN", name:name })
+              }
             >
-              <MaterialCommunityIcons name="account-lock" size={sizes.iconSize} color={colors.secondary} />
+              <MaterialCommunityIcons
+                name="account-lock"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>Lockdown</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "COMMAND" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "COMMAND", name:name })
+              }
             >
-              <Ionicons name="terminal" size={sizes.iconSize} color={colors.secondary} />
+              <Ionicons
+                name="terminal"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>CMD</Text>
             </Pressable>
           </View>
           <View style={styles.MenuRow}>
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "LOCATION" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "LOCATION", name:name })
+              }
             >
-              <Ionicons name="location" size={sizes.iconSize} color={colors.secondary} />
+              <Ionicons
+                name="location"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>Locations</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "LOCATION" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "LOCATION", name:name })
+              }
             >
-              <Ionicons name="stats-chart" size={sizes.iconSize} color={colors.secondary} />
+              <Ionicons
+                name="stats-chart"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>Statistics</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
-              onPress={() => navigation.navigate("Request", { uid: uid, type: "LOCATION" })}
+              onPress={() =>
+                navigation.navigate("Request", { uid: uid, type: "LOCATION", name:name })
+              }
             >
-              <AntDesign name="filter" size={sizes.iconSize} color={colors.secondary} />
+              <AntDesign
+                name="filter"
+                size={sizes.iconSize}
+                color={colors.secondary}
+              />
               <Text style={styles.ButtonText}>Filtering</Text>
             </Pressable>
           </View>

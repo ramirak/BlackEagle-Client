@@ -92,10 +92,10 @@ export default global = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginLeft: 15
+    marginLeft: 15,
   },
   IconButton: {
-    marginLeft: 10
+    marginLeft: 10,
   },
   AddRequestButton: {
     height: 50,
@@ -138,9 +138,9 @@ export default global = StyleSheet.create({
     justifyContent: "center",
   },
   ModalView: {
-    flex:1,
-    alignItems:"center",
-    justifyContent:"center"
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   ModalContainer: {
     flex: 0.8,
@@ -152,17 +152,46 @@ export default global = StyleSheet.create({
     borderColor: colors.primary,
     backgroundColor: colors.secondary,
   },
+  ModalConfigContainer: {
+    flex: 0.4,
+    flexDirection: "col",
+    width: "40%",
+    shadowRadius: 20,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: colors.primary,
+    backgroundColor: colors.secondary,
+  },
   TopModalView: {
     flex: 1,
   },
   BottomModalView: {
-    justifyContent: "flex-end",
+    flexDirection: "row",
   },
   buttonClose: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderRightColor: "white",
+    borderLeftColor: "white",
     backgroundColor: colors.primary,
     height: 50,
+  },
+  TextInput: {
+    height: 50,
+    flex: 1,
+    padding: 10,
+    paddingRight: 40,
+  },
+  SendButton: {
+    height: 50,
+    width: 150,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 6,
+    borderColor: colors.primary,
+    backgroundColor: colors.primary,
   },
   errorMsg: {
     color: "red",
@@ -170,5 +199,5 @@ export default global = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-  }
+  },
 });

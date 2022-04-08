@@ -1,23 +1,30 @@
 import { React, useState, useEffect } from "react";
 import { Pressable, Text, Modal, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, FlatList } from "react-native-web";
+import { View, FlatList, TextInput } from "react-native-web";
+import { FontAwesome } from "@expo/vector-icons";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
-import RightPanel from "../components/RightPanel";
 import PagingArrows from "../components/PagingArrows";
 import global from "../config/global";
+import colors from "../config/colors";
+import sizes from "../config/sizes";
 
 const Request = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [specificData, setSpecificData] = useState([]);
+  const [refresh, setRefresh] = useState(true);
   const [pageCurrent, setpageCurrent] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalConfigVisible, setModalConfigVisible] = useState(false);
+  const [cmdType, setCmpType] = useState([]);
+  const [cmdParam, setCmdParam] = useState([]);
+  const { uid } = route.params;
+  const { name } = route.params;
+  const { type } = route.params;
 
   useEffect(() => {
-    const { uid } = route.params;
-    const { type } = route.params;
-
+    if (!refresh) return;
     fetch("https://localhost:8010/data/getAll/" + uid + "/" + type, {
       method: "GET",
       credentials: "include",
@@ -29,12 +36,32 @@ const Request = ({ route, navigation }) => {
       .then((responseJson) => {
         setData(responseJson);
       });
-  }, []);
+    setRefresh(false);
+  }, [refresh]);
+
+  const checkConfig = () => {
+    switch (type) {
+      case "COMMAND":
+      case "FILTERS":
+        setModalConfigVisible(true);
+        break;
+      default:
+        addRequest();
+        break;
+    }
+  };
 
   const addRequest = () => {
-    const { uid } = route.params;
-    const { type } = route.params;
-
+    let dataAttr;
+    if (type == "COMMAND") {
+      dataAttr = {
+        REQUEST_TYPE: type,
+        COMMAND_TYPE: cmdType,
+        COMMAND_PARAMETER: cmdParam,
+      };
+    } else {
+      dataAttr = { REQUEST_TYPE: type };
+    }
     fetch("https://localhost:8010/data/add/" + uid, {
       method: "POST",
       credentials: "include",
@@ -44,10 +71,19 @@ const Request = ({ route, navigation }) => {
       },
       body: JSON.stringify({
         dataType: "REQUEST",
-        dataAttributes: { REQUEST_TYPE: type },
+        dataAttributes: dataAttr,
       }),
     })
-      .then((response) => response.json())
+    .then((response) => {
+      if (response.ok) {
+        alert("The request has been sent.");
+      }else{
+        alert(
+          "There is an already pending request."
+        )
+      }
+      return response.json();
+    })
       .then((responseJson) => {
         console.log(responseJson);
       })
@@ -57,8 +93,6 @@ const Request = ({ route, navigation }) => {
   };
 
   const getSpecificData = (dataId) => {
-    const { uid } = route.params;
-
     fetch("https://localhost:8010/data/get/" + uid + "/" + dataId, {
       method: "GET",
       credentials: "include",
@@ -68,8 +102,6 @@ const Request = ({ route, navigation }) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        //let decodedData = base64.decode(responseJson.dataAttributes.DATA);
-        //setSpecificData(decodedData);
         setSpecificData(responseJson.dataAttributes.DATA);
       })
       .catch((error) => {
@@ -77,8 +109,22 @@ const Request = ({ route, navigation }) => {
       });
   };
 
+  const deleteData = (dataId) => {
+    fetch("https://localhost:8010/data/delete/" + uid + "/" + dataId, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then(() => setRefresh(true))
+      .catch((error) => {
+        console.log("error: " + error);
+      });
+  };
+
   const setComponentType = () => {
-    const { type } = route.params;
     switch (type) {
       case "SCREENSHOT": //bmp
         return (
@@ -114,6 +160,41 @@ const Request = ({ route, navigation }) => {
       .replace(/,/g, "\n");
   };
 
+  const setAddRequestComponent = () => {
+    switch (type) {
+      case "COMMAND":
+        return (
+          <View>
+            <View>
+              <TextInput
+                style={global.TextInput}
+                placeholder="Command"
+                placeholderTextColor={colors.primary}
+                onChangeText={(cmdType) => setCmpType(cmdType)}
+              />
+            </View>
+            <View>
+              <TextInput
+                style={global.TextInput}
+                placeholder="Additional Param"
+                placeholderTextColor={colors.primary}
+                onChangeText={(cmdParam) => setCmdParam(cmdParam)}
+              />
+            </View>
+          </View>
+        );
+      case "FILTERS":
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleRefresh = () => {
+    setRefresh(true);
+  };
+
   /*
   const handlePreviousPage = () => {
     console.log("previous page clicked", pageCurrent);
@@ -131,7 +212,22 @@ const Request = ({ route, navigation }) => {
     <SafeAreaView style={global.pageContainer}>
       <ParentMenu navigation={navigation} />
       <View style={global.rightContainer}>
-        <RightPanel />
+        <View>
+          <Pressable
+            style={global.refreshButton}
+            onPress={() => handleRefresh()}
+          >
+            <FontAwesome
+              style={global.icon}
+              name="refresh"
+              size={sizes.refreshIconSize}
+              color={colors.primary}
+            />
+          </Pressable>
+        </View>
+        <View style={global.headerMenu}>
+          <Text style={global.headerText}>{name + " - " + type.toLowerCase()}</Text>
+        </View>
         <View style={global.rightMenu}>
           <PagingArrows />
           <FlatList
@@ -149,6 +245,16 @@ const Request = ({ route, navigation }) => {
                 <Text style={global.ButtonText}>
                   {item.dataType} : {item.createdTimestamp} : {item.dataId}
                 </Text>
+                <Pressable
+                  style={global.IconButton}
+                  onPress={() => deleteData(item.dataId)}
+                >
+                  <FontAwesome
+                    name="trash-o"
+                    size={sizes.iconSize}
+                    color={colors.secondary}
+                  />
+                </Pressable>
               </Pressable>
             )}
           />
@@ -175,8 +281,46 @@ const Request = ({ route, navigation }) => {
               </View>
             </View>
           </Modal>
+          <Modal
+            style={global.ModalConfigContainer}
+            animationType="fade"
+            transparent={true}
+            visible={modalConfigVisible}
+            onRequestClose={() => {
+              setModalConfigVisible(!modalConfigVisible);
+            }}
+          >
+            <View style={global.ModalView}>
+              <View style={global.ModalConfigContainer}>
+                <View style={global.TopModalView}>
+                  {setAddRequestComponent()}
+                </View>
+                <View style={global.BottomModalView}>
+                  <Pressable
+                    onPress={() => {
+                      {
+                        addRequest(),
+                          setModalConfigVisible(!modalConfigVisible);
+                      }
+                    }}
+                    style={global.buttonClose}
+                  >
+                    <Text style={global.ButtonText}>Send</Text>
+                  </Pressable>
+                  <Pressable
+                    style={global.buttonClose}
+                    onPress={() => setModalConfigVisible(!modalConfigVisible)}
+                  >
+                    <Text style={global.ButtonText}>Close</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
           <Pressable
-            onPress={() => addRequest()}
+            onPress={() => {
+              checkConfig();
+            }}
             style={global.AddRequestButton}
           >
             <Text style={global.ButtonText}>Add Request</Text>
