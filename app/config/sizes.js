@@ -1,5 +1,5 @@
 export default {
     iconSize: 26,
-    refreshIconSize: 20,
+    refreshIconSize: 23,
     PagingArrowIconSize: 25,
 };

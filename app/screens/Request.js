@@ -74,16 +74,14 @@ const Request = ({ route, navigation }) => {
         dataAttributes: dataAttr,
       }),
     })
-    .then((response) => {
-      if (response.ok) {
-        alert("The request has been sent.");
-      }else{
-        alert(
-          "There is an already pending request."
-        )
-      }
-      return response.json();
-    })
+      .then((response) => {
+        if (response.ok) {
+          alert("The request has been sent.");
+        } else {
+          alert("There is an already pending request.");
+        }
+        return response.json();
+      })
       .then((responseJson) => {
         console.log(responseJson);
       })
@@ -141,7 +139,10 @@ const Request = ({ route, navigation }) => {
           />
         );
       case "AUDIO": //wav
-        break;
+        let snd = new Audio("data:audio/wav;base64," + specificData);
+        return (
+          <Pressable style={global.ButtonList} onPress={() => snd.play()} />
+        );
       default: {
         //text
         let decodedData = base64.decode(specificData.toString());
@@ -226,7 +227,9 @@ const Request = ({ route, navigation }) => {
           </Pressable>
         </View>
         <View style={global.headerMenu}>
-          <Text style={global.headerText}>{name + " - " + type.toLowerCase()}</Text>
+          <Text style={global.headerText}>
+            {name + " - " + type.toLowerCase()}
+          </Text>
         </View>
         <View style={global.rightMenu}>
           <PagingArrows />
@@ -323,7 +326,9 @@ const Request = ({ route, navigation }) => {
             }}
             style={global.AddRequestButton}
           >
-            <Text style={global.ButtonText}>Add Request</Text>
+            <Text style={global.ButtonText}>
+              Add {type.toLowerCase()} request
+            </Text>
           </Pressable>
         </View>
       </View>

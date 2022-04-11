@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, TextInput, StyleSheet, Text } from "react-native-web";
+import { View, TextInput, Text } from "react-native-web";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -12,9 +12,9 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   return (
-    <SafeAreaView style={styles.pageContainer}>
-      <Text style={styles.HeaderText}>Black Eagle</Text>
-      <View style={styles.loginContainer}>
+    <SafeAreaView style={global.LoginPageContainer}>
+      <Text style={global.LoginHeaderText}>Black Eagle</Text>
+      <View style={global.LoginContainer}>
         <View>
           <MaterialIcons
             style={global.icon}
@@ -45,10 +45,10 @@ const Login = ({ navigation }) => {
           />
         </View>
         <Pressable
-          style={styles.LoginButton}
+          style={global.LoginButton}
           onPress={() => [LoginNow(email, password, navigation)]}
         >
-          <Text style={styles.ButtonText}>Login</Text>
+          <Text style={global.LoginButtonText}>Login</Text>
         </Pressable>
         <Pressable
             style={global.smallButton}
@@ -89,49 +89,4 @@ const LoginNow = (email, password, navigation) => {
     });
 };
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  loginContainer: {
-    flex: 1,
-    width: "25%",
-    margin: 5,
-    backgroundColor: colors.secondary,
-    justifyContent: "center",
-  },
-  inputView: {
-    borderRadius: 30,
-    width: "70%",
-    height: 45,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  LoginButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: colors.primary,
-    margin: 10,
-  },
-  ButtonText: {
-    fontSize: 12,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: colors.secondary,
-  },
-  HeaderText: {
-    fontSize: 18,
-    lineHeight: 25,
-    letterSpacing: 0.5,
-    color: colors.primary,
-    fontWeight: "bold",
-    marginTop: 5,
-  },
-});
 export default Login;

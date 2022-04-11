@@ -8,6 +8,27 @@ export default global = StyleSheet.create({
     justifyContent: "space-evenly",
     marginTop: 15,
   },
+  LoginPageContainer: {
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  LoginContainer: {
+    flex: 1,
+    width: "25%",
+    margin: 5,
+    backgroundColor: colors.secondary,
+    justifyContent: "center",
+  },
+  LoginButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: colors.primary,
+    margin: 10,
+  },
   headerMenu: {
     flex: 0.1,
     backgroundColor: colors.parentMenuBorder,
@@ -16,11 +37,20 @@ export default global = StyleSheet.create({
     borderWidth: 0,
     borderColor: colors.primary,
   },
+  LoginHeaderText: {
+    fontSize: 18,
+    lineHeight: 25,
+    letterSpacing: 0.5,
+    color: colors.primary,
+    fontWeight: "bold",
+    marginTop: 5,
+  },
   headerText: {
     color: "black",
     fontSize: 35,
     fontWeight: "bold",
     textAlign: "center",
+    textTransform: "capitalize"
   },
   refreshButton: {
     flex: 1,
@@ -80,6 +110,13 @@ export default global = StyleSheet.create({
     paddingLeft: 10,
     justifyContent: "space-between",
     backgroundColor: colors.primary,
+  },
+  LoginButtonText: {
+    fontSize: 12,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: colors.secondary,
   },
   ButtonText: {
     fontSize: 15,

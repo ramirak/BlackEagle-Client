@@ -49,10 +49,10 @@ const Interface = ({ route, navigation }) => {
       .then((response) => {
         if (response.status == "507") {
           alert("You can only create up to 5 devices");
-        }else{
+        } else {
           alert(
             "Your device authentication details is being downloaded.\nPlease keep it in a secure loaction!"
-          )
+          );
         }
         return response.json();
       })
@@ -93,14 +93,15 @@ const Interface = ({ route, navigation }) => {
         </View>
         <View style={global.rightMenu}>
           <View style={styles.AddChildView}>
-            <Pressable style={global.SendButton} onPress={() => addChild(name)}>
-              <Text style={global.ButtonText}>Add Child</Text>
-            </Pressable>
             <TextInput
               style={styles.TextInputStyle}
               placeholder="Enter Name"
+              value={name}
               onChangeText={(name) => setName(name)}
             />
+            <Pressable style={global.SendButton} onPress={() => {addChild(name), setName("")}}>
+              <Text style={global.ButtonText}>Add Child</Text>
+            </Pressable>
           </View>
           <View style={global.ListView}>
             <FlatList
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     height: 50,
     width: 150,
-    marginLeft: 10,
+    marginRight: 10,
     textAlign: "center",
     fontWeight: "bold",
   },
