@@ -125,6 +125,22 @@ export default global = StyleSheet.create({
     letterSpacing: 0.5,
     color: colors.fontColor,
   },
+  TextInputStyle: { //CHILD
+    borderColor: colors.primary,
+    borderWidth: 2,
+    borderRadius: 3,
+    height: 50,
+    width: 150,
+    marginRight: 10,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  TextInputInModal: {
+    borderColor: colors.primary,
+    borderWidth: 1,
+    height: 35,
+    padding: 15,
+  },
   ListRightButtons: {
     flex: 1,
     flexDirection: "row",
@@ -173,6 +189,16 @@ export default global = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
+  },
+   CheckboxContainer: {
+    flex: 1,
+  },
+  CheckboxSection: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  Checkbox: {
+    margin: 8,
   },
   ModalView: {
     flex: 1,

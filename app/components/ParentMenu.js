@@ -6,6 +6,7 @@ import colors from "../config/colors";
 import global from "../config/global";
 
 const ParentMenu = ({ navigation, email }) => {
+
   return (
     <SafeAreaView>
       <View style={global.leftMenu}>

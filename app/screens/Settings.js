@@ -7,7 +7,6 @@ import {
   Ionicons,
   MaterialIcons,
   MaterialCommunityIcons,
-  Entypo,
 } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
 import global from "../config/global";
@@ -21,7 +20,7 @@ const Settings = ({ navigation, route }) => {
   //const { type } = route.params;
 
   const settingsComponent = () => {
-/*
+    /*
     switch (type) {
       case "NAME":
         return (
@@ -78,7 +77,7 @@ const Settings = ({ navigation, route }) => {
       default:
         break;
     }
- */   
+ */
   };
 
   return (
@@ -135,17 +134,6 @@ const Settings = ({ navigation, route }) => {
                 color="white"
               />
               <Text style={styles.ButtonText}>Security</Text>
-            </Pressable>
-            <Pressable
-              style={styles.Button}
-              onPress={() => setModalVisible(true)}
-            >
-              <Entypo
-                name="text-document"
-                size={sizes.iconSize}
-                color="white"
-              />
-              <Text style={styles.ButtonText}>Logs</Text>
             </Pressable>
             <Pressable
               style={styles.Button}

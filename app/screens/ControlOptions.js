@@ -128,20 +128,20 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={styles.Button}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "LOCATION", name:name })
+                navigation.navigate("Request", { uid: uid, type: "HISTORY", name:name })
               }
             >
-              <Ionicons
-                name="stats-chart"
-                size={sizes.iconSize}
-                color={colors.secondary}
+             <FontAwesome5 
+             name="history" 
+             size={sizes.iconSize}
+             color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>Statistics</Text>
+              <Text style={styles.ButtonText}>History</Text>
             </Pressable>
             <Pressable
               style={styles.Button}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "LOCATION", name:name })
+                navigation.navigate("Request", { uid: uid, type: "CONFIGURATION", name:name })
               }
             >
               <AntDesign

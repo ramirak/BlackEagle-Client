@@ -1,11 +1,12 @@
 import { React, useState, useEffect } from "react";
-import { Pressable, Text, Modal, Image } from "react-native";
+import { Pressable, Text, Modal, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, FlatList, TextInput } from "react-native-web";
-import { FontAwesome } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
+import Checkbox from "expo-checkbox";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
-import PagingArrows from "../components/PagingArrows";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -14,11 +15,19 @@ const Request = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [specificData, setSpecificData] = useState([]);
   const [refresh, setRefresh] = useState(true);
-  const [pageCurrent, setpageCurrent] = useState([]);
+  //const [pageCurrent, setPageCurrent] = useState(1);
+  //const [dataCounter, setDataCounter] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfigVisible, setModalConfigVisible] = useState(false);
-  const [cmdType, setCmpType] = useState([]);
-  const [cmdParam, setCmdParam] = useState([]);
+  //const [processButtonVisible, setProcessButtonVisible] = useState(false);
+  const [browser, setBrowser] = useState("");
+  const [cmdType, setCmpType] = useState("");
+  const [cmdParam, setCmdParam] = useState("");
+  const [fakenews, setFakenews] = useState(false);
+  const [gambling, setGambling] = useState(false);
+  const [porn, setPorn] = useState(false);
+  const [social, setSocial] = useState(false);
+  const [specificUrl, setSpecificUrl] = useState("");
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
@@ -35,14 +44,44 @@ const Request = ({ route, navigation }) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setData(responseJson);
+        // console.log("@@@@@@", pageCurrent);
+        //console.log("!!!!!!!", dataCounter);
       });
     setRefresh(false);
-  }, [refresh]);
+  }, [refresh]); //, pageCurrent]);
+
+  const checkRequestButton = () => {
+    switch (type) {
+      case "KEYLOG":
+        break;
+      case "HISTORY":
+        return (
+          <Pressable
+            onPress={() => checkConfig()}
+            style={global.AddRequestButton}
+          >
+            <Text style={global.ButtonText}>Download browser history</Text>
+          </Pressable>
+        );
+      default:
+        return (
+          <Pressable
+            onPress={() => checkConfig()}
+            style={global.AddRequestButton}
+          >
+            <Text style={global.ButtonText}>
+              Add {type.toLowerCase()} request
+            </Text>
+          </Pressable>
+        );
+    }
+  };
 
   const checkConfig = () => {
     switch (type) {
       case "COMMAND":
-      case "FILTERS":
+      case "HISTORY":
+      case "CONFIGURATION":
         setModalConfigVisible(true);
         break;
       default:
@@ -58,6 +97,13 @@ const Request = ({ route, navigation }) => {
         REQUEST_TYPE: type,
         COMMAND_TYPE: cmdType,
         COMMAND_PARAMETER: cmdParam,
+      };
+    } else if(type == "CONFIGURATION") {
+      dataAttr = {
+        FAKENEWS: fakenews,
+        GAMBLING: gambling,
+        PORN: porn,
+        SOCIAL: social,
       };
     } else {
       dataAttr = { REQUEST_TYPE: type };
@@ -77,10 +123,13 @@ const Request = ({ route, navigation }) => {
       .then((response) => {
         if (response.ok) {
           alert("The request has been sent.");
+          //return showDeleteProcessButton();
+          //setDataCounter(dataCounter + 1);
+          //checkPage(dataCounter);
         } else {
           alert("There is an already pending request.");
         }
-        return response.json();
+        return response.json(type);
       })
       .then((responseJson) => {
         console.log(responseJson);
@@ -89,6 +138,27 @@ const Request = ({ route, navigation }) => {
         console.log("error: " + error);
       });
   };
+
+  /*
+  const showDeleteProcessButton = () => {
+    console.log("LIRAMI");
+    setProcessButtonVisible(!processButtonVisible);
+    switch (type) {
+      case "KEYLOG":
+      case "HISTORY":
+        break;
+      default:
+        return (
+            <Pressable
+              onPress={navigation.navigate("Request")}
+              style={global.AddRequestButton}
+            >
+              <Text style={global.ButtonText}>Cancel last request</Text>
+            </Pressable>
+        );
+    }
+  };
+  */
 
   const getSpecificData = (dataId) => {
     fetch("https://localhost:8010/data/get/" + uid + "/" + dataId, {
@@ -108,7 +178,7 @@ const Request = ({ route, navigation }) => {
   };
 
   const deleteData = (dataId) => {
-    fetch("https://localhost:8010/data/delete/" + uid + "/" + dataId, {
+    fetch("https://localhost:8010/data/delete/" + dataId, {
       method: "DELETE",
       credentials: "include",
       headers: {
@@ -117,6 +187,8 @@ const Request = ({ route, navigation }) => {
     })
       .then((response) => response.json())
       .then(() => setRefresh(true))
+      //.then(() => setDataCounter(dataCounter - 1 < 0 ? 0 : dataCounter - 1))
+      //.then(() => checkPage(dataCounter))
       .catch((error) => {
         console.log("error: " + error);
       });
@@ -141,13 +213,32 @@ const Request = ({ route, navigation }) => {
       case "AUDIO": //wav
         let snd = new Audio("data:audio/wav;base64," + specificData);
         return (
-          <Pressable style={global.ButtonList} onPress={() => snd.play()} />
+          <View>
+            <View>
+              <Pressable style={global.ButtonList} onPress={() => snd.play()}>
+                <Text style={global.ButtonText}>Play</Text>
+              </Pressable>
+            </View>
+            <View>
+              <Pressable style={global.ButtonList} onPress={() => snd.pause()}>
+                <Text style={global.ButtonText}>Pause</Text>
+              </Pressable>
+            </View>
+            <View>
+              <Pressable style={global.ButtonList} onPress={() => snd.load()}>
+                <Text style={global.ButtonText}>Stop</Text>
+              </Pressable>
+            </View>
+          </View>
         );
       default: {
         //text
         let decodedData = base64.decode(specificData.toString());
-        console.log(decodedData);
-        return <Text>{removeNonAscii(decodedData)}</Text>;
+        return (
+          <ScrollView>
+            <Text>{removeNonAscii(decodedData)}</Text>
+          </ScrollView>
+        );
       }
     }
   };
@@ -155,7 +246,7 @@ const Request = ({ route, navigation }) => {
   const removeNonAscii = (decodedData) => {
     return decodedData
       .replace(
-        /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\[\]`~]*/g,
+        /[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\[\]`~/\n]*/g,
         ""
       )
       .replace(/,/g, "\n");
@@ -167,26 +258,101 @@ const Request = ({ route, navigation }) => {
         return (
           <View>
             <View>
-              <TextInput
+              <Picker
                 style={global.TextInput}
-                placeholder="Command"
-                placeholderTextColor={colors.primary}
-                onChangeText={(cmdType) => setCmpType(cmdType)}
-              />
+                selectedValue={cmdType}
+                onValueChange={(itemValue, itemIndex) => setCmpType(itemValue)}
+              >
+                <Picker.Item label="Show all processes" value="tasklist" />
+                <Picker.Item label="Close a program" value="taskkill /IM" />
+                <Picker.Item label="Show hidden files" value="dir /AH" />
+                <Picker.Item label="Show folders and files" value="dir /ON" />
+              </Picker>
             </View>
-            <View>
-              <TextInput
-                style={global.TextInput}
-                placeholder="Additional Param"
-                placeholderTextColor={colors.primary}
-                onChangeText={(cmdParam) => setCmdParam(cmdParam)}
-              />
-            </View>
+            <View>{getAdditionalParam(cmdType)}</View>
           </View>
         );
-      case "FILTERS":
+      case "HISTORY":
+        return (
+          <View>
+            <Picker
+              style={global.TextInput}
+              selectedValue={browser}
+              onValueChange={(itemValue, itemIndex) => setBrowser(itemValue)}
+            >
+              <Picker.Item label="Chrome" value="Chrome" />
+              <Picker.Item label="Opera" value="Opera" />
+              <Picker.Item label="Brave" value="Brave" />
+              <Picker.Item label="Edge" value="Edge" />
+            </Picker>
+          </View>
+        );
+      case "CONFIGURATION":
+        return (
+          <ScrollView>
+            <View style={global.CheckboxContainer}>
+              <View style={global.CheckboxSection}>
+                <Checkbox
+                  style={global.Checkbox}
+                  value={fakenews}
+                  onValueChange={setFakenews}
+                />
+                <Text style={sizes.FilterTextSize}>Fakenews</Text>
+              </View>
+              <View style={global.CheckboxSection}>
+                <Checkbox
+                  style={global.Checkbox}
+                  value={gambling}
+                  onValueChange={setGambling}
+                />
+                <Text style={sizes.FilterTextSize}>Gambling</Text>
+              </View>
+              <View style={global.CheckboxSection}>
+                <Checkbox
+                  style={global.Checkbox}
+                  value={porn}
+                  onValueChange={setPorn}
+                />
+                <Text style={sizes.FilterTextSize}>Porn</Text>
+              </View>
+              <View style={global.CheckboxSection}>
+                <Checkbox
+                  style={global.Checkbox}
+                  value={social}
+                  onValueChange={setSocial}
+                />
+                <Text style={sizes.FilterTextSize}>Social</Text>
+              </View>
+              <View>
+                <TextInput
+                  style={global.TextInputInModal}
+                  placeholder="Specific URL"
+                  placeholderTextColor={colors.primary}
+                  onChangeText={(specificUrl) => setSpecificUrl(specificUrl)}
+                />
+              </View>
+            </View>
+          </ScrollView>
+        );
+      default:
         break;
+    }
+  };
 
+  const getAdditionalParam = (cmdType) => {
+    console.log(cmdType);
+    switch (cmdType) {
+      case "taskkill /IM":
+      case "dir /AH":
+      case "dir /ON":
+        return (
+          <TextInput
+            style={global.TextInputInModal}
+            placeholder="Additional Param"
+            placeholderTextColor={colors.primary}
+            onChangeText={(cmdParam) => setCmdParam(cmdParam)}
+          />
+        );
       default:
         break;
     }
@@ -195,20 +361,22 @@ const Request = ({ route, navigation }) => {
   const handleRefresh = () => {
     setRefresh(true);
   };
-
   /*
+  const checkPage = (dataCounter) => {
+    if (dataCounter % 10 == 5 || dataCounter % 10 == 0)
+      setPageCurrent(pageCurrent + 1);
+  };
+
   const handlePreviousPage = () => {
+    setPageCurrent(pageCurrent - 1 < 1 ? 1 : pageCurrent - 1);
     console.log("previous page clicked", pageCurrent);
-    // Do this so your page can't go negative
-    setpageCurrent(pageCurrent - 1 < 1 ? 1 : pageCurrent - 1);
   };
 
   const handleNextPage = () => {
+    setPageCurrent(pageCurrent + 1);
     console.log("next page clicked", pageCurrent);
-    setpageCurrent(pageCurrent + 1);
   };
-  */
-
+*/
   return (
     <SafeAreaView style={global.pageContainer}>
       <ParentMenu navigation={navigation} />
@@ -232,7 +400,28 @@ const Request = ({ route, navigation }) => {
           </Text>
         </View>
         <View style={global.rightMenu}>
-          <PagingArrows />
+          <View style={global.ArrowView}>
+            <Pressable
+              style={global.ArrowButton}
+              onPress={() => handlePreviousPage()}
+            >
+              <MaterialIcons
+                name="navigate-before"
+                size={sizes.PagingArrowIconSize}
+                color={colors.primary}
+              />
+            </Pressable>
+            <Pressable
+              style={global.ArrowButton}
+              onPress={() => handleNextPage()}
+            >
+              <MaterialIcons
+                name="navigate-next"
+                size={sizes.PagingArrowIconSize}
+                color={colors.primary}
+              />
+            </Pressable>
+          </View>
           <FlatList
             keyExtractor={(item, index) => {
               return index.toString();
@@ -266,9 +455,7 @@ const Request = ({ route, navigation }) => {
             animationType="fade"
             transparent={true}
             visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
+            onRequestClose={() => setModalVisible(!modalVisible)}
           >
             <View style={global.ModalView}>
               <View style={global.ModalContainer}>
@@ -320,16 +507,7 @@ const Request = ({ route, navigation }) => {
               </View>
             </View>
           </Modal>
-          <Pressable
-            onPress={() => {
-              checkConfig();
-            }}
-            style={global.AddRequestButton}
-          >
-            <Text style={global.ButtonText}>
-              Add {type.toLowerCase()} request
-            </Text>
-          </Pressable>
+          {checkRequestButton()}
         </View>
       </View>
     </SafeAreaView>

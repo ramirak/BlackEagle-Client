@@ -94,7 +94,7 @@ const Interface = ({ route, navigation }) => {
         <View style={global.rightMenu}>
           <View style={styles.AddChildView}>
             <TextInput
-              style={styles.TextInputStyle}
+              style={global.TextInputStyle}
               placeholder="Enter Name"
               value={name}
               onChangeText={(name) => setName(name)}
@@ -161,16 +161,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 20,
     justifyContent: "center",
-  },
-  TextInputStyle: {
-    borderColor: colors.primary,
-    borderWidth: 2,
-    borderRadius: 3,
-    height: 50,
-    width: 150,
-    marginRight: 10,
-    textAlign: "center",
-    fontWeight: "bold",
   },
 });
 export default Interface;
