@@ -47,12 +47,12 @@ const Notifications = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={global.pageContainer}>
+    <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />
-      <View style={global.rightContainer}>
+      <View style={global.RightContainer}>
         <View>
           <Pressable
-            style={global.refreshButton}
+            style={global.RefreshButton}
             onPress={() => handleRefresh()}
           >
             <FontAwesome
@@ -63,10 +63,10 @@ const Notifications = ({ route, navigation }) => {
             />
           </Pressable>
         </View>
-        <View style={global.headerMenu}>
-          <Text style={global.headerText}>My Notifications</Text>
+        <View style={global.HeaderMenu}>
+          <Text style={global.HeaderText}>My Notifications</Text>
         </View>
-        <View style={global.rightMenu}>
+        <View style={global.RightMenu}>
           <View style={global.ArrowView}>
             <Pressable
               style={global.ArrowButton}

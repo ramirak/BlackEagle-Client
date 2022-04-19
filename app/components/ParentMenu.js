@@ -9,7 +9,7 @@ const ParentMenu = ({ navigation, email }) => {
 
   return (
     <SafeAreaView>
-      <View style={global.leftMenu}>
+      <View style={styles.LeftMenu}>
         <View>
           <Pressable
             style={styles.MenuButton}
@@ -65,6 +65,18 @@ const Logout = (navigation) => {
 
 
 const styles = StyleSheet.create({
+  LeftMenu: {
+    flex: 1,
+    flexDirection: "col",
+    backgroundColor: colors.parentMenuBorder,
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 5,
+    marginLeft: 15,
+    marginBottom: 15,
+    borderWidth: 0,
+    borderColor: colors.primary,
+  },
   MenuButton: {
     height: 50,
     width: 350,

@@ -1,24 +1,25 @@
 import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, TextInput, StyleSheet, Text } from "react-native-web";
+import { View, TextInput, Text } from "react-native-web";
 import { Feather } from '@expo/vector-icons';
 import colors from "../config/colors";
 import sizes from "../config/sizes";
+import global from "../config/global";
 
 const SecondLogin = ({ navigation, route }) => {
   const { email } = route.params;
 
   const [password, setPassword] = useState("");
   return (
-    <SafeAreaView style={styles.pageContainer}>
-      <View style={styles.loginView}>
-        <Text style={styles.HeaderText}>We have sent you one time key via email</Text>
-        <View style={styles.loginContainer}>
+    <SafeAreaView style={global.LoginAndRegisterPageContainer}>
+      <View style={global.SecondLoginView}>
+        <Text style={global.LoginAndRegisterHeaderText}>We have sent you one time key via email</Text>
+        <View style={global.SecondLoginContainer}>
           <View>
-          <Feather style={styles.icon} name="key" size={sizes.iconSize} color={colors.loginAndRegisterIconColor} />
+          <Feather style={global.Icon} name="key" size={sizes.iconSize} color={colors.loginAndRegisterIconColor} />
             <TextInput
-              style={styles.TextInput}
+              style={global.TextInput}
               placeholder="One Time Key"
               placeholderTextColor="#003f5c"
               secureTextEntry={true}
@@ -26,11 +27,11 @@ const SecondLogin = ({ navigation, route }) => {
             />
           </View>
           <Pressable
-            style={styles.LoginButton}
+            style={global.LoginAndRegisterButton}
             //onPress={LoginNow}
             onPress={() => [LoginNow(email, password, navigation)]}
           >
-            <Text style={styles.ButtonText}>Login</Text>
+            <Text style={global.ButtonText}>Login</Text>
           </Pressable>
         </View>
       </View>
@@ -61,60 +62,4 @@ const LoginNow = (email, password, navigation) => {
     });
 };
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  loginView:{
-    flex: 1,
-    flexDirection:"col",
-    marginTop:10,
-  },
-  loginContainer: {
-    flex: 1,
-    backgroundColor: colors.secondary,
-    justifyContent: "center",
-    marginTop: 10,
-  },
-  inputView: {
-    borderRadius: 30,
-    width: "70%",
-    height: 45,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  TextInput: {
-    height: 50,
-    flex: 1,
-    padding: 10,
-    paddingRight: 40,
-  },
-  LoginButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: colors.primary,
-  },
-  ButtonText: {
-    fontSize: 12,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: colors.secondary,
-  },
-  HeaderText: {
-    fontSize: 18,
-    lineHeight: 25,
-    letterSpacing: 0.5,
-    color: colors.primary,
-  },
-  icon: {
-    position: 'absolute',
-    right: 10,
-  },
-});
 export default SecondLogin;

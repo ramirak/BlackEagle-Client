@@ -12,12 +12,12 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   return (
-    <SafeAreaView style={global.LoginPageContainer}>
-      <Text style={global.LoginHeaderText}>Black Eagle</Text>
-      <View style={global.LoginContainer}>
+    <SafeAreaView style={global.LoginAndRegisterPageContainer}>
+      <Text style={global.LoginAndRegisterHeaderText}>Black Eagle</Text>
+      <View style={global.LoginAndRegisterContainer}>
         <View>
           <MaterialIcons
-            style={global.icon}
+            style={global.Icon}
             name="email"
             size={sizes.iconSize}
             color={colors.loginAndRegisterIconColor}
@@ -31,7 +31,7 @@ const Login = ({ navigation }) => {
         </View>
         <View>
           <Ionicons
-            style={global.icon}
+            style={global.Icon}
             name="key-outline"
             size={sizes.iconSize}
             color={colors.loginAndRegisterIconColor}
@@ -45,22 +45,22 @@ const Login = ({ navigation }) => {
           />
         </View>
         <Pressable
-          style={global.LoginButton}
+          style={global.LoginAndRegisterButton}
           onPress={() => [LoginNow(email, password, navigation)]}
         >
-          <Text style={global.LoginButtonText}>Login</Text>
+          <Text style={global.ButtonText}>Login</Text>
         </Pressable>
         <Pressable
-            style={global.smallButton}
+            style={global.SmallButton}
             onPress={() => navigation.navigate("Register")}
           >
-          <Text style={global.smallButtonText}>Don't have an account? Sign Up</Text>
+          <Text style={global.SmallButtonText}>Don't have an account? Sign Up</Text>
           </Pressable>
         <Pressable
-            style={global.smallButton}
-            onPress={() => navigation.navigate("Control Panel", { email: "email" })}
+            style={global.SmallButton}
+            onPress={() => navigation.navigate("Forgot Password", { email: "email" })}
           >
-          <Text style={global.smallButtonText}>Forgot Password?</Text>
+          <Text style={global.SmallButtonText}>Forgot Password?</Text>
           </Pressable>
       </View>
     </SafeAreaView>

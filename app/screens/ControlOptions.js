@@ -1,7 +1,7 @@
 import { React } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleSheet, Text, View } from "react-native-web";
+import { Text, View } from "react-native-web";
 import {
   Ionicons,
   FontAwesome5,
@@ -20,17 +20,17 @@ const ControlOptions = ({ navigation, route }) => {
   const { name } = route.params;
 
   return (
-    <SafeAreaView style={global.pageContainer}>
+    <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />
-      <View style={global.rightContainer}>
-        <View style={global.headerMenu}>
-          <Text style={global.headerText}>{name}</Text>
+      <View style={global.RightContainer}>
+        <View style={global.HeaderMenu}>
+          <Text style={global.HeaderText}>{name}</Text>
         </View>
 
-        <View style={global.rightMenu}>
-          <View style={styles.MenuRow}>
+        <View style={global.RightMenu}>
+          <View style={global.MenuRow}>
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "SCREENSHOT", name:name })
               }
@@ -40,10 +40,10 @@ const ControlOptions = ({ navigation, route }) => {
                 size={sizes.iconSize}
                 color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>Screenshots</Text>
+              <Text style={global.MenuButtonText}>Screenshots</Text>
             </Pressable>
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "KEYLOG", name:name })
               }
@@ -53,11 +53,11 @@ const ControlOptions = ({ navigation, route }) => {
                 size={sizes.iconSize}
                 color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>Keylogs</Text>
+              <Text style={global.MenuButtonText}>Keylogs</Text>
             </Pressable>
 
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "CAMERA", name:name })
               }
@@ -67,12 +67,12 @@ const ControlOptions = ({ navigation, route }) => {
                 size={sizes.iconSize}
                 color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>Camera</Text>
+              <Text style={global.MenuButtonText}>Camera</Text>
             </Pressable>
           </View>
-          <View style={styles.MenuRow}>
+          <View style={global.MenuRow}>
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "AUDIO", name:name })
               }
@@ -82,10 +82,10 @@ const ControlOptions = ({ navigation, route }) => {
                 size={sizes.iconSize}
                 color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>Audio</Text>
+              <Text style={global.MenuButtonText}>Audio</Text>
             </Pressable>
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "LOCKDOWN", name:name })
               }
@@ -95,10 +95,10 @@ const ControlOptions = ({ navigation, route }) => {
                 size={sizes.iconSize}
                 color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>Lockdown</Text>
+              <Text style={global.MenuButtonText}>Lockdown</Text>
             </Pressable>
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "COMMAND", name:name })
               }
@@ -108,12 +108,12 @@ const ControlOptions = ({ navigation, route }) => {
                 size={sizes.iconSize}
                 color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>CMD</Text>
+              <Text style={global.MenuButtonText}>CMD</Text>
             </Pressable>
           </View>
-          <View style={styles.MenuRow}>
+          <View style={global.MenuRow}>
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "LOCATION", name:name })
               }
@@ -123,10 +123,10 @@ const ControlOptions = ({ navigation, route }) => {
                 size={sizes.iconSize}
                 color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>Locations</Text>
+              <Text style={global.MenuButtonText}>Locations</Text>
             </Pressable>
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "HISTORY", name:name })
               }
@@ -136,10 +136,10 @@ const ControlOptions = ({ navigation, route }) => {
              size={sizes.iconSize}
              color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>History</Text>
+              <Text style={global.MenuButtonText}>History</Text>
             </Pressable>
             <Pressable
-              style={styles.Button}
+              style={global.MenuButton}
               onPress={() =>
                 navigation.navigate("Request", { uid: uid, type: "CONFIGURATION", name:name })
               }
@@ -149,7 +149,7 @@ const ControlOptions = ({ navigation, route }) => {
                 size={sizes.iconSize}
                 color={colors.secondary}
               />
-              <Text style={styles.ButtonText}>Filtering</Text>
+              <Text style={global.MenuButtonText}>Filtering</Text>
             </Pressable>
           </View>
         </View>
@@ -157,38 +157,5 @@ const ControlOptions = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  MenuRow: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  Button: {
-    height: 100,
-    width: 150,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    margin: 5,
-    backgroundColor: colors.primary,
-  },
-  ButtonText: {
-    fontSize: 15,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.5,
-    color: colors.secondary,
-  },
-  HeaderText: {
-    fontSize: 18,
-    lineHeight: 25,
-    letterSpacing: 0.5,
-    color: colors.primary,
-  },
-});
 
 export default ControlOptions;

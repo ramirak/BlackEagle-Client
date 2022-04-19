@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Pressable, Text, Modal, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, FlatList, TextInput } from "react-native-web";
+import { View, FlatList, TextInput, StyleSheet } from "react-native-web";
 import { Picker } from "@react-native-picker/picker";
 import Checkbox from "expo-checkbox";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
@@ -50,115 +50,26 @@ const Request = ({ route, navigation }) => {
     setRefresh(false);
   }, [refresh]); //, pageCurrent]);
 
-  const checkRequestButton = () => {
-    switch (type) {
-      case "KEYLOG":
-        break;
-      case "HISTORY":
-        return (
-          <Pressable
-            onPress={() => checkConfig()}
-            style={global.AddRequestButton}
-          >
-            <Text style={global.ButtonText}>Download browser history</Text>
-          </Pressable>
-        );
-      default:
-        return (
-          <Pressable
-            onPress={() => checkConfig()}
-            style={global.AddRequestButton}
-          >
-            <Text style={global.ButtonText}>
-              Add {type.toLowerCase()} request
-            </Text>
-          </Pressable>
-        );
-    }
+  const handleRefresh = () => {
+    setRefresh(true);
   };
 
-  const checkConfig = () => {
-    switch (type) {
-      case "COMMAND":
-      case "HISTORY":
-      case "CONFIGURATION":
-        setModalConfigVisible(true);
-        break;
-      default:
-        addRequest();
-        break;
-    }
+    /*
+  const checkPage = (dataCounter) => {
+    if (dataCounter % 10 == 5 || dataCounter % 10 == 0)
+      setPageCurrent(pageCurrent + 1);
   };
 
-  const addRequest = () => {
-    let dataAttr;
-    if (type == "COMMAND") {
-      dataAttr = {
-        REQUEST_TYPE: type,
-        COMMAND_TYPE: cmdType,
-        COMMAND_PARAMETER: cmdParam,
-      };
-    } else if(type == "CONFIGURATION") {
-      dataAttr = {
-        FAKENEWS: fakenews,
-        GAMBLING: gambling,
-        PORN: porn,
-        SOCIAL: social,
-      };
-    } else {
-      dataAttr = { REQUEST_TYPE: type };
-    }
-    fetch("https://localhost:8010/data/add/" + uid, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        dataType: "REQUEST",
-        dataAttributes: dataAttr,
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          alert("The request has been sent.");
-          //return showDeleteProcessButton();
-          //setDataCounter(dataCounter + 1);
-          //checkPage(dataCounter);
-        } else {
-          alert("There is an already pending request.");
-        }
-        return response.json(type);
-      })
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-      .catch((error) => {
-        console.log("error: " + error);
-      });
+  const handlePreviousPage = () => {
+    setPageCurrent(pageCurrent - 1 < 1 ? 1 : pageCurrent - 1);
+    console.log("previous page clicked", pageCurrent);
   };
 
-  /*
-  const showDeleteProcessButton = () => {
-    console.log("LIRAMI");
-    setProcessButtonVisible(!processButtonVisible);
-    switch (type) {
-      case "KEYLOG":
-      case "HISTORY":
-        break;
-      default:
-        return (
-            <Pressable
-              onPress={navigation.navigate("Request")}
-              style={global.AddRequestButton}
-            >
-              <Text style={global.ButtonText}>Cancel last request</Text>
-            </Pressable>
-        );
-    }
+  const handleNextPage = () => {
+    setPageCurrent(pageCurrent + 1);
+    console.log("next page clicked", pageCurrent);
   };
-  */
+*/
 
   const getSpecificData = (dataId) => {
     fetch("https://localhost:8010/data/get/" + uid + "/" + dataId, {
@@ -290,34 +201,34 @@ const Request = ({ route, navigation }) => {
       case "CONFIGURATION":
         return (
           <ScrollView>
-            <View style={global.CheckboxContainer}>
-              <View style={global.CheckboxSection}>
+            <View style={styles.CheckboxContainer}>
+              <View style={styles.CheckboxSection}>
                 <Checkbox
-                  style={global.Checkbox}
+                  style={styles.Checkbox}
                   value={fakenews}
                   onValueChange={setFakenews}
                 />
                 <Text style={sizes.FilterTextSize}>Fakenews</Text>
               </View>
-              <View style={global.CheckboxSection}>
+              <View style={styles.CheckboxSection}>
                 <Checkbox
-                  style={global.Checkbox}
+                  style={styles.Checkbox}
                   value={gambling}
                   onValueChange={setGambling}
                 />
                 <Text style={sizes.FilterTextSize}>Gambling</Text>
               </View>
-              <View style={global.CheckboxSection}>
+              <View style={styles.CheckboxSection}>
                 <Checkbox
-                  style={global.Checkbox}
+                  style={styles.Checkbox}
                   value={porn}
                   onValueChange={setPorn}
                 />
                 <Text style={sizes.FilterTextSize}>Porn</Text>
               </View>
-              <View style={global.CheckboxSection}>
+              <View style={styles.CheckboxSection}>
                 <Checkbox
-                  style={global.Checkbox}
+                  style={styles.Checkbox}
                   value={social}
                   onValueChange={setSocial}
                 />
@@ -339,6 +250,132 @@ const Request = ({ route, navigation }) => {
     }
   };
 
+  const checkRequestButton = () => {
+    switch (type) {
+      case "KEYLOG":
+        break;
+      case "HISTORY":
+        return (
+          <Pressable
+            onPress={() => setModalConfigVisible(true)}
+            style={styles.AddRequestButton}
+          >
+            <Text style={global.ButtonText}>Download browser history</Text>
+          </Pressable>
+        );
+      case "COMMAND":
+      case "CONFIGURATION":
+        return (
+          <Pressable
+            onPress={() => setModalConfigVisible(true)}
+            style={styles.AddRequestButton}
+          >
+            <Text style={global.ButtonText}>
+              Add {type.toLowerCase()} request
+            </Text>
+          </Pressable>
+        );
+      default:
+        return (
+          <Pressable
+            onPress={() => defineTypeAttributes()}
+            style={styles.AddRequestButton}
+          >
+            <Text style={global.ButtonText}>
+              Add {type.toLowerCase()} request
+            </Text>
+          </Pressable>
+        );
+    }
+  };
+
+  const defineTypeAttributes = () => {
+    let dataAttr;
+    if (type == "COMMAND") {
+      dataAttr = {
+        REQUEST_TYPE: type,
+        COMMAND_TYPE: cmdType,
+        COMMAND_PARAMETER: cmdParam,
+      };
+      addRequest(dataAttr);
+    } else if (type == "CONFIGURATION") {
+      dataAttr = {
+        FAKENEWS: fakenews,
+        GAMBLING: gambling,
+        PORN: porn,
+        SOCIAL: social,
+      };
+      addConfigurationRequest(dataAttr);
+    } else {
+      dataAttr = { REQUEST_TYPE: type };
+      addRequest(dataAttr);
+    }
+  };
+
+  const addRequest = (dataAttr) => {
+    fetch("https://localhost:8010/data/add/" + uid, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        dataType: "REQUEST",
+        dataAttributes: dataAttr,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("The request has been sent.");
+          //return showDeleteProcessButton();
+          //setDataCounter(dataCounter + 1);
+          //checkPage(dataCounter);
+        } else {
+          alert("There is an already pending request.");
+        }
+        return response.json(type);
+      })
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.log("error: " + error);
+      });
+  };
+
+  const addConfigurationRequest = (dataAttr) => {
+    fetch("https://localhost:8010/data/update/" + uid, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        dataType: "CONFIGURATION",
+        dataAttributes: dataAttr,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("The request has been sent.");
+          //return showDeleteProcessButton();
+          //setDataCounter(dataCounter + 1);
+          //checkPage(dataCounter);
+        } else {
+          alert("There is an already pending request.");
+        }
+        return response.json(type);
+      })
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.log("error: " + error);
+      });
+  };
+
   const getAdditionalParam = (cmdType) => {
     console.log(cmdType);
     switch (cmdType) {
@@ -358,32 +395,34 @@ const Request = ({ route, navigation }) => {
     }
   };
 
-  const handleRefresh = () => {
-    setRefresh(true);
-  };
   /*
-  const checkPage = (dataCounter) => {
-    if (dataCounter % 10 == 5 || dataCounter % 10 == 0)
-      setPageCurrent(pageCurrent + 1);
+  const showDeleteProcessButton = () => {
+    console.log("LIRAMI");
+    setProcessButtonVisible(!processButtonVisible);
+    switch (type) {
+      case "KEYLOG":
+      case "HISTORY":
+        break;
+      default:
+        return (
+            <Pressable
+              onPress={navigation.navigate("Request")}
+              style={styles.AddRequestButton}
+            >
+              <Text style={global.ButtonText}>Cancel last request</Text>
+            </Pressable>
+        );
+    }
   };
+  */
 
-  const handlePreviousPage = () => {
-    setPageCurrent(pageCurrent - 1 < 1 ? 1 : pageCurrent - 1);
-    console.log("previous page clicked", pageCurrent);
-  };
-
-  const handleNextPage = () => {
-    setPageCurrent(pageCurrent + 1);
-    console.log("next page clicked", pageCurrent);
-  };
-*/
   return (
-    <SafeAreaView style={global.pageContainer}>
+    <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />
-      <View style={global.rightContainer}>
+      <View style={global.RightContainer}>
         <View>
           <Pressable
-            style={global.refreshButton}
+            style={global.RefreshButton}
             onPress={() => handleRefresh()}
           >
             <FontAwesome
@@ -394,12 +433,12 @@ const Request = ({ route, navigation }) => {
             />
           </Pressable>
         </View>
-        <View style={global.headerMenu}>
-          <Text style={global.headerText}>
+        <View style={global.HeaderMenu}>
+          <Text style={global.HeaderText}>
             {name + " - " + type.toLowerCase()}
           </Text>
         </View>
-        <View style={global.rightMenu}>
+        <View style={global.RightMenu}>
           <View style={global.ArrowView}>
             <Pressable
               style={global.ArrowButton}
@@ -450,7 +489,7 @@ const Request = ({ route, navigation }) => {
               </Pressable>
             )}
           />
-          <Modal
+          <Modal /*Modal for showing a specific data*/
             style={global.ModalContainer}
             animationType="fade"
             transparent={true}
@@ -471,7 +510,7 @@ const Request = ({ route, navigation }) => {
               </View>
             </View>
           </Modal>
-          <Modal
+          <Modal /* Modal for COMMAND, HISTORY and CONFIGURATION components */
             style={global.ModalConfigContainer}
             animationType="fade"
             transparent={true}
@@ -488,17 +527,15 @@ const Request = ({ route, navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      {
-                        addRequest(),
-                          setModalConfigVisible(!modalConfigVisible);
-                      }
+                        defineTypeAttributes(),
+                        setModalConfigVisible(!modalConfigVisible);
                     }}
-                    style={global.buttonClose}
+                    style={global.CloseButton}
                   >
                     <Text style={global.ButtonText}>Send</Text>
                   </Pressable>
                   <Pressable
-                    style={global.buttonClose}
+                    style={global.CloseButton}
                     onPress={() => setModalConfigVisible(!modalConfigVisible)}
                   >
                     <Text style={global.ButtonText}>Close</Text>
@@ -513,5 +550,33 @@ const Request = ({ route, navigation }) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  AddRequestButton: {
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 6,
+    borderColor: colors.borderRightColor,
+    backgroundColor: colors.primary,
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.5,
+    color: colors.secondary,
+    margin: 5,
+    paddingLeft: 10,
+  },
+  CheckboxContainer: {
+    flex: 1,
+  },
+  CheckboxSection: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  Checkbox: {
+    margin: 8,
+  },
+});
 
 export default Request;

@@ -13,7 +13,7 @@ import {
 
 const Homepage = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.Container}>
       <View>
         <Image
           style={{ width: 350, height: 270 }}
@@ -22,23 +22,23 @@ const Homepage = ({ navigation }) => {
         <StatusBar style="auto" />
       </View>
 
-      <View style={styles.fixToText}>
-        <View style={styles.buttonContainer}>
+      <View style={styles.FixToText}>
+        <View style={styles.ButtonContainer}>
           <Button
-            style={styles.buttonContainer}
+            style={styles.ButtonContainer}
             color="#000"
             title="Login"
             onPress={() => navigation.navigate("Login")}
           />
         </View>
-        <View style={styles.buttonContainer}>
+        <View style={styles.ButtonContainer}>
           <Button
             color="#000"
             title="Register"
             onPress={() => navigation.navigate("Register")}
           />
         </View>
-        <View style={styles.buttonContainer}>
+        <View style={styles.ButtonContainer}>
           <Button
             color="#000"
             title="Test"
@@ -52,17 +52,17 @@ const Homepage = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  Container: {
     flex: 1,
     paddingTop: Platform.OS === "android" ? 20 : 0,
     backgroundColor: colors.secondary,
     alignItems: "center",
     justifyContent: "space-evenly",
   },
-  fixToText: {
+  FixToText: {
     margin: 20,
   },
-  buttonContainer: {
+  ButtonContainer: {
     flex: 1,
     padding: 5,
     width: 200,

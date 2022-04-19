@@ -49,12 +49,12 @@ const Reports = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={global.pageContainer}>
+    <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />
-      <View style={global.rightContainer}>
+      <View style={global.RightContainer}>
         <View>
           <Pressable
-            style={global.refreshButton}
+            style={global.RefreshButton}
             onPress={() => handleRefresh()}
           >
             <FontAwesome
@@ -65,10 +65,10 @@ const Reports = ({ route, navigation }) => {
             />
           </Pressable>
         </View>
-        <View style={global.headerMenu}>
-          <Text style={global.headerText}>My Reports</Text>
+        <View style={global.HeaderMenu}>
+          <Text style={global.HeaderText}>My Reports</Text>
         </View>
-        <View style={global.rightMenu}>
+        <View style={global.RightMenu}>
           <View style={global.ArrowView}>
             <Pressable
               style={global.ArrowButton}

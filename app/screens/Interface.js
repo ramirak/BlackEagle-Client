@@ -85,21 +85,26 @@ const Interface = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={global.pageContainer}>
+    <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} email={email} />
-      <View style={global.rightContainer}>
-        <View style={global.headerMenu}>
-          <Text style={global.headerText}>My children devices</Text>
+      <View style={global.RightContainer}>
+        <View style={global.HeaderMenu}>
+          <Text style={global.HeaderText}>My children devices</Text>
         </View>
-        <View style={global.rightMenu}>
+        <View style={global.RightMenu}>
           <View style={styles.AddChildView}>
             <TextInput
-              style={global.TextInputStyle}
+              style={styles.TextInputStyle}
               placeholder="Enter Name"
               value={name}
               onChangeText={(name) => setName(name)}
             />
-            <Pressable style={global.SendButton} onPress={() => {addChild(name), setName("")}}>
+            <Pressable
+              style={global.SendButton}
+              onPress={() => {
+                addChild(name), setName("");
+              }}
+            >
               <Text style={global.ButtonText}>Add Child</Text>
             </Pressable>
           </View>
@@ -123,7 +128,7 @@ const Interface = ({ route, navigation }) => {
                     <Text style={global.ButtonText}>
                       {item.name} - {item.userId.uid}
                     </Text>
-                    <View style={global.ListRightButtons}>
+                    <View style={styles.ListRightButtons}>
                       <Pressable
                         style={global.IconButton}
                         onPress={() => navigation.navigate("Homepage")}
@@ -159,8 +164,24 @@ const Interface = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   AddChildView: {
     flexDirection: "row",
-    padding: 20,
     justifyContent: "center",
+    padding: 20,
+  },
+  TextInputStyle: {
+    borderColor: colors.primary,
+    borderWidth: 2,
+    borderRadius: 3,
+    height: 50,
+    width: 150,
+    marginRight: 10,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  ListRightButtons: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginLeft: 15,
   },
 });
 export default Interface;
