@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { Pressable, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text } from "react-native-web";
+import { View, Text, TextInput } from "react-native-web";
 import {
   AntDesign,
   Ionicons,
@@ -15,19 +15,25 @@ import sizes from "../config/sizes";
 
 const Settings = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [type, setType] = useState("");
   const [newName, setNewName] = useState("");
-  const { uid } = route.params;
-  const { name } = route.params;
-  const { type } = route.params;
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [hint, setHint] = useState("");
+  const [userAnswer, setUserAnswer] = useState("");
+  const [oneTimeKey, setOneTimeKey] = useState("");
+  const { email } = route.params;
 
-  const settingsComponent = () => {
+  const settingsComponent = (type) => {
+    console.log(type);
     switch (type) {
       case "NAME":
         return (
           <View>
             <View>
               <TextInput
-                style={global.TextInput}
+                style={global.TextInputInModal}
                 placeholder="New name"
                 placeholderTextColor={colors.primary}
                 onChangeText={(newName) => setNewName(newName)}
@@ -43,7 +49,7 @@ const Settings = ({ navigation, route }) => {
                 style={global.TextInput}
                 placeholder="Old password"
                 placeholderTextColor={colors.primary}
-                //onChangeText={}
+                onChangeText={(password) => setPassword(password)}
               />
             </View>
             <View>
@@ -51,7 +57,7 @@ const Settings = ({ navigation, route }) => {
                 style={global.TextInput}
                 placeholder="New password"
                 placeholderTextColor={colors.primary}
-                //onChangeText={}
+                onChangeText={(newPassword) => setNewPassword(newPassword)}
               />
             </View>
             <View>
@@ -59,15 +65,17 @@ const Settings = ({ navigation, route }) => {
                 style={global.TextInput}
                 placeholder="Confirm new password"
                 placeholderTextColor={colors.primary}
-                //onChangeText={}
+                onChangeText={(confirmPassword) =>
+                  setConfirmPassword(confirmPassword)
+                }
               />
             </View>
             <View>
               <TextInput
                 style={global.TextInput}
-                placeholder="New Hint"
+                placeholder="New hint"
                 placeholderTextColor={colors.primary}
-                //onChangeText={}
+                onChangeText={(hint) => setHint(hint)}
               />
             </View>
           </View>
@@ -77,68 +85,67 @@ const Settings = ({ navigation, route }) => {
       case "SECURITY":
         break;
       case "SUSPEND":
-        break;
+        return (
+          <View>
+            <View>
+              <Text>
+                If you are sure, write in the text line "YES" and click Send.
+              </Text>
+              <TextInput
+                style={global.TextInputInModal}
+                placeholder="Are you sure?"
+                placeholderTextColor={colors.primary}
+                onChangeText={(userAnswer) => setUserAnswer(userAnswer)}
+              />
+            </View>
+          </View>
+        );
       case "DELETE":
-        break;
+        return (
+          <View>
+            <View>
+              <Text>We have sent you one time key via email.</Text>
+              <TextInput
+                style={global.TextInputInModal}
+                placeholder="One time key"
+                placeholderTextColor={colors.primary}
+                onChangeText={(oneTimeKey) => setOneTimeKey(oneTimeKey)}
+              />
+            </View>
+          </View>
+        );
       default:
         break;
     }
   };
 
-  const setSettingRequests = () => {
+  const settingsRequests = () => {
     switch (type) {
       case "DELETE":
-        return (
-          fetch("https://localhost:8010/users/delete/" + oneTimeKey, {
-            method: "DELETE",
-            credentials: "include",
-            headers: {
-              Accept: "application/json",
-            },
+        return fetch("https://localhost:8010/users/delete/" + oneTimeKey, {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              alert("The account has been deleted.");
+            } else {
+              alert("Deletion failed.");
+            }
+            return response.json(type);
           })
-            .then((response) => {
-              if (response.ok) {
-                alert("The account has been deleted.");
-              } else {
-                alert("Deletion failed.");
-              }
-              return response.json(type);
-            })
-            .then((responseJson) => {
-              console.log(responseJson);
-            })
-            .catch((error) => {
-              console.log("error: " + error);
-            })
-          );
-      case "PASSWORD":
-        return (
-          fetch("https://localhost:8010/users/reset/" + email + oneTimeKey, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              Accept: "application/json",
-            },
+          .then((responseJson) => {
+            console.log(responseJson);
           })
-            .then((response) => {
-              if (response.ok) {
-                alert("Password reset succeeded.");
-              } else {
-                alert("Password reset failed.");
-              }
-              return response.json(type);
-            })
-            .then((responseJson) => {
-              console.log(responseJson);
-            })
-            .catch((error) => {
-              console.log("error: " + error);
-            })
-          );
-
+          .catch((error) => {
+            console.log("error: " + error);
+          });
       default:
-        return (
-        fetch("https://localhost:8010/users/update", {
+        let jsonBody = getJsonBodyByType();
+         return fetch("https://localhost:8010/users/update", {
           method: "PUT",
           credentials: "include",
           headers: {
@@ -146,21 +153,7 @@ const Settings = ({ navigation, route }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-              USERID: 
-              {
-                  UID: email,	
-                  PASSWORD:
-                  {
-                    PASSWORD: password,
-                    OPTINALPASSWORD: optinalPassword,
-                    CREATIONTIME: null,
-                    ACTIVE: true,
-                    HINT: hint
-                  }
-              },
-              ROLE: role,
-              ACTIVE: true,
-              DEVICECOUNT: deviceCount
+            jsonBody,
           }),
         })
           .then((response) => {
@@ -176,12 +169,41 @@ const Settings = ({ navigation, route }) => {
           })
           .catch((error) => {
             console.log("error: " + error);
-          })
-        );
-    }
+          });
+        }
   };
 
- 
+  const getJsonBodyByType = () => {
+    let regName = null,
+      regPassword = null,
+      regOptionalPassword = null,
+      regHint = null;
+    if (type == "NAME") {
+      regName = newName;
+    } else if (type == "PASSWORD") {
+      (regPassword = newPassword),
+        (regOptionalPassword = password),
+        (regHint = hint);
+    }
+    let jsonTemplate = {
+      userId: {
+        uid: email,
+        name: regName,
+        password: {
+          password: regPassword,
+          optionalPassword: regOptionalPassword,
+          creationTime: null,
+          active: null,
+          hint: regHint,
+        },
+      },
+      role: null,
+      active: null,
+      deviceCount: null,
+    };
+    return jsonTemplate;
+  };
+
   return (
     <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />
@@ -193,7 +215,9 @@ const Settings = ({ navigation, route }) => {
           <View style={global.MenuRow}>
             <Pressable
               style={global.MenuButton}
-              onPress={() => setModalVisible(true)}
+              onPress={() => {
+                setModalVisible(true), setType("NAME");
+              }}
             >
               <MaterialCommunityIcons
                 name="rename-box"
@@ -204,7 +228,9 @@ const Settings = ({ navigation, route }) => {
             </Pressable>
             <Pressable
               style={global.MenuButton}
-              onPress={() => setModalVisible(true)}
+              onPress={() => {
+                setModalVisible(true), setType("PASSWORD");
+              }}
             >
               <MaterialCommunityIcons
                 name="form-textbox-password"
@@ -215,7 +241,9 @@ const Settings = ({ navigation, route }) => {
             </Pressable>
             <Pressable
               style={global.MenuButton}
-              onPress={() => setModalVisible(true)}
+              onPress={() => {
+                setModalVisible(true), setType("NOTIFICATION");
+              }}
             >
               <Ionicons
                 name="md-notifications-circle"
@@ -228,7 +256,9 @@ const Settings = ({ navigation, route }) => {
           <View style={global.MenuRow}>
             <Pressable
               style={global.MenuButton}
-              onPress={() => setModalVisible(true)}
+              onPress={() => {
+                setModalVisible(true), setType("SECURITY");
+              }}
             >
               <MaterialIcons
                 name="security"
@@ -239,7 +269,9 @@ const Settings = ({ navigation, route }) => {
             </Pressable>
             <Pressable
               style={global.MenuButton}
-              onPress={() => setModalVisible(true)}
+              onPress={() => {
+                setModalVisible(true), setType("SUSPEND");
+              }}
             >
               <MaterialCommunityIcons
                 name="account-cancel-outline"
@@ -252,7 +284,9 @@ const Settings = ({ navigation, route }) => {
           <View style={global.MenuRow}>
             <Pressable
               style={global.MenuButton}
-              onPress={() => setModalVisible(true)}
+              onPress={() => {
+                setModalVisible(true), setType("DELETE");
+              }}
             >
               <AntDesign
                 name="deleteuser"
@@ -272,12 +306,14 @@ const Settings = ({ navigation, route }) => {
             }}
           >
             <View style={global.ModalView}>
-              <View style={global.ModalContainer}>
-                <View style={global.TopModalView}>{settingsComponent()}</View>
+              <View style={global.ModalConfigContainer}>
+                <View style={global.TopModalView}>
+                  {settingsComponent(type)}
+                </View>
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      setModalConfigVisible(!modalConfigVisible), setSettingRequests();
+                      setModalVisible(!modalVisible), settingsRequests();
                     }}
                     style={global.CloseButton}
                   >
@@ -285,7 +321,7 @@ const Settings = ({ navigation, route }) => {
                   </Pressable>
                   <Pressable
                     style={global.CloseButton}
-                    onPress={() => setModalConfigVisible(!modalConfigVisible)}
+                    onPress={() => setModalVisible(!modalVisible)}
                   >
                     <Text style={global.ButtonText}>Close</Text>
                   </Pressable>

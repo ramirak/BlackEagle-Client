@@ -28,6 +28,7 @@ const Request = ({ route, navigation }) => {
   const [porn, setPorn] = useState(false);
   const [social, setSocial] = useState(false);
   const [specificUrl, setSpecificUrl] = useState("");
+  const [additionalSitesOP, setAdditionalSitesOP] = useState("Add");
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
@@ -54,7 +55,7 @@ const Request = ({ route, navigation }) => {
     setRefresh(true);
   };
 
-    /*
+  /*
   const checkPage = (dataCounter) => {
     if (dataCounter % 10 == 5 || dataCounter % 10 == 0)
       setPageCurrent(pageCurrent + 1);
@@ -88,6 +89,13 @@ const Request = ({ route, navigation }) => {
       });
   };
 
+  const deleteByType = (dataId) => {
+    if(type == "CONFIGURATION"){
+      deleteUrl(dataId);
+    }
+    else deleteData(dataId);
+  };
+
   const deleteData = (dataId) => {
     fetch("https://localhost:8010/data/delete/" + dataId, {
       method: "DELETE",
@@ -100,6 +108,44 @@ const Request = ({ route, navigation }) => {
       .then(() => setRefresh(true))
       //.then(() => setDataCounter(dataCounter - 1 < 0 ? 0 : dataCounter - 1))
       //.then(() => checkPage(dataCounter))
+      .catch((error) => {
+        console.log("error: " + error);
+      });
+  };
+
+  const deleteUrl = (dataId) => {
+    let dataAttr = {
+      FAKENEWS: fakenews,
+      GAMBLING: gambling,
+      PORN: porn,
+      SOCIAL: social,
+      ADDITIONAL_SITES: specificUrl,
+      ADDITIONAL_SITES_OPERATION: additionalSitesOP,
+    };
+    fetch("https://localhost:8010/data/update", {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        DATAID: "CONFIGURATION@" + dataId,
+        DATATYPE: type,
+        dataAttributes: dataAttr
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("The update was successful.");
+        } else {
+          alert("The update failed.");
+        }
+        return response.json(type);
+      })
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
       .catch((error) => {
         console.log("error: " + error);
       });
@@ -304,6 +350,8 @@ const Request = ({ route, navigation }) => {
         GAMBLING: gambling,
         PORN: porn,
         SOCIAL: social,
+        ADDITIONAL_SITES: specificUrl,
+        ADDITIONAL_SITES_OPERATION: additionalSitesOP,
       };
       addConfigurationRequest(dataAttr);
     } else {
@@ -478,7 +526,7 @@ const Request = ({ route, navigation }) => {
                 </Text>
                 <Pressable
                   style={global.IconButton}
-                  onPress={() => deleteData(item.dataId)}
+                  onPress={() => deleteByType(item.dataId)}
                 >
                   <FontAwesome
                     name="trash-o"
@@ -527,7 +575,7 @@ const Request = ({ route, navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                        defineTypeAttributes(),
+                      defineTypeAttributes(),
                         setModalConfigVisible(!modalConfigVisible);
                     }}
                     style={global.CloseButton}

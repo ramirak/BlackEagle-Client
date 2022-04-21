@@ -46,33 +46,37 @@ const Login = ({ navigation }) => {
         </View>
         <Pressable
           style={global.LoginAndRegisterButton}
-          onPress={() => [LoginNow(email, password, navigation)]}
+          onPress={() => loginNow(email, password, navigation)}
         >
           <Text style={global.ButtonText}>Login</Text>
         </Pressable>
         <Pressable
-            style={global.SmallButton}
-            onPress={() => navigation.navigate("Register")}
-          >
-          <Text style={global.SmallButtonText}>Don't have an account? Sign Up</Text>
-          </Pressable>
+          style={global.SmallButton}
+          onPress={() => navigation.navigate("Register")}
+        >
+          <Text style={global.SmallButtonText}>
+            Don't have an account? Sign Up
+          </Text>
+        </Pressable>
         <Pressable
-            style={global.SmallButton}
-            onPress={() => navigation.navigate("Forgot Password", { email: "email" })}
-          >
+          style={global.SmallButton}
+          onPress={() =>
+            navigation.navigate("Forgot Password", { email: "email" })
+          }
+        >
           <Text style={global.SmallButtonText}>Forgot Password?</Text>
-          </Pressable>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
 };
 
-const LoginNow = (email, password, navigation) => {
+const loginNow = (email, password, navigation) => {
   fetch("https://localhost:8010/login", {
     method: "POST",
     credentials: "include",
     headers: {
-      "Accept": "application/json",
+      Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({

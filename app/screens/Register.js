@@ -13,6 +13,7 @@ import sizes from "../config/sizes";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [hint, setHint] = useState("");
@@ -60,6 +61,20 @@ const Register = ({ navigation }) => {
           />
         </View>
         <View>
+          <MaterialIcons
+            style={global.Icon}
+            name="drive-file-rename-outline"
+            size={sizes.iconSize}
+            color={colors.loginAndRegisterIconColor}
+          />
+          <TextInput
+            style={global.TextInput}
+            placeholder="Name"
+            placeholderTextColor="#003f5c"
+            onChangeText={(name) => setName(name)}
+          />
+        </View>
+        <View>
           <Ionicons
             style={global.Icon}
             name="key-outline"
@@ -84,7 +99,7 @@ const Register = ({ navigation }) => {
           />
           <TextInput
             style={global.TextInput}
-            placeholder="Confirm Password"
+            placeholder="Confirm password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
             onChangeText={(confirmPassword) =>
@@ -101,14 +116,14 @@ const Register = ({ navigation }) => {
           />
           <TextInput
             style={global.TextInput}
-            placeholder="Password Hint"
+            placeholder="Password hint"
             placeholderTextColor="#003f5c"
             onChangeText={(hint) => setHint(hint)}
           />
         </View>
         <Pressable
           style={global.LoginAndRegisterButton}
-          onPress={RegisterNow(email, password, hint, navigation)}
+          onPress={registerNow(email, name, password, hint, navigation)}
         >
           <Text style={global.ButtonText}>Register</Text>
         </Pressable>
@@ -125,7 +140,7 @@ const Register = ({ navigation }) => {
   );
 };
 
-const RegisterNow = (email, password, hint, navigation) => {
+const registerNow = (email, name, password, hint, navigation) => {
   fetch("http://localhost:8010/users/register", {
     method: "POST",
     headers: {
@@ -135,6 +150,7 @@ const RegisterNow = (email, password, hint, navigation) => {
     body: JSON.stringify({
       userId: {
         uid: email,
+        name: name,
         password: {
           password: password,
           hint: hint,
@@ -144,7 +160,7 @@ const RegisterNow = (email, password, hint, navigation) => {
     }),
   })
     .then((response) => {
-      if (response.ok) navigation.navigate("Login");
+      if (response.ok) navigation.navigate("Login", { email: email });
       else throw new Error(response.status);
     })
     .catch((error) => {

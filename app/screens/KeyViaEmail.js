@@ -2,35 +2,41 @@ import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
-import { Feather } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
+import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
-import global from "../config/global";
 
-const SecondLogin = ({ navigation, route }) => {
-  const [password, setPassword] = useState("");
+const KeyViaEmail = ({ navigation, route }) => {
+  const [oneTimeKey, setOneTimeKey] = useState("");
   const { email } = route.params;
-  
+
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
       <View style={global.SecondLoginView}>
-        <Text style={global.LoginAndRegisterHeaderText}>We have sent you one time key via email</Text>
+        <Text style={global.LoginAndRegisterHeaderText}>
+          Please enter the code you received in the email
+        </Text>
         <View style={global.SecondLoginContainer}>
           <View>
-          <Feather style={global.Icon} name="key" size={sizes.iconSize} color={colors.loginAndRegisterIconColor} />
+            <Ionicons
+              style={global.Icon}
+              name="key-outline"
+              size={sizes.iconSize}
+              color={colors.loginAndRegisterIconColor}
+            />
             <TextInput
               style={global.TextInput}
-              placeholder="One time key"
+              placeholder="One Time Key"
               placeholderTextColor="#003f5c"
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
+              onChangeText={(oneTimeKey) => setOneTimeKey(oneTimeKey)}
             />
           </View>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => [loginNow(email, password, navigation)]}
+            onPress={() => [verifyKey(email, password, oneTimeKey, navigation)]}
           >
-            <Text style={global.ButtonText}>Login</Text>
+            <Text style={global.ButtonText}>Verify</Text>
           </Pressable>
         </View>
       </View>
@@ -38,8 +44,8 @@ const SecondLogin = ({ navigation, route }) => {
   );
 };
 
-const loginNow = (email, password, navigation) => {
-  fetch("https://localhost:8010/login", {
+const verifyKey = (email, navigation) => {
+  fetch("https://localhost:8010/users/reset/" + email + oneTimeKey, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -47,13 +53,12 @@ const loginNow = (email, password, navigation) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      uid: email,
-      password: password,
+      email: email,
+      oneTimeKey: oneTimeKey
     }),
   })
     .then((response) => {
-      if (response.ok)
-        navigation.navigate("Interface",  { email: email });
+      if (response.ok) navigation.navigate("New Password");
       else throw new Error(response.status);
     })
     .catch((error) => {
@@ -61,4 +66,4 @@ const loginNow = (email, password, navigation) => {
     });
 };
 
-export default SecondLogin;
+export default KeyViaEmail;

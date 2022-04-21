@@ -5,6 +5,8 @@ import Homepage from "./app/screens/Homepage";
 import Login from "./app/screens/Login";
 import SecondLogin from "./app/screens/SecondLogin";
 import ForgotPassword from "./app/screens/ForgotPassword"
+import KeyViaEmail from "./app/screens/KeyViaEmail";
+import NewPassword from "./app/screens/NewPassword";
 import Register from "./app/screens/Register";
 import Interface from "./app/screens/Interface";
 import Reports from "./app/screens/Reports";
@@ -30,6 +32,8 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Second Login" component={SecondLogin} />
         <Stack.Screen name="Forgot Password" component={ForgotPassword} />
+        <Stack.Screen name="Key Via Email" component={KeyViaEmail} />
+        <Stack.Screen name="New Password" component={NewPassword} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Interface" component={Interface} />
         <Stack.Screen name="Reports" component={Reports} />
