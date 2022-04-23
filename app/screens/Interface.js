@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   TextInputStyle: {
-    borderColor: colors.primary,
     borderWidth: 2,
     borderRadius: 3,
     height: 50,
@@ -176,6 +175,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     textAlign: "center",
     fontWeight: "bold",
+    borderColor: colors.primary,
   },
   ListRightButtons: {
     flex: 1,

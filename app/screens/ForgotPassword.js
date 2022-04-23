@@ -51,9 +51,6 @@ const resetPassword = (email, navigation) => {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      uid: email,
-    }),
   })
     .then((response) => {
       if (response.ok) navigation.navigate("Key Via Email", { email: "email" });

@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { Pressable, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, TextInput } from "react-native-web";
+import { View, Text, TextInput, StyleSheet } from "react-native-web";
 import {
   AntDesign,
   Ionicons,
@@ -20,7 +20,6 @@ const Settings = ({ navigation, route }) => {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [hint, setHint] = useState("");
   const [userAnswer, setUserAnswer] = useState("");
   const [oneTimeKey, setOneTimeKey] = useState("");
   const { email } = route.params;
@@ -30,52 +29,43 @@ const Settings = ({ navigation, route }) => {
     switch (type) {
       case "NAME":
         return (
-          <View>
-            <View>
-              <TextInput
-                style={global.TextInputInModal}
-                placeholder="New name"
-                placeholderTextColor={colors.primary}
-                onChangeText={(newName) => setNewName(newName)}
-              />
-            </View>
-          </View>
+          <TextInput
+            style={styles.TextInputSettings}
+            placeholder="New name"
+            placeholderTextColor={colors.primary}
+            onChangeText={(newName) => setNewName(newName)}
+          />
         );
       case "PASSWORD":
         return (
           <View>
-            <View>
+            <View style={styles.TextInputView}>
               <TextInput
-                style={global.TextInput}
+                style={styles.TextInputSettings}
                 placeholder="Old password"
+                secureTextEntry={true}
                 placeholderTextColor={colors.primary}
                 onChangeText={(password) => setPassword(password)}
               />
             </View>
-            <View>
+            <View style={styles.TextInputView}>
               <TextInput
-                style={global.TextInput}
+                style={styles.TextInputSettings}
                 placeholder="New password"
+                secureTextEntry={true}
                 placeholderTextColor={colors.primary}
                 onChangeText={(newPassword) => setNewPassword(newPassword)}
               />
             </View>
-            <View>
+            <View style={styles.TextInputView}>
               <TextInput
-                style={global.TextInput}
+                style={styles.TextInputSettings}
                 placeholder="Confirm new password"
+                secureTextEntry={true}
                 placeholderTextColor={colors.primary}
                 onChangeText={(confirmPassword) =>
                   setConfirmPassword(confirmPassword)
                 }
-              />
-            </View>
-            <View>
-              <TextInput
-                style={global.TextInput}
-                placeholder="New hint"
-                placeholderTextColor={colors.primary}
-                onChangeText={(hint) => setHint(hint)}
               />
             </View>
           </View>
@@ -87,26 +77,34 @@ const Settings = ({ navigation, route }) => {
       case "SUSPEND":
         return (
           <View>
-            <View>
-              <Text>
-                If you are sure, write in the text line "YES" and click Send.
-              </Text>
-              <TextInput
-                style={global.TextInputInModal}
-                placeholder="Are you sure?"
-                placeholderTextColor={colors.primary}
-                onChangeText={(userAnswer) => setUserAnswer(userAnswer)}
-              />
-            </View>
+            <Text style={styles.TextInfo}>
+              If you are sure, write in the text line "YES" and click Send.
+            </Text>
+            <TextInput
+              style={styles.TextInputSettings}
+              placeholder="Are you sure?"
+              placeholderTextColor={colors.primary}
+              onChangeText={(userAnswer) => setUserAnswer(userAnswer)}
+            />
           </View>
         );
       case "DELETE":
         return (
           <View>
+            <View style={styles.DeleteView}>
+              <Text style={styles.TextInfo}>
+                Click on "Send key" and enter the key you received in the email.
+              </Text>
+              <Pressable
+                style={styles.KeyButton}
+                //onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={global.ButtonText}>Send Key</Text>
+              </Pressable>
+            </View>
             <View>
-              <Text>We have sent you one time key via email.</Text>
               <TextInput
-                style={global.TextInputInModal}
+                style={styles.TextInputSettings}
                 placeholder="One time key"
                 placeholderTextColor={colors.primary}
                 onChangeText={(oneTimeKey) => setOneTimeKey(oneTimeKey)}
@@ -145,7 +143,7 @@ const Settings = ({ navigation, route }) => {
           });
       default:
         let jsonBody = getJsonBodyByType();
-         return fetch("https://localhost:8010/users/update", {
+        return fetch("https://localhost:8010/users/update", {
           method: "PUT",
           credentials: "include",
           headers: {
@@ -170,20 +168,18 @@ const Settings = ({ navigation, route }) => {
           .catch((error) => {
             console.log("error: " + error);
           });
-        }
+    }
   };
 
   const getJsonBodyByType = () => {
     let regName = null,
       regPassword = null,
       regOptionalPassword = null,
-      regHint = null;
     if (type == "NAME") {
       regName = newName;
     } else if (type == "PASSWORD") {
       (regPassword = newPassword),
-        (regOptionalPassword = password),
-        (regHint = hint);
+        (regOptionalPassword = password);
     }
     let jsonTemplate = {
       userId: {
@@ -194,7 +190,6 @@ const Settings = ({ navigation, route }) => {
           optionalPassword: regOptionalPassword,
           creationTime: null,
           active: null,
-          hint: regHint,
         },
       },
       role: null,
@@ -306,8 +301,8 @@ const Settings = ({ navigation, route }) => {
             }}
           >
             <View style={global.ModalView}>
-              <View style={global.ModalConfigContainer}>
-                <View style={global.TopModalView}>
+              <View style={styles.ModalSettingsContainer}>
+                <View style={styles.TopModalSettingsView}>
                   {settingsComponent(type)}
                 </View>
                 <View style={global.BottomModalView}>
@@ -334,5 +329,54 @@ const Settings = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  ModalSettingsContainer: {
+    flex: 0.5,
+    flexDirection: "col",
+    width: "20%",
+    borderWidth: 2,
+    borderRadius: 5,
+    shadowRadius: 20,
+    borderColor: colors.primary,
+    backgroundColor: colors.secondary,
+  },
+  TopModalSettingsView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  TextInfo: {
+    fontSize: 15,
+    lineHeight: 25,
+    letterSpacing: 0.5,
+    fontWeight: "bold",
+  },
+  DeleteView: {
+    padding: 3,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  KeyButton: {
+    height: 40,
+    width: 100,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: colors.primary,
+    backgroundColor: colors.primary,
+  },
+  TextInputView: {
+    padding: 2,
+  },
+  TextInputSettings: {
+    height: 35,
+    borderWidth: 2,
+    borderRadius: 2,
+    fontWeight: "500",
+    textAlign: "center",
+    borderColor: colors.primary,
+  },
+});
 
 export default Settings;

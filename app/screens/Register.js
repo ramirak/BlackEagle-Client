@@ -5,7 +5,6 @@ import { View, TextInput, Text } from "react-native-web";
 import {
   Ionicons,
   MaterialIcons,
-  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -16,7 +15,6 @@ const Register = ({ navigation }) => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [hint, setHint] = useState("");
   const [error, setErrors] = useState("");
 
   const [data, setData] = useState({
@@ -107,23 +105,9 @@ const Register = ({ navigation }) => {
             }
           />
         </View>
-        <View>
-          <MaterialCommunityIcons
-            style={global.Icon}
-            name="lightbulb-on-outline"
-            size={sizes.iconSize}
-            color={colors.loginAndRegisterIconColor}
-          />
-          <TextInput
-            style={global.TextInput}
-            placeholder="Password hint"
-            placeholderTextColor="#003f5c"
-            onChangeText={(hint) => setHint(hint)}
-          />
-        </View>
         <Pressable
           style={global.LoginAndRegisterButton}
-          onPress={registerNow(email, name, password, hint, navigation)}
+          onPress={registerNow(email, name, password, navigation)}
         >
           <Text style={global.ButtonText}>Register</Text>
         </Pressable>
@@ -140,7 +124,7 @@ const Register = ({ navigation }) => {
   );
 };
 
-const registerNow = (email, name, password, hint, navigation) => {
+const registerNow = (email, name, password, navigation) => {
   fetch("http://localhost:8010/users/register", {
     method: "POST",
     headers: {
@@ -153,7 +137,6 @@ const registerNow = (email, name, password, hint, navigation) => {
         name: name,
         password: {
           password: password,
-          hint: hint,
         },
       },
       role: "PLAYER",

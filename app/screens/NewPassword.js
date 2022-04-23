@@ -11,7 +11,6 @@ const NewPassword = ({ navigation, route }) => {
   const [oneTimeKey, setOneTimeKey] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [hint, setHint] = useState("");
   const { email } = route.params;
 
   return (
@@ -54,23 +53,9 @@ const NewPassword = ({ navigation, route }) => {
             }
           />
         </View>
-        <View>
-          <MaterialCommunityIcons
-            style={global.Icon}
-            name="lightbulb-on-outline"
-            size={sizes.iconSize}
-            color={colors.loginAndRegisterIconColor}
-          />
-          <TextInput
-            style={global.TextInput}
-            placeholder="Password Hint"
-            placeholderTextColor="#003f5c"
-            onChangeText={(hint) => setHint(hint)}
-          />
-        </View>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => [updateNewPassword(email, password, hint, navigation)]}
+            onPress={() => [updateNewPassword(email, password, navigation)]}
           >
             <Text style={global.ButtonText}>Change Password</Text>
           </Pressable>
@@ -80,8 +65,8 @@ const NewPassword = ({ navigation, route }) => {
   );
 };
 
-const updateNewPassword = (email, password, hint, navigation) => {
-  fetch("https://localhost:8010/users/" + email + "/" + password + "/" + hint, {
+const updateNewPassword = (email, password, navigation) => {
+  fetch("https://localhost:8010/users/" + email + "/" + password, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -91,7 +76,6 @@ const updateNewPassword = (email, password, hint, navigation) => {
     body: JSON.stringify({
       uid: email,
       password: password,
-      hint: hint
     }),
   })
     .then((response) => {
