@@ -549,7 +549,7 @@ const Request = ({ route, navigation }) => {
                 <View style={global.TopModalView}>{setComponentType()}</View>
                 <View style={global.BottomModalView}>
                   <Pressable
-                    style={global.buttonClose}
+                    style={global.CloseButton}
                     onPress={() => setModalVisible(!modalVisible)}
                   >
                     <Text style={global.ButtonText}>Close</Text>

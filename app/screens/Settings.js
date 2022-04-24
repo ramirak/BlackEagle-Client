@@ -174,7 +174,7 @@ const Settings = ({ navigation, route }) => {
   const getJsonBodyByType = () => {
     let regName = null,
       regPassword = null,
-      regOptionalPassword = null,
+      regOptionalPassword = null;
     if (type == "NAME") {
       regName = newName;
     } else if (type == "PASSWORD") {
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
   ModalSettingsContainer: {
     flex: 0.5,
     flexDirection: "col",
-    width: "20%",
+    width: "30%",
     borderWidth: 2,
     borderRadius: 5,
     shadowRadius: 20,
