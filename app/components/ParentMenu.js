@@ -5,7 +5,9 @@ import { View, StyleSheet } from "react-native-web";
 import colors from "../config/colors";
 import global from "../config/global";
 
-const ParentMenu = ({ navigation, email, password }) => {
+const ParentMenu = ({ navigation, email }) => {
+  //const { email } = route.params;
+  console.log("ParentMenu = " + email);
 
   return (
     <SafeAreaView>
@@ -29,7 +31,7 @@ const ParentMenu = ({ navigation, email, password }) => {
             ><Text style={global.ButtonText}>Reports</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Settings", {email:email}, {password:password})}
+            onPress={() => navigation.navigate("Settings", {email:email})}
           ><Text style={global.ButtonText}>Settings</Text></Pressable>
           <Pressable
             style={styles.MenuButton}

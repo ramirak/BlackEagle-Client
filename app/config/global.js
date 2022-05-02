@@ -229,7 +229,7 @@ export default global = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   ErrorMsg: {
-    color: "red",
+    color: colors.ErrorTextColor,
     fontSize: 12,
     lineHeight: 21,
     fontWeight: "bold",

@@ -8,17 +8,16 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
 import { handleRefresh, removeNonAscii } from "../config/Utils";
-import { addRequest, getSpecificData, deleteData } from "../config/FetchRequest";
+import { addRequest, deleteData, getSpecificData, addConfigurationRequest, deleteUrl } from "../config/FetchRequest";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-const Request = ({ route, navigation }) => {
+// History, Command, Configuration and Lockdown requests page
+const NotImmRequest = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [specificData, setSpecificData] = useState([]);
   const [refresh, setRefresh] = useState(true);
-  //const [pageCurrent, setPageCurrent] = useState(1);
-  //const [dataCounter, setDataCounter] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfigVisible, setModalConfigVisible] = useState(false);
   const [browser, setBrowser] = useState("");
@@ -46,103 +45,24 @@ const Request = ({ route, navigation }) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setData(responseJson);
-        // console.log("@@@@@@", pageCurrent);
-        //console.log("!!!!!!!", dataCounter);
       });
     setRefresh(false);
   }, [refresh]); //, pageCurrent]);
 
   const deleteByType = (dataId) => {
     if (type == "CONFIGURATION") {
-      deleteUrl(dataId);
+      deleteUrl( dataId, type, fakenews, gambling, porn, social, specificUrl, additionalSitesOP);
     } else deleteData(dataId, setRefresh);
   };
 
-  const deleteUrl = (dataId) => {
-    let dataAttr = {
-      FAKENEWS: fakenews,
-      GAMBLING: gambling,
-      PORN: porn,
-      SOCIAL: social,
-      ADDITIONAL_SITES: specificUrl,
-      ADDITIONAL_SITES_OPERATION: additionalSitesOP,
-    };
-    fetch("https://localhost:8010/data/update", {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        DATAID: "CONFIGURATION@" + dataId,
-        DATATYPE: type,
-        dataAttributes: dataAttr,
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          alert("The update was successful.");
-        } else {
-          alert("The update failed.");
-        }
-        return response.json(type);
-      })
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-      .catch((error) => {
-        console.log("error: " + error);
-      });
-  };
-
-  const setComponentType = () => {
-    switch (type) {
-      case "SCREENSHOT": //bmp
-        return (
-          <Image
-            style={{ width: "100%", height: "100%", resizeMode: "stretch" }}
-            source={{ uri: "data:image/bmp;base64," + specificData }}
-          />
-        );
-      case "CAMERA": //png
-        return (
-          <Image
-            style={{ width: "100%", height: "100%", resizeMode: "stretch" }}
-            source={{ uri: "data:image/png;base64," + specificData }}
-          />
-        );
-      case "AUDIO": //wav
-        let snd = new Audio("data:audio/wav;base64," + specificData);
-        return (
-          <View>
-            <View>
-              <Pressable style={global.ButtonList} onPress={() => snd.play()}>
-                <Text style={global.ButtonText}>Play</Text>
-              </Pressable>
-            </View>
-            <View>
-              <Pressable style={global.ButtonList} onPress={() => snd.pause()}>
-                <Text style={global.ButtonText}>Pause</Text>
-              </Pressable>
-            </View>
-            <View>
-              <Pressable style={global.ButtonList} onPress={() => snd.load()}>
-                <Text style={global.ButtonText}>Stop</Text>
-              </Pressable>
-            </View>
-          </View>
-        );
-      default: {
-        //text
-        let decodedData = base64.decode(specificData.toString());
-        return (
-          <ScrollView>
-            <Text>{removeNonAscii(decodedData)}</Text>
-          </ScrollView>
-        );
-      }
-    }
+  const setDataText = () => {
+    //text
+    let decodedData = base64.decode(specificData.toString());
+    return (
+      <ScrollView>
+        <Text>{removeNonAscii(decodedData)}</Text>
+      </ScrollView>
+    );
   };
 
   const setAddRequestComponent = () => {
@@ -234,8 +154,6 @@ const Request = ({ route, navigation }) => {
 
   const checkRequestButton = () => {
     switch (type) {
-      case "KEYLOG":
-        break;
       case "HISTORY":
         return (
           <Pressable
@@ -289,47 +207,14 @@ const Request = ({ route, navigation }) => {
         ADDITIONAL_SITES: specificUrl,
         ADDITIONAL_SITES_OPERATION: additionalSitesOP,
       };
-      addConfigurationRequest(dataAttr);
+      addConfigurationRequest(uid, dataAttr);
     } else {
       dataAttr = { REQUEST_TYPE: type };
       addRequest(uid, dataAttr);
     }
   };
 
-  const addConfigurationRequest = (dataAttr) => {
-    fetch("https://localhost:8010/data/update/" + uid, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        dataType: "CONFIGURATION",
-        dataAttributes: dataAttr,
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          alert("The request has been sent.");
-          //return showDeleteProcessButton();
-          //setDataCounter(dataCounter + 1);
-          //checkPage(dataCounter);
-        } else {
-          alert("There is an already pending request.");
-        }
-        return response.json(type);
-      })
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-      .catch((error) => {
-        console.log("error: " + error);
-      });
-  };
-
   const getAdditionalParam = (cmdType) => {
-    console.log(cmdType);
     switch (cmdType) {
       case "taskkill /IM":
       case "dir /AH":
@@ -401,8 +286,7 @@ const Request = ({ route, navigation }) => {
               <Pressable
                 style={global.ButtonList}
                 onPress={() => {
-                  setModalVisible(true),
-                    getSpecificData(uid, item.dataId, setSpecificData);
+                  setModalVisible(true), getSpecificData(uid, item.dataId, setSpecificData);
                 }}
               >
                 <Text style={global.ButtonText}>
@@ -430,7 +314,7 @@ const Request = ({ route, navigation }) => {
           >
             <View style={global.ModalView}>
               <View style={global.ModalContainer}>
-                <View style={global.TopModalView}>{setComponentType()}</View>
+                <View style={global.TopModalView}>{setDataText()}</View>
                 <View style={global.BottomModalView}>
                   <Pressable
                     style={global.CloseButton}
@@ -511,4 +395,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Request;
+export default NotImmRequest;

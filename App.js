@@ -12,6 +12,8 @@ import Interface from "./app/screens/Interface";
 import Reports from "./app/screens/Reports";
 import Settings from "./app/screens/Settings";
 import ControlOptions from "./app/screens/ControlOptions";
+import ImmediatelyRequest from "./app/screens/ImmediatelyRequest";
+import NotImmRequest from "./app/screens/NotImmRequest";
 import Request from "./app/screens/Request";
 import Notifications from "./app/screens/Notifications";
 
@@ -39,6 +41,8 @@ export default function App() {
         <Stack.Screen name="Reports" component={Reports} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Control Options" component={ControlOptions} />
+        <Stack.Screen name="Immediately Request" component={ImmediatelyRequest} />
+        <Stack.Screen name="Not Immediately Request" component={NotImmRequest} />
         <Stack.Screen name="Request" component={Request} />
         <Stack.Screen name="Notifications" component={Notifications} />
 

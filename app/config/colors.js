@@ -4,6 +4,7 @@ export default {
   parentMenuBorder:"#eeeee", //Grey
   borderRightColor: "#eeeee", //Grey
   fontColor: "#fff", //White
-  smallButtonTextColor: "#ff0000", //Red
+  smallButtonTextColor: "#0000ff", //Blue
+  ErrorTextColor: "#ff0000", //Red
   loginAndRegisterIconColor: "#ffc0cb", //pink
 };

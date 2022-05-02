@@ -1,13 +1,8 @@
 import { React, useState } from "react";
-import { Pressable, Modal } from "react-native";
+import { Pressable, Modal, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, StyleSheet } from "react-native-web";
-import {
-  AntDesign,
-  Ionicons,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { AntDesign, Ionicons, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -15,26 +10,73 @@ import sizes from "../config/sizes";
 
 const Settings = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [type, setType] = useState("");
   const [newName, setNewName] = useState("");
-  const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userAnswer, setUserAnswer] = useState("");
   const [oneTimeKey, setOneTimeKey] = useState("");
+  const [details, setDetails] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [oldPasswordError, setOldPasswordError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const { email } = route.params;
+
+  const handleSettings = (type) => {
+    switch (type) {
+      case "NAME":
+        if (newName.length == 0) setNameError("Name is required");
+        else if (newName.length < 2)
+          setNameError("Name should be minimum 2 characters");
+        else {
+          setNameError("");
+          settingsRequests();
+          setModalVisible(!modalVisible);
+        }
+        break;
+      case "PASSWORD":
+        if (oldPassword.length == 0)
+          setOldPasswordError("Password is required");
+        else if (oldPassword != password)
+          setOldPasswordError("Wrong old password");
+        else if (newPassword.length == 0)
+          setNewPasswordError("New password is required");
+        else if (confirmPasswordError != newPassword)
+          setConfirmPasswordError(
+            "Confirm password and password are not the same"
+          );
+        else {
+          setOldPasswordError("");
+          setNewPasswordError("");
+          setConfirmPasswordError("");
+          settingsRequests();
+          setModalVisible(!modalVisible);
+        }
+        break;
+      default:
+        break;
+    }
+  };
 
   const settingsComponent = (type) => {
     console.log(type);
     switch (type) {
       case "NAME":
         return (
-          <TextInput
-            style={styles.TextInputSettings}
-            placeholder="New name"
-            placeholderTextColor={colors.primary}
-            onChangeText={(newName) => setNewName(newName)}
-          />
+          <View>
+            <View>
+              <TextInput
+                style={styles.TextInputSettings}
+                placeholder="New name"
+                placeholderTextColor={colors.primary}
+                onChangeText={(newName) => setNewName(newName)}
+              />
+            </View>
+            <Text style={global.ErrorMsg}>{nameError}</Text>
+          </View>
         );
       case "PASSWORD":
         return (
@@ -45,9 +87,10 @@ const Settings = ({ navigation, route }) => {
                 placeholder="Old password"
                 secureTextEntry={true}
                 placeholderTextColor={colors.primary}
-                onChangeText={(password) => setPassword(password)}
+                onChangeText={(oldPassword) => setOldPassword(oldPassword)}
               />
             </View>
+            <Text style={global.ErrorMsg}>{oldPasswordError}</Text>
             <View style={styles.TextInputView}>
               <TextInput
                 style={styles.TextInputSettings}
@@ -57,6 +100,7 @@ const Settings = ({ navigation, route }) => {
                 onChangeText={(newPassword) => setNewPassword(newPassword)}
               />
             </View>
+            <Text style={global.ErrorMsg}>{newPasswordError}</Text>
             <View style={styles.TextInputView}>
               <TextInput
                 style={styles.TextInputSettings}
@@ -68,6 +112,7 @@ const Settings = ({ navigation, route }) => {
                 }
               />
             </View>
+            <Text style={global.ErrorMsg}>{confirmPasswordError}</Text>
           </View>
         );
       case "NOTIFICATION":
@@ -112,9 +157,31 @@ const Settings = ({ navigation, route }) => {
             </View>
           </View>
         );
-      default:
+      default: {
+        //text
         break;
+      }
     }
+  };
+
+  const getSettingsDetails = () => {
+    fetch(
+      "https://localhost:8010/data/get/" + email + "/CONFIGURATION@" + email,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setDetails(responseJson);
+      })
+      .catch((error) => {
+        console.log("error: " + error);
+      });
   };
 
   const settingsRequests = () => {
@@ -178,8 +245,7 @@ const Settings = ({ navigation, route }) => {
     if (type == "NAME") {
       regName = newName;
     } else if (type == "PASSWORD") {
-      (regPassword = newPassword),
-        (regOptionalPassword = password);
+      (regPassword = newPassword), (regOptionalPassword = password);
     }
     let jsonTemplate = {
       userId: {
@@ -275,6 +341,19 @@ const Settings = ({ navigation, route }) => {
               />
               <Text style={global.MenuButtonText}>Suspend Account</Text>
             </Pressable>
+            <Pressable
+              style={global.MenuButton}
+              onPress={() => {
+                setDetailsModalVisible(true), getSettingsDetails();
+              }}
+            >
+              <MaterialCommunityIcons
+                name="account-details"
+                size={sizes.iconSize}
+                color="white"
+              />
+              <Text style={global.MenuButtonText}>Account Details</Text>
+            </Pressable>
           </View>
           <View style={global.MenuRow}>
             <Pressable
@@ -308,7 +387,7 @@ const Settings = ({ navigation, route }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      setModalVisible(!modalVisible), settingsRequests();
+                      handleSettings(type);
                     }}
                     style={global.CloseButton}
                   >
@@ -317,6 +396,31 @@ const Settings = ({ navigation, route }) => {
                   <Pressable
                     style={global.CloseButton}
                     onPress={() => setModalVisible(!modalVisible)}
+                  >
+                    <Text style={global.ButtonText}>Close</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal //Details Modal
+            style={global.ModalContainer}
+            animationType="fade"
+            transparent={true}
+            visible={detailsModalVisible}
+            onRequestClose={() => {
+              setDetailsModalVisible(!detailsModalVisible);
+            }}
+          >
+            <View style={global.ModalView}>
+              <View style={styles.ModalSettingsContainer}>
+                <View style={styles.TopModalSettingsView}>
+                <Text>{details}</Text>
+                </View>
+                <View style={global.BottomModalView}>
+                  <Pressable
+                    style={global.CloseButton}
+                    onPress={() => setDetailsModalVisible(!detailsModalVisible)}
                   >
                     <Text style={global.ButtonText}>Close</Text>
                   </Pressable>

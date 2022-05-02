@@ -9,7 +9,7 @@ import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-const Interface = ({ route, navigation }) => {
+const Interface = ({ navigation, route }) => {
   const [data, setData] = useState("");
   const [name, setName] = useState("");
   const [refresh, setRefresh] = useState(true);
@@ -49,6 +49,8 @@ const Interface = ({ route, navigation }) => {
       .then((response) => {
         if (response.status == "507") {
           alert("You can only create up to 5 devices");
+        } else if (response.status == "400") {
+          alert("Name is required");
         } else {
           alert(
             "Your device authentication details is being downloaded.\nPlease keep it in a secure loaction!"

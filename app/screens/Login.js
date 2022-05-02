@@ -10,6 +10,16 @@ import sizes from "../config/sizes";
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const handleLogin = () => {
+    if (email.length == 0) setEmailError("Email is required");
+    else setEmailError("");
+
+    if (password.length == 0) setPasswordError("Password is required");
+    else setPasswordError("");
+  };
 
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
@@ -26,9 +36,11 @@ const Login = ({ navigation }) => {
             style={global.TextInput}
             placeholder="Email"
             placeholderTextColor="#003f5c"
+            value={email}
             onChangeText={(email) => setEmail(email)}
           />
         </View>
+        <Text style={global.ErrorMsg}>{emailError}</Text>
         <View>
           <Ionicons
             style={global.Icon}
@@ -41,12 +53,16 @@ const Login = ({ navigation }) => {
             placeholder="Password"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
+            value={password}
             onChangeText={(password) => setPassword(password)}
           />
         </View>
+        <Text style={global.ErrorMsg}>{passwordError}</Text>
         <Pressable
           style={global.LoginAndRegisterButton}
-          onPress={() => loginNow(email, password, navigation)}
+          onPress={() => {
+            loginNow(email, password, navigation), handleLogin();
+          }}
         >
           <Text style={global.ButtonText}>Login</Text>
         </Pressable>
