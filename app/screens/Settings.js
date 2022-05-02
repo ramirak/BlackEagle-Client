@@ -283,7 +283,7 @@ const Settings = ({ navigation, route }) => {
               <MaterialCommunityIcons
                 name="rename-box"
                 size={sizes.iconSize}
-                color="white"
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Update Name</Text>
             </Pressable>
@@ -296,7 +296,7 @@ const Settings = ({ navigation, route }) => {
               <MaterialCommunityIcons
                 name="form-textbox-password"
                 size={sizes.iconSize}
-                color="white"
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Update Password</Text>
             </Pressable>
@@ -309,7 +309,7 @@ const Settings = ({ navigation, route }) => {
               <Ionicons
                 name="md-notifications-circle"
                 size={sizes.iconSize}
-                color="white"
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Notification Settings</Text>
             </Pressable>
@@ -324,7 +324,7 @@ const Settings = ({ navigation, route }) => {
               <MaterialIcons
                 name="security"
                 size={sizes.iconSize}
-                color="white"
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Security</Text>
             </Pressable>
@@ -337,7 +337,7 @@ const Settings = ({ navigation, route }) => {
               <MaterialCommunityIcons
                 name="account-cancel-outline"
                 size={sizes.iconSize}
-                color="white"
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Suspend Account</Text>
             </Pressable>
@@ -350,7 +350,7 @@ const Settings = ({ navigation, route }) => {
               <MaterialCommunityIcons
                 name="account-details"
                 size={sizes.iconSize}
-                color="white"
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Account Details</Text>
             </Pressable>
@@ -365,7 +365,7 @@ const Settings = ({ navigation, route }) => {
               <AntDesign
                 name="deleteuser"
                 size={sizes.iconSize}
-                color="white"
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Delete Account</Text>
             </Pressable>

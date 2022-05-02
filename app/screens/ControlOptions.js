@@ -31,7 +31,7 @@ const ControlOptions = ({ navigation, route }) => {
               <MaterialCommunityIcons
                 name="monitor-screenshot"
                 size={sizes.iconSize}
-                color={colors.secondary}
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Screenshots</Text>
             </Pressable>
@@ -44,7 +44,7 @@ const ControlOptions = ({ navigation, route }) => {
               <Entypo
                 name="keyboard"
                 size={sizes.iconSize}
-                color={colors.secondary}
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Keylogs</Text>
             </Pressable>
@@ -58,7 +58,7 @@ const ControlOptions = ({ navigation, route }) => {
               <Feather
                 name="camera"
                 size={sizes.iconSize}
-                color={colors.secondary}
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Camera</Text>
             </Pressable>
@@ -73,7 +73,7 @@ const ControlOptions = ({ navigation, route }) => {
               <FontAwesome5
                 name="audio-description"
                 size={sizes.iconSize}
-                color={colors.secondary}
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Audio</Text>
             </Pressable>
@@ -86,7 +86,7 @@ const ControlOptions = ({ navigation, route }) => {
               <MaterialCommunityIcons
                 name="account-lock"
                 size={sizes.iconSize}
-                color={colors.secondary}
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Lockdown</Text>
             </Pressable>
@@ -99,7 +99,7 @@ const ControlOptions = ({ navigation, route }) => {
               <Ionicons
                 name="terminal"
                 size={sizes.iconSize}
-                color={colors.secondary}
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>CMD</Text>
             </Pressable>
@@ -114,7 +114,7 @@ const ControlOptions = ({ navigation, route }) => {
               <Ionicons
                 name="location"
                 size={sizes.iconSize}
-                color={colors.secondary}
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Locations</Text>
             </Pressable>
@@ -127,7 +127,7 @@ const ControlOptions = ({ navigation, route }) => {
              <FontAwesome5 
              name="history" 
              size={sizes.iconSize}
-             color={colors.secondary}
+             color={colors.primary}
               />
               <Text style={global.MenuButtonText}>History</Text>
             </Pressable>
@@ -140,7 +140,7 @@ const ControlOptions = ({ navigation, route }) => {
               <AntDesign
                 name="filter"
                 size={sizes.iconSize}
-                color={colors.secondary}
+                color={colors.primary}
               />
               <Text style={global.MenuButtonText}>Filtering</Text>
             </Pressable>

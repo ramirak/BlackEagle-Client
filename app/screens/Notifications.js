@@ -91,7 +91,7 @@ const Notifications = ({ navigation }) => {
               data={Notification}
               renderItem={({ item }) => (
                 <Pressable style={global.ButtonList}>
-                  <Text style={global.ButtonText}>
+                  <Text style={global.ListItemText}>
                     {item.type} : {item.timeOfEvent} : {item.eventAttributes.IP_ADDR}
                   </Text>
                 </Pressable>

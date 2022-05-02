@@ -405,7 +405,7 @@ const Request = ({ route, navigation }) => {
                     getSpecificData(uid, item.dataId, setSpecificData);
                 }}
               >
-                <Text style={global.ButtonText}>
+                <Text style={global.ListItemText}>
                   {item.dataType} : {item.createdTimestamp} : {item.dataId}
                 </Text>
                 <Pressable

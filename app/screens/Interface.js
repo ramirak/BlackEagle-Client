@@ -127,7 +127,7 @@ const Interface = ({ navigation, route }) => {
                     }
                     style={global.ButtonList}
                   >
-                    <Text style={global.ButtonText}>
+                    <Text style={global.ListItemText}>
                       {item.name} - {item.userId.uid}
                     </Text>
                     <View style={styles.ListRightButtons}>
