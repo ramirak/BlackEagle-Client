@@ -299,7 +299,7 @@ const NotImmRequest = ({ route, navigation }) => {
                   <FontAwesome
                     name="trash-o"
                     size={sizes.iconSize}
-                    color={colors.secondary}
+                    color={colors.primary}
                   />
                 </Pressable>
               </Pressable>

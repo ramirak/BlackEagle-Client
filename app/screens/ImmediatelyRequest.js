@@ -62,17 +62,17 @@ const ImmediatelyRequest = ({ route, navigation }) => {
           <View>
             <View>
               <Pressable style={global.ButtonList} onPress={() => snd.play()}>
-                <Text style={global.ButtonText}>Play</Text>
+                <Text style={global.ListItemText}>Play</Text>
               </Pressable>
             </View>
             <View>
               <Pressable style={global.ButtonList} onPress={() => snd.pause()}>
-                <Text style={global.ButtonText}>Pause</Text>
+                <Text style={global.ListItemText}>Pause</Text>
               </Pressable>
             </View>
             <View>
               <Pressable style={global.ButtonList} onPress={() => snd.load()}>
-                <Text style={global.ButtonText}>Stop</Text>
+                <Text style={global.ListItemText}>Stop</Text>
               </Pressable>
             </View>
           </View>
@@ -175,7 +175,7 @@ const ImmediatelyRequest = ({ route, navigation }) => {
                   <FontAwesome
                     name="trash-o"
                     size={sizes.iconSize}
-                    color={colors.secondary}
+                    color={colors.primary}
                   />
                 </Pressable>
               </Pressable>

@@ -138,7 +138,7 @@ const Interface = ({ navigation, route }) => {
                         <MaterialIcons
                           name="edit"
                           size={sizes.iconSize}
-                          color={colors.secondary}
+                          color={colors.primary}
                         />
                       </Pressable>
                       <Pressable
@@ -148,7 +148,7 @@ const Interface = ({ navigation, route }) => {
                         <FontAwesome
                           name="trash-o"
                           size={sizes.iconSize}
-                          color={colors.secondary}
+                          color={colors.primary}
                         />
                       </Pressable>
                     </View>
