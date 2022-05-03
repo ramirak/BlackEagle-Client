@@ -9,6 +9,7 @@ import { getData } from "../config/Utils";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
+import { checkSession } from "../config/FetchRequest";
 
 const Interface = ({ navigation }) => {
   const [data, setData] = useState("");
@@ -17,6 +18,7 @@ const Interface = ({ navigation }) => {
   const [email, setEmail] = useState("");
 
   useEffect(() => {
+    checkSession(navigation);
     getData("@email", setEmail);
     if (!refresh) return;
     fetch("https://localhost:8010/device/getAll", {

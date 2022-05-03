@@ -9,25 +9,14 @@ import {
   Button,
   Platform,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../config/colors";
-
+import { checkSession } from "../config/FetchRequest";
 const Homepage = ({ navigation }) => {
-
+ 
   /* The user will be redirected to Interface when doing refresh as long as he is logged on */
-  const getDataForRefresh = async (key) => {
-    try {
-      const value = await AsyncStorage.getItem(key);
-      if (value != "") navigation.navigate("Interface");
-    } catch (e) {
-      // error reading value
-    }
-  };
-
   useEffect(() => {
-    getDataForRefresh("@email");
+   checkSession(navigation)
   }, []);
-
   return (
     <SafeAreaView style={styles.Container}>
       <View>
@@ -52,13 +41,6 @@ const Homepage = ({ navigation }) => {
             color="#000"
             title="Register"
             onPress={() => navigation.navigate("Register")}
-          />
-        </View>
-        <View style={styles.ButtonContainer}>
-          <Button
-            color="#000"
-            title="Test"
-            onPress={() => navigation.navigate("Interface", { name: "rami" })}
           />
         </View>
       </View>

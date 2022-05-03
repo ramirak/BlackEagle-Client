@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
@@ -6,12 +6,16 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
-
+import { checkSession } from "../config/FetchRequest";
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  useEffect(() => {
+    checkSession(navigation)
+   }, []);
 
   const handleLogin = () => {
     if (email.length == 0) setEmailError("Email is required");

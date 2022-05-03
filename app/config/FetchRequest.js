@@ -27,6 +27,22 @@ export function addRequest(uid, dataAttr) {
     });
 }
 
+export function checkSession(navigation) {
+  fetch("https://localhost:8010/users/sessionCheck", {
+    method: "GET",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (response.ok) {
+        navigation.navigate("Interface")
+      } else{
+        navigation.navigate("Homepage")
+      }
+    })
+    .catch((error) => {
+    });
+}
+
 export function getSpecificData(uid, dataId, setSpecificData) {
   fetch("https://localhost:8010/data/get/" + uid + "/" + dataId, {
     method: "GET",
