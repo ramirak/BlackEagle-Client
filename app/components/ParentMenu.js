@@ -1,14 +1,13 @@
 import { React } from "react";
 import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, StyleSheet } from "react-native-web";
-import colors from "../config/colors";
+import { storeData } from "../config/Utils";
 import global from "../config/global";
+import colors from "../config/colors";
 
 const ParentMenu = ({ navigation, email }) => {
-  //const { email } = route.params;
-  console.log("ParentMenu = " + email);
-
   return (
     <SafeAreaView>
       <View style={styles.LeftMenu}>
@@ -57,7 +56,10 @@ const Logout = (navigation) => {
     credentials: "include",
   })
     .then((response) => {
-      if (response.status == 404) navigation.navigate("Homepage");
+      if (response.status == 404){
+        storeData("");
+        navigation.navigate("Homepage");
+      } 
       else throw new Error(response.status);
     })
     .catch((error) => {
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
   LeftMenu: {
     flex: 1,
     flexDirection: "col",
-    backgroundColor: "black",
+    backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "space-between",
     borderRadius: 0,
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 0,
-    backgroundColor: "black",
+    backgroundColor: colors.primary,
     fontSize: 15,
     lineHeight: 21,
     fontWeight: "bold",

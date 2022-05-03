@@ -1,6 +1,5 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import colors from "../config/colors";
 import {
   StyleSheet,
   Text,
@@ -10,8 +9,25 @@ import {
   Button,
   Platform,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import colors from "../config/colors";
 
 const Homepage = ({ navigation }) => {
+
+  /* The user will be redirected to Interface when doing refresh as long as he is logged on */
+  const getDataForRefresh = async (key) => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value != "") navigation.navigate("Interface");
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    getDataForRefresh("@email");
+  }, []);
+
   return (
     <SafeAreaView style={styles.Container}>
       <View>
@@ -42,7 +58,7 @@ const Homepage = ({ navigation }) => {
           <Button
             color="#000"
             title="Test"
-            onPress={() => navigation.navigate("Interface", { name: "rami" })} //TODOOOOOOOOOOOOOOOOOOOOOOOO
+            onPress={() => navigation.navigate("Interface", { name: "rami" })}
           />
         </View>
       </View>

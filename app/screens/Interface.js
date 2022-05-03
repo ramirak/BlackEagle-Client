@@ -5,17 +5,19 @@ import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import fileDownload from "js-file-download";
 import ParentMenu from "../components/ParentMenu";
+import { getData } from "../config/Utils";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-const Interface = ({ navigation, route }) => {
+const Interface = ({ navigation }) => {
   const [data, setData] = useState("");
   const [name, setName] = useState("");
   const [refresh, setRefresh] = useState(true);
-  const { email } = route.params;
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
+    getData("@email", setEmail);
     if (!refresh) return;
     fetch("https://localhost:8010/device/getAll", {
       method: "GET",

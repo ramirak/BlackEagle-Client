@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export function handleRefresh(setRefresh) {
   setRefresh(true);
-}    
+}
 
 export function removeNonAscii(decodedData) {
   return decodedData
@@ -11,7 +13,23 @@ export function removeNonAscii(decodedData) {
     .replace(/,/g, "\n");
 }
 
-  /*
+export const getData = async (key, setEmail) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    setEmail(value);
+    return value;
+  } catch (e) {
+    // error reading value
+  }
+}
+
+export const storeData = async (value) => {
+  try {
+    await AsyncStorage.setItem("@email", value);
+  } catch (e) {}
+}
+
+/*
   export function checkPage(dataCounter) {
     if (dataCounter % 10 == 5 || dataCounter % 10 == 0)
       setPageCurrent(pageCurrent + 1);

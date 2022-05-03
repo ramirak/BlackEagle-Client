@@ -1,14 +1,21 @@
 import { React, useState } from "react";
-import { Pressable, Modal, ScrollView } from "react-native";
+import { Pressable, Modal } from "react-native";
+import { removeNonAscii } from "../config/Utils"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, StyleSheet } from "react-native-web";
-import { AntDesign, Ionicons, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Ionicons,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
+import { getData } from "../config/Utils";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-const Settings = ({ navigation, route }) => {
+const Settings = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [type, setType] = useState("");
@@ -23,8 +30,9 @@ const Settings = ({ navigation, route }) => {
   const [oldPasswordError, setOldPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const { email } = route.params;
+  const [email, setEmail] = useState("");
 
+  
   const handleSettings = (type) => {
     switch (type) {
       case "NAME":
@@ -60,9 +68,9 @@ const Settings = ({ navigation, route }) => {
         break;
     }
   };
-
-  const settingsComponent = (type) => {
-    console.log(type);
+  
+  const settingsComponent = (type) => {    
+    getData("@email", setEmail);
     switch (type) {
       case "NAME":
         return (
@@ -165,8 +173,7 @@ const Settings = ({ navigation, route }) => {
   };
 
   const getSettingsDetails = () => {
-    fetch(
-      "https://localhost:8010/data/get/" + email + "/CONFIGURATION@" + email,
+    fetch("https://localhost:8010/data/get/" + email + "/CONFIGURATION@" + email,
       {
         method: "GET",
         credentials: "include",
@@ -177,7 +184,7 @@ const Settings = ({ navigation, route }) => {
     )
       .then((response) => response.json())
       .then((responseJson) => {
-        setDetails(responseJson);
+        setDetails(removeNonAscii(JSON.stringify(responseJson.dataAttributes)));
       })
       .catch((error) => {
         console.log("error: " + error);
@@ -415,7 +422,7 @@ const Settings = ({ navigation, route }) => {
             <View style={global.ModalView}>
               <View style={styles.ModalSettingsContainer}>
                 <View style={styles.TopModalSettingsView}>
-                <Text>{details}</Text>
+                  <Text>{details}</Text>
                 </View>
                 <View style={global.BottomModalView}>
                   <Pressable
