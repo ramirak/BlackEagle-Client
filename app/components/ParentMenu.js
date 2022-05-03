@@ -14,10 +14,6 @@ const ParentMenu = ({ navigation, email }) => {
         <View>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Homepage")}
-          ><Text style={global.ButtonText}>Homepage</Text></Pressable>
-          <Pressable
-            style={styles.MenuButton}
             onPress={() => navigation.navigate("Interface", {email:email})}
           ><Text style={global.ButtonText}>My Children</Text></Pressable>
           <Pressable
@@ -34,7 +30,11 @@ const ParentMenu = ({ navigation, email }) => {
           ><Text style={global.ButtonText}>Settings</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Homepage")}
+            onPress={() => navigation.navigate("Help", {email:email})}
+          ><Text style={global.ButtonText}>Help</Text></Pressable>
+          <Pressable
+            style={styles.MenuButton}
+            onPress={() => navigation.navigate("About", {email:email})}
           ><Text style={global.ButtonText}>About</Text></Pressable>
         </View>
         <View>

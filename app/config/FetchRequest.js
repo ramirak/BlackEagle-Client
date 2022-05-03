@@ -35,9 +35,7 @@ export function checkSession(navigation) {
     .then((response) => {
       if (response.ok) {
         navigation.navigate("Interface")
-      } else{
-        navigation.navigate("Homepage")
-      }
+      } 
     })
     .catch((error) => {
     });

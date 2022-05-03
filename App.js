@@ -16,6 +16,8 @@ import ImmediatelyRequest from "./app/screens/ImmediatelyRequest";
 import NotImmRequest from "./app/screens/NotImmRequest";
 import Request from "./app/screens/Request";
 import Notifications from "./app/screens/Notifications";
+import Help from "./app/screens/Help";
+import About from "./app/screens/About";
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
@@ -45,6 +47,8 @@ export default function App() {
         <Stack.Screen name="Not Immediately Request" component={NotImmRequest} />
         <Stack.Screen name="Request" component={Request} />
         <Stack.Screen name="Notifications" component={Notifications} />
+        <Stack.Screen name="Help" component={Help} />
+        <Stack.Screen name="About" component={About} />
 
       </Stack.Navigator>
     </NavigationContainer>
