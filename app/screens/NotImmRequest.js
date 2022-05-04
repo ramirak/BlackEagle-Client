@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Pressable, Text, Modal, Image, ScrollView } from "react-native";
+import { Pressable, Text, Modal, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, FlatList, TextInput, StyleSheet } from "react-native-web";
 import { Picker } from "@react-native-picker/picker";
@@ -56,7 +56,6 @@ const NotImmRequest = ({ route, navigation }) => {
   };
 
   const setDataText = () => {
-    //text
     let decodedData = base64.decode(specificData.toString());
     return (
       <ScrollView>

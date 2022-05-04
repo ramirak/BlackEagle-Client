@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { Pressable, Modal } from "react-native";
-import { removeNonAscii } from "../config/Utils"
+import { removeNonAscii } from "../config/Utils";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, StyleSheet } from "react-native-web";
 import {
@@ -23,7 +23,6 @@ const Settings = ({ navigation }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [userAnswer, setUserAnswer] = useState("");
   const [oneTimeKey, setOneTimeKey] = useState("");
   const [details, setDetails] = useState("");
   const [nameError, setNameError] = useState("");
@@ -32,7 +31,6 @@ const Settings = ({ navigation }) => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [email, setEmail] = useState("");
 
-  
   const handleSettings = (type) => {
     switch (type) {
       case "NAME":
@@ -68,8 +66,8 @@ const Settings = ({ navigation }) => {
         break;
     }
   };
-  
-  const settingsComponent = (type) => {    
+
+  const settingsComponent = (type) => {
     getData("@email", setEmail);
     switch (type) {
       case "NAME":
@@ -130,29 +128,36 @@ const Settings = ({ navigation }) => {
       case "SUSPEND":
         return (
           <View>
-            <Text style={styles.TextInfo}>
-              If you are sure, write in the text line "YES" and click Send.
-            </Text>
-            <TextInput
-              style={styles.TextInputSettings}
-              placeholder="Are you sure?"
-              placeholderTextColor={colors.primary}
-              onChangeText={(userAnswer) => setUserAnswer(userAnswer)}
-            />
+            <View style={styles.InsideModalView}>
+              <Pressable
+                style={styles.SettingButton}
+                //onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={global.ButtonText}>Suspend</Text>
+              </Pressable>
+            </View>
+            <View style={styles.InsideModalView}>
+              <Pressable
+                style={styles.SettingButton}
+                //onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={global.ButtonText}>Active</Text>
+              </Pressable>
+            </View>
           </View>
         );
       case "DELETE":
         return (
           <View>
-            <View style={styles.DeleteView}>
+            <View style={styles.InsideModalView}>
               <Text style={styles.TextInfo}>
-                Click on "Send key" and enter the key you received in the email.
+                Click on "Get key" and enter the key you received in the email.
               </Text>
               <Pressable
-                style={styles.KeyButton}
+                style={styles.SettingButton}
                 //onPress={() => setModalVisible(!modalVisible)}
               >
-                <Text style={global.ButtonText}>Send Key</Text>
+                <Text style={global.ButtonText}>Get key</Text>
               </Pressable>
             </View>
             <View>
@@ -166,14 +171,14 @@ const Settings = ({ navigation }) => {
           </View>
         );
       default: {
-        //text
         break;
       }
     }
   };
 
   const getSettingsDetails = () => {
-    fetch("https://localhost:8010/data/get/" + email + "/CONFIGURATION@" + email,
+    fetch(
+      "https://localhost:8010/data/get/" + email + "/CONFIGURATION@" + email,
       {
         method: "GET",
         credentials: "include",
@@ -459,16 +464,16 @@ const styles = StyleSheet.create({
   },
   TextInfo: {
     fontSize: 15,
-    lineHeight: 25,
+    textAlign: "center",
     letterSpacing: 0.5,
     fontWeight: "bold",
   },
-  DeleteView: {
+  InsideModalView: {
     padding: 3,
     alignItems: "center",
     justifyContent: "center",
   },
-  KeyButton: {
+  SettingButton: {
     height: 40,
     width: 100,
     borderRadius: 4,
