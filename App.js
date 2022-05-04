@@ -18,6 +18,9 @@ import Request from "./app/screens/Request";
 import Notifications from "./app/screens/Notifications";
 import Help from "./app/screens/Help";
 import About from "./app/screens/About";
+import { AntDesign } from '@expo/vector-icons'; 
+import { View } from "react-native-web";
+import fonts from "./app/config/fonts";
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
@@ -31,7 +34,14 @@ const MyTheme = {
 export default function App() {
   return (
     <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{
+        headerShown: true,
+        title: 'BlackEagle - Spy & Control',
+        headerTitleStyle: {
+          fontWeight: 'bold', fontFamily: fonts.primary
+        },
+            headerLeft: () => <View style={{paddingLeft:15}}><AntDesign name="Safety" size={26} color="black" /></View>,
+      }}>
         <Stack.Screen name="Homepage" component={Homepage} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Second Login" component={SecondLogin} />

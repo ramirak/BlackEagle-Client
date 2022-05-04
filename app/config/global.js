@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native-web";
 import colors from "./colors";
+import fonts from "./fonts";
 
 export default global = StyleSheet.create({
   PageContainer: {
@@ -35,6 +36,7 @@ export default global = StyleSheet.create({
     height: 50,
     padding: 10,
     paddingRight: 40,
+    fontFamily: fonts.primary
   },
   ButtonText: {
     fontSize: 15,
@@ -42,6 +44,7 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: colors.secondary,
+    fontFamily: fonts.primary
   },
   ListItemText:{
     fontSize: 15,
@@ -49,6 +52,7 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: colors.primary,
+    fontFamily: fonts.primary
   },
   MenuButton: {
     margin: 10,
@@ -70,6 +74,7 @@ export default global = StyleSheet.create({
     letterSpacing: 0.5,
     textAlign: "center",
     color: colors.primary,
+    fontFamily: fonts.primary
   },
   SmallButton: {
     alignItems: "center",
@@ -81,6 +86,7 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: colors.smallButtonTextColor,
+    fontFamily: fonts.primary
   },
   LoginAndRegisterButton: { // Also SecondLogin and ForgotPassword
     alignItems: "center",
@@ -117,6 +123,8 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     textTransform: "capitalize",
+    fontFamily: fonts.primary,
+    letterSpacing:3,
   },
   RefreshButton: {
     flex: 1,
@@ -161,7 +169,7 @@ export default global = StyleSheet.create({
     textAlign: "left",
     alignItems: "center",
     borderRadius: 5,
-    height: 60,
+    height: 50,
     margin: 5,
     paddingRight: 10,
     paddingLeft: 10,

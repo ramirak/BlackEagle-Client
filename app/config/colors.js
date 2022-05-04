@@ -1,5 +1,5 @@
 export default {
-  primary: "black", //Black
+  primary: "#102027", //Black
   secondary: "white",  //White
   parentMenuBorder:"#eeeee", //Grey
   borderRightColor: "#eeeee", //Grey
