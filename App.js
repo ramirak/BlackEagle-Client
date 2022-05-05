@@ -22,7 +22,7 @@ import Upgrade from "./app/screens/Upgrade";
 import { AntDesign } from '@expo/vector-icons'; 
 import { View } from "react-native-web";
 import fonts from "./app/config/fonts";
-
+import AppDownload from "./app/screens/AppDownload";
 const Stack = createNativeStackNavigator();
 const MyTheme = {
   ...DefaultTheme,
@@ -61,6 +61,8 @@ export default function App() {
         <Stack.Screen name="Help" component={Help} />
         <Stack.Screen name="About" component={About} />
         <Stack.Screen name="Upgrade" component={Upgrade} />
+        <Stack.Screen name="AppDownload" component={AppDownload} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

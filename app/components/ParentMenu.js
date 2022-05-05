@@ -34,9 +34,12 @@ const ParentMenu = ({ navigation, email }) => {
           ><Text style={global.ButtonText}>Upgrade</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
+            onPress={() => navigation.navigate("AppDownload", { email: email })}
+          ><Text style={global.ButtonText}>Download</Text></Pressable>
+          <Pressable
+            style={styles.MenuButton}
             onPress={() => navigation.navigate("Help", { email: email })}
           ><Text style={global.ButtonText}>Help</Text></Pressable>
-
           <Pressable
             style={styles.MenuButton}
             onPress={() => navigation.navigate("About", { email: email })}
