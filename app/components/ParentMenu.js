@@ -14,27 +14,32 @@ const ParentMenu = ({ navigation, email }) => {
         <View>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Interface", {email:email})}
+            onPress={() => navigation.navigate("Interface", { email: email })}
           ><Text style={global.ButtonText}>My Children</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Notifications", {email:email})}
+            onPress={() => navigation.navigate("Notifications", { email: email })}
           ><Text style={global.ButtonText}>Notifications</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Reports", {email:email})}
-            ><Text style={global.ButtonText}>Reports</Text></Pressable>
+            onPress={() => navigation.navigate("Reports", { email: email })}
+          ><Text style={global.ButtonText}>Reports</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Settings", {email:email})}
+            onPress={() => navigation.navigate("Settings", { email: email })}
           ><Text style={global.ButtonText}>Settings</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("Help", {email:email})}
-          ><Text style={global.ButtonText}>Help</Text></Pressable>
+            onPress={() => navigation.navigate("Upgrade", { email: email })}
+          ><Text style={global.ButtonText}>Upgrade</Text></Pressable>
           <Pressable
             style={styles.MenuButton}
-            onPress={() => navigation.navigate("About", {email:email})}
+            onPress={() => navigation.navigate("Help", { email: email })}
+          ><Text style={global.ButtonText}>Help</Text></Pressable>
+
+          <Pressable
+            style={styles.MenuButton}
+            onPress={() => navigation.navigate("About", { email: email })}
           ><Text style={global.ButtonText}>About</Text></Pressable>
         </View>
         <View>
@@ -56,10 +61,10 @@ const Logout = (navigation) => {
     credentials: "include",
   })
     .then((response) => {
-      if (response.status == 404){
+      if (response.status == 404) {
         storeData("");
         navigation.navigate("Homepage");
-      } 
+      }
       else throw new Error(response.status);
     })
     .catch((error) => {
@@ -78,7 +83,7 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     borderWidth: 0,
     borderColor: colors.primary,
-    width:350,
+    width: 350,
   },
   MenuButton: {
     height: 50,

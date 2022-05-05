@@ -18,6 +18,7 @@ import Request from "./app/screens/Request";
 import Notifications from "./app/screens/Notifications";
 import Help from "./app/screens/Help";
 import About from "./app/screens/About";
+import Upgrade from "./app/screens/Upgrade";
 import { AntDesign } from '@expo/vector-icons'; 
 import { View } from "react-native-web";
 import fonts from "./app/config/fonts";
@@ -36,11 +37,11 @@ export default function App() {
     <NavigationContainer theme={MyTheme}>
       <Stack.Navigator screenOptions={{
         headerShown: true,
-        title: 'BlackEagle - Spy & Control',
+        title: 'BlackEagle - Spy & Control - Securely',
         headerTitleStyle: {
           fontWeight: 'bold', fontFamily: fonts.primary
         },
-            headerLeft: () => <View style={{paddingLeft:15}}><AntDesign name="Safety" size={26} color="black" /></View>,
+            headerLeft: () => <View style={{paddingLeft:15}}><AntDesign name="Safety" size={26} color="#00701a" /></View>,
       }}>
         <Stack.Screen name="Homepage" component={Homepage} />
         <Stack.Screen name="Login" component={Login} />
@@ -59,7 +60,7 @@ export default function App() {
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="Help" component={Help} />
         <Stack.Screen name="About" component={About} />
-
+        <Stack.Screen name="Upgrade" component={Upgrade} />
       </Stack.Navigator>
     </NavigationContainer>
   );

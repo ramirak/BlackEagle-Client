@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native-web";
 import global from "../config/global";
 import colors from "../config/colors";
 import ParentMenu from "../components/ParentMenu";
-
+import { ScrollView } from "react-native-web";
 const Help = ({ navigation }) => {
   return (
     <SafeAreaView style={global.PageContainer}>
@@ -14,7 +14,7 @@ const Help = ({ navigation }) => {
           <Text style={global.HeaderText}>BlackEagle Q/A</Text>
         </View>
         <View style={global.RightMenu}>
-          <View style={styles.TextView}>
+          <ScrollView style={styles.TextView}>
             <Text>
               <Text style={styles.HelpTextHeader}>How to connect a new device?</Text>
               {"\n"}
@@ -30,6 +30,15 @@ const Help = ({ navigation }) => {
               control. Find the request you would like to send, E.g.,
               Screenshots, Camera. Click on the "Add Request" button. You will
               be notified whether the request has been sent.
+              {"\n"}
+              <Text style={styles.HelpTextHeader}>Should I worry about the way my data stays on the server?</Text>
+              {"\n"}
+              All device related data, is encrypted with our AES-256 key and stays that way up until the monitoring user requests to view it.{"\n"}
+              We also do not keep any user related data after the user request to delete his account.
+              {"\n"}
+              <Text style={styles.HelpTextHeader}>How about user privacy, do you collect any data about the users of this service?</Text>
+              {"\n"}
+              We do not collect any data which is not needed in order to provide our services to our users.
               {"\n"}
               <Text style={styles.HelpTextHeader}>How to filter network activity on a device?</Text>
               {"\n"}
@@ -59,19 +68,19 @@ const Help = ({ navigation }) => {
               application.
               {"\n"}
               <Text style={styles.HelpTextHeader}>I'm getting a message which states I have used all my account
-              quota, what can I do?</Text>
+                quota, what can I do?</Text>
               {"\n"}
               You can either delete old data from your account or upgrade your
               account to one of the options available right now.
               {"\n"}
               <Text style={styles.HelpTextHeader}>I want to stop the devices from collecting data but do not
-              want to delete the service yet. How can I do so?</Text>
+                want to delete the service yet. How can I do so?</Text>
               {"\n"}
               At any time, you can suspend the service from the settings menu.
               The devices will stop the collection of data until reactivation.
               {"\n"}
             </Text>
-          </View>
+          </ScrollView>
         </View>
       </View>
     </SafeAreaView>
@@ -79,9 +88,9 @@ const Help = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    TextView : {
-        flex: 1,
-    },
+  TextView: {
+    flex: 1,
+  },
   HelpTextHeader: {
     fontSize: 15,
     fontWeight: "bold",

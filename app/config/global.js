@@ -126,6 +126,11 @@ export default global = StyleSheet.create({
     fontFamily: fonts.primary,
     letterSpacing:3,
   },
+  AboutText:{
+    fontFamily: fonts.primary,
+    lineHeight:28,
+    fontSize: 16,
+  },
   RefreshButton: {
     flex: 1,
     margin: 10,
