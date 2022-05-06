@@ -3,13 +3,33 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { MaterialIcons } from "@expo/vector-icons";
+import { checkEmail } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
 const ForgotPassword = ({ navigation, route }) => {
+  const [emailError, setEmailError] = useState("");
   const { email } = route.params;
 
+  const resetPassword = (email, navigation) => {
+    fetch("https://localhost:8010/users/reset/" + email, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) navigation.navigate("Key Via Email", { email: "email" });
+        else checkEmail(email, setEmailError);
+      })
+      .catch((error) => {
+        console.log("error: " + error);
+      });
+  };
+  
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
       <View style={global.SecondLoginView}>
@@ -31,6 +51,7 @@ const ForgotPassword = ({ navigation, route }) => {
               onChangeText={(email) => setEmail(email)}
             />
           </View>
+          <Text style={global.ErrorMsg}>{emailError}</Text>
           <Pressable
             style={global.LoginAndRegisterButton}
             onPress={() => resetPassword(email, navigation)}
@@ -41,24 +62,6 @@ const ForgotPassword = ({ navigation, route }) => {
       </View>
     </SafeAreaView>
   );
-};
-
-const resetPassword = (email, navigation) => {
-  fetch("https://localhost:8010/users/reset/" + email, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      if (response.ok) navigation.navigate("Key Via Email", { email: "email" });
-      else throw new Error(response.status);
-    })
-    .catch((error) => {
-      console.log("error: " + error);
-    });
 };
 
 export default ForgotPassword;

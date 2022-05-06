@@ -3,6 +3,9 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+//import { registerNow } from "../components/FetchRequest";
+import { handleRegister } from "../components/Errors";
+import { SmallNaviButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -16,26 +19,6 @@ const Register = ({ navigation }) => {
   const [nameError, setNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  const handleRegister = () => {
-    if (email.length < 6) setEmailError("Email should be minimum 6 characters");
-    else if (email.indexOf(" ") >= 0)
-      setEmailError("Email cannot contain spaces");
-    else setEmailError("");
-
-    if (name.length < 2) setNameError("Name should be minimum 2 characters");
-    else setNameError("");
-
-    if (password.length < 10)
-      setPasswordError("Password should be minimum 10 characters");
-    else if (password.indexOf(" ") >= 0)
-      setPasswordError("Password cannot contain spaces");
-    else setPasswordError("");
-
-    if (confirmPassword != password)
-      setConfirmPasswordError("Confirmed password and password are not the same");
-    else setConfirmPasswordError("");
-  };
 
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
@@ -112,19 +95,27 @@ const Register = ({ navigation }) => {
         <Pressable
           style={global.LoginAndRegisterButton}
           onPress={() => {
-            registerNow(email, name, password, navigation), handleRegister();
+            registerNow(email, name, password, navigation),
+              handleRegister(
+                email,
+                setEmailError,
+                name,
+                setNameError,
+                password,
+                setPasswordError,
+                confirmPassword,
+                setConfirmPasswordError
+              );
           }}
         >
           <Text style={global.ButtonText}>Register</Text>
         </Pressable>
-        <Pressable
-          style={global.SmallButton}
-          onPress={() => navigation.navigate("Login")}
-        >
-          <Text style={global.SmallButtonText}>
-            Already have an account? Login
-          </Text>
-        </Pressable>
+
+        <SmallNaviButton
+          navigation={navigation}
+          page={"Login"}
+          text={"Already have an account? Login"}
+        />
       </View>
     </SafeAreaView>
   );

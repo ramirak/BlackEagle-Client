@@ -3,10 +3,13 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { checkSession, LoginNow } from "../components/FetchRequest";
+import { handleLogin } from "../components/Errors";
+import { SmallNaviButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
-import { checkSession } from "../config/FetchRequest";
+
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,16 +17,8 @@ const Login = ({ navigation }) => {
   const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
-    checkSession(navigation)
-   }, []);
-
-  const handleLogin = () => {
-    if (email.length == 0) setEmailError("Email is required");
-    else setEmailError("");
-
-    if (password.length == 0) setPasswordError("Password is required");
-    else setPasswordError("");
-  };
+    checkSession(navigation);
+  }, []);
 
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
@@ -65,52 +60,30 @@ const Login = ({ navigation }) => {
         <Pressable
           style={global.LoginAndRegisterButton}
           onPress={() => {
-            loginNow(email, password, navigation), handleLogin();
+            LoginNow(email, password, navigation), handleLogin(email, setEmailError, password, setPasswordError);
           }}
         >
           <Text style={global.ButtonText}>Login</Text>
         </Pressable>
-        <Pressable
-          style={global.SmallButton}
-          onPress={() => navigation.navigate("Register")}
-        >
-          <Text style={global.SmallButtonText}>
-            Don't have an account? Sign Up
-          </Text>
-        </Pressable>
-        <Pressable
-          style={global.SmallButton}
-          onPress={() =>
-            navigation.navigate("Forgot Password", { email: "email" })
-          }
-        >
-          <Text style={global.SmallButtonText}>Forgot Password?</Text>
-        </Pressable>
+        <SmallNaviButton
+          navigation={navigation}
+          page={"Register"}
+          text={"Don't have an account? Sign Up"}
+        />
+        <SmallNaviButton
+          navigation={navigation}
+          page={"Forgot Password"}
+          text={"Forgot Password?"}
+          email={email}
+        />
+        <SmallNaviButton
+          navigation={navigation}
+          page={"Homepage"}
+          text={"Back to Homepage"}
+        />
       </View>
     </SafeAreaView>
   );
-};
-
-const loginNow = (email, password, navigation) => {
-  fetch("https://localhost:8010/login", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      uid: email,
-      password: password,
-    }),
-  })
-    .then((response) => {
-      if (response.ok) navigation.navigate("Second Login", { email: email });
-      else throw new Error(response.status);
-    })
-    .catch((error) => {
-      console.log("error: " + error);
-    });
 };
 
 export default Login;

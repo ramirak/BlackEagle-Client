@@ -8,7 +8,15 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
 import { handleRefresh, removeNonAscii } from "../config/Utils";
-import { addRequest, deleteData, getSpecificData, addConfigurationRequest, deleteUrl } from "../config/FetchRequest";
+import { checkCmdParam, checkUrl } from "../components/Errors";
+import {
+  addRequest,
+  deleteData,
+  getSpecificData,
+  addConfigurationRequest,
+  deleteUrl,
+} from "../components/FetchRequest";
+import { GoBackButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -29,6 +37,8 @@ const NotImmRequest = ({ route, navigation }) => {
   const [social, setSocial] = useState(false);
   const [specificUrl, setSpecificUrl] = useState("");
   const [additionalSitesOP, setAdditionalSitesOP] = useState("Add");
+  const [cmdParamError, setCmdParamError] = useState("");
+  const [specificUrlError, setSpecificUrlError] = useState("");
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
@@ -51,7 +61,16 @@ const NotImmRequest = ({ route, navigation }) => {
 
   const deleteByType = (dataId) => {
     if (type == "CONFIGURATION") {
-      deleteUrl( dataId, type, fakenews, gambling, porn, social, specificUrl, additionalSitesOP);
+      deleteUrl(
+        dataId,
+        type,
+        fakenews,
+        gambling,
+        porn,
+        social,
+        specificUrl,
+        additionalSitesOP
+      );
     } else deleteData(dataId, setRefresh);
   };
 
@@ -82,6 +101,7 @@ const NotImmRequest = ({ route, navigation }) => {
               </Picker>
             </View>
             <View>{getAdditionalParam(cmdType)}</View>
+            <Text style={global.ErrorMsg}>{cmdParamError}</Text>
           </View>
         );
       case "HISTORY":
@@ -143,6 +163,7 @@ const NotImmRequest = ({ route, navigation }) => {
                   onChangeText={(specificUrl) => setSpecificUrl(specificUrl)}
                 />
               </View>
+              <Text style={global.ErrorMsg}>{specificUrlError}</Text>
             </View>
           </ScrollView>
         );
@@ -196,6 +217,7 @@ const NotImmRequest = ({ route, navigation }) => {
         COMMAND_TYPE: cmdType,
         COMMAND_PARAMETER: cmdParam,
       };
+      checkCmdParam(cmdParam, setCmdParamError);
       addRequest(uid, dataAttr);
     } else if (type == "CONFIGURATION") {
       dataAttr = {
@@ -206,6 +228,7 @@ const NotImmRequest = ({ route, navigation }) => {
         ADDITIONAL_SITES: specificUrl,
         ADDITIONAL_SITES_OPERATION: additionalSitesOP,
       };
+      checkUrl(specificUrl, setSpecificUrlError);
       addConfigurationRequest(uid, dataAttr);
     } else {
       dataAttr = { REQUEST_TYPE: type };
@@ -236,6 +259,7 @@ const NotImmRequest = ({ route, navigation }) => {
       <ParentMenu navigation={navigation} />
       <View style={global.RightContainer}>
         <View>
+          <GoBackButton navigation={navigation} uid={uid} name={name} />
           <Pressable
             style={global.RefreshButton}
             onPress={() => handleRefresh(setRefresh)}
@@ -285,7 +309,8 @@ const NotImmRequest = ({ route, navigation }) => {
               <Pressable
                 style={global.ButtonList}
                 onPress={() => {
-                  setModalVisible(true), getSpecificData(uid, item.dataId, setSpecificData);
+                  setModalVisible(true),
+                    getSpecificData(uid, item.dataId, setSpecificData);
                 }}
               >
                 <Text style={global.ListItemText}>

@@ -3,13 +3,13 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
-import fileDownload from "js-file-download";
 import ParentMenu from "../components/ParentMenu";
 import { getData } from "../config/Utils";
+import { checkSession, deleteChild } from "../components/FetchRequest";
+import { AddChildButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
-import { checkSession } from "../config/FetchRequest";
 
 const Interface = ({ navigation }) => {
   const [data, setData] = useState("");
@@ -38,58 +38,6 @@ const Interface = ({ navigation }) => {
     setRefresh(false);
   }, [refresh]);
 
-  const addChild = (childName) => {
-    fetch("https://localhost:8010/device/add", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: childName,
-      }),
-    })
-      .then((response) => {
-        if (response.status == "507") {
-          alert("You can only create up to 5 devices");
-        } else if (response.status == "400") {
-          alert("Name is required");
-        } else {
-          alert(
-            "Your device authentication details is being downloaded.\nPlease keep it in a secure loaction!"
-          );
-        }
-        return response.json();
-      })
-      .then((responseJson) => {
-        let deviceLoginDetails = JSON.stringify({
-          uid: responseJson.userId.uid,
-          password: responseJson.userId.passwordBoundary.password,
-        });
-        fileDownload(deviceLoginDetails, "auth.json");
-      })
-      .then(() => setRefresh(true))
-      .catch((error) => {
-        console.log("error: " + error);
-      });
-  };
-
-  const deleteChild = (id) => {
-    fetch("https://localhost:8010/device/delete/" + id, {
-      method: "DELETE",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then(() => setRefresh(true))
-      .catch((error) => {
-        console.log("error: " + error);
-      });
-  };
-
   return (
     <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} email={email} />
@@ -105,14 +53,11 @@ const Interface = ({ navigation }) => {
               value={name}
               onChangeText={(name) => setName(name)}
             />
-            <Pressable
-              style={global.SendButton}
-              onPress={() => {
-                addChild(name), setName("");
-              }}
-            >
-              <Text style={global.ButtonText}>Add Child</Text>
-            </Pressable>
+            <AddChildButton
+              name={name}
+              setName={setName}
+              setRefresh={setRefresh}
+            />
           </View>
           <View style={global.ListView}>
             <FlatList
@@ -147,7 +92,7 @@ const Interface = ({ navigation }) => {
                       </Pressable>
                       <Pressable
                         style={global.IconButton}
-                        onPress={() => deleteChild(item.userId.uid)}
+                        onPress={() => deleteChild(item.userId.uid, setRefresh)}
                       >
                         <FontAwesome
                           name="trash-o"
@@ -190,4 +135,5 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
 });
+
 export default Interface;

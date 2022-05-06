@@ -6,5 +6,9 @@ export default {
   fontColor: "white", //White
   smallButtonTextColor: "#0000ff", //Blue
   ErrorTextColor: "#ff0000", //Red
-  loginAndRegisterIconColor: "#ffc0cb", //pink
+  loginAndRegisterIconColor: "#34a4eb", //Light-Blue
+  CurrAccountTypeIconColor: "green",
+  AccountTypeIconColor: "red",
+  WindowsIconColor: "#00A4EF",
+  AndroidIconColor: "#3DDC84",
 };

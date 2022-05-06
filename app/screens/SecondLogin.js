@@ -3,6 +3,7 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { Feather } from "@expo/vector-icons";
+import { checkKey } from "../components/Errors";
 import { storeData } from "../config/Utils";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -10,7 +11,32 @@ import global from "../config/global";
 
 const SecondLogin = ({ navigation, route }) => {
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const { email } = route.params;
+
+  const loginNow = (email, password, navigation) => {
+    fetch("https://localhost:8010/login", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uid: email,
+        password: password,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          storeData(email);
+          navigation.navigate("Interface");
+        } else checkKey(password, setPasswordError);
+      })
+      .catch((error) => {
+        console.log("error: " + error);
+      });
+  };
 
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
@@ -34,9 +60,10 @@ const SecondLogin = ({ navigation, route }) => {
               onChangeText={(password) => setPassword(password)}
             />
           </View>
+          <Text style={global.ErrorMsg}>{passwordError}</Text>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => [loginNow(email, password, navigation)]}
+            onPress={() => loginNow(email, password, navigation)}
           >
             <Text style={global.ButtonText}>Login</Text>
           </Pressable>
@@ -44,30 +71,6 @@ const SecondLogin = ({ navigation, route }) => {
       </View>
     </SafeAreaView>
   );
-};
-
-const loginNow = (email, password, navigation) => {
-  fetch("https://localhost:8010/login", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      uid: email,
-      password: password,
-    }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        storeData(email);
-       navigation.navigate("Interface");
-      } else throw new Error(response.status);
-    })
-    .catch((error) => {
-      console.log("error: " + error);
-    });
 };
 
 export default SecondLogin;

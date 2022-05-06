@@ -36,7 +36,7 @@ export default global = StyleSheet.create({
     height: 50,
     padding: 10,
     paddingRight: 40,
-    fontFamily: fonts.primary
+    //fontFamily: fonts.primary
   },
   ButtonText: {
     fontSize: 15,
@@ -44,7 +44,7 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: colors.secondary,
-    fontFamily: fonts.primary
+    //fontFamily: fonts.primary
   },
   ListItemText:{
     fontSize: 15,
@@ -52,7 +52,7 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: colors.primary,
-    fontFamily: fonts.primary
+    //fontFamily: fonts.primary
   },
   MenuButton: {
     margin: 10,
@@ -74,7 +74,7 @@ export default global = StyleSheet.create({
     letterSpacing: 0.5,
     textAlign: "center",
     color: colors.primary,
-    fontFamily: fonts.primary
+    //fontFamily: fonts.primary
   },
   SmallButton: {
     alignItems: "center",
@@ -86,7 +86,7 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: colors.smallButtonTextColor,
-    fontFamily: fonts.primary
+    //fontFamily: fonts.primary
   },
   LoginAndRegisterButton: { // Also SecondLogin and ForgotPassword
     alignItems: "center",
@@ -123,13 +123,11 @@ export default global = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     textTransform: "capitalize",
-    fontFamily: fonts.primary,
+    //fontFamily: fonts.primary,
     letterSpacing:3,
   },
-  AboutText:{
-    fontFamily: fonts.primary,
-    lineHeight:28,
-    fontSize: 16,
+  TextView: {
+    flex: 1,
   },
   RefreshButton: {
     flex: 1,

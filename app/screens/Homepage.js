@@ -10,9 +10,9 @@ import {
   Platform,
 } from "react-native";
 import colors from "../config/colors";
-import { checkSession } from "../config/FetchRequest";
-const Homepage = ({ navigation }) => {
- 
+import { checkSession } from "../components/FetchRequest";
+
+const Homepage = ({ navigation }) => { 
   /* The user will be redirected to Interface when doing refresh as long as he is logged on */
   useEffect(() => {
    checkSession(navigation)

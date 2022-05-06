@@ -1,3 +1,94 @@
+import fileDownload from "js-file-download";
+
+export function checkSession(navigation) {
+  fetch("https://localhost:8010/users/sessionCheck", {
+    method: "GET",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (response.ok) {
+        navigation.navigate("Interface");
+      }
+    })
+    .catch((error) => {
+      console.log("error: " + error);
+    });
+}
+
+export function LoginNow(email, password, navigation) {
+  fetch("https://localhost:8010/login", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      uid: email,
+      password: password,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) navigation.navigate("Second Login", { email: email });
+      else throw new Error(response.status);
+    })
+    .catch((error) => {
+      console.log("error: " + error);
+    });
+}
+
+export function addChild(childName, setRefresh) {
+  fetch("https://localhost:8010/device/add", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: childName,
+    }),
+  })
+    .then((response) => {
+      if (response.status == "507") {
+        alert("You can only create up to 5 devices");
+      } else if (response.status == "400") {
+        alert("Name is required");
+      } else {
+        alert(
+          "Your device authentication details is being downloaded.\nPlease keep it in a secure loaction!"
+        );
+      }
+      return response.json();
+    })
+    .then((responseJson) => {
+      let deviceLoginDetails = JSON.stringify({
+        uid: responseJson.userId.uid,
+        password: responseJson.userId.passwordBoundary.password,
+      });
+      fileDownload(deviceLoginDetails, "auth.json");
+    })
+    .then(() => setRefresh(true))
+    .catch((error) => {
+      console.log("error: " + error);
+    });
+}
+
+export function deleteChild(id, setRefresh) {
+  fetch("https://localhost:8010/device/delete/" + id, {
+    method: "DELETE",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then(() => setRefresh(true))
+    .catch((error) => {
+      console.log("error: " + error);
+    });
+}
+
 export function addRequest(uid, dataAttr) {
   fetch("https://localhost:8010/data/add/" + uid, {
     method: "POST",
@@ -24,20 +115,6 @@ export function addRequest(uid, dataAttr) {
     })
     .catch((error) => {
       console.log("error: " + error);
-    });
-}
-
-export function checkSession(navigation) {
-  fetch("https://localhost:8010/users/sessionCheck", {
-    method: "GET",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (response.ok) {
-        navigation.navigate("Interface")
-      } 
-    })
-    .catch((error) => {
     });
 }
 
@@ -102,7 +179,16 @@ export function addConfigurationRequest(uid, dataAttr) {
     });
 }
 
-export function deleteUrl(dataId, type, fakenews, gambling, porn, social, specificUrl, additionalSitesOP) {
+export function deleteUrl(
+  dataId,
+  type,
+  fakenews,
+  gambling,
+  porn,
+  social,
+  specificUrl,
+  additionalSitesOP
+) {
   let dataAttr = {
     FAKENEWS: fakenews,
     GAMBLING: gambling,
@@ -121,7 +207,7 @@ export function deleteUrl(dataId, type, fakenews, gambling, porn, social, specif
     body: JSON.stringify({
       DATAID: "CONFIGURATION@" + dataId,
       DATATYPE: type,
-      dataAttributes: dataAttr
+      dataAttributes: dataAttr,
     }),
   })
     .then((response) => {
@@ -138,4 +224,4 @@ export function deleteUrl(dataId, type, fakenews, gambling, porn, social, specif
     .catch((error) => {
       console.log("error: " + error);
     });
-};
+}

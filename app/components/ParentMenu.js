@@ -101,4 +101,5 @@ const styles = StyleSheet.create({
     color: colors.fontColor,
   },
 });
+
 export default ParentMenu;
