@@ -367,8 +367,7 @@ const NotImmRequest = ({ route, navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      defineTypeAttributes(),
-                        setModalConfigVisible(!modalConfigVisible);
+                      defineTypeAttributes();
                     }}
                     style={global.CloseButton}
                   >

@@ -1,6 +1,5 @@
 import { React, useState } from "react";
 import { Pressable, Modal } from "react-native";
-import { removeNonAscii } from "../config/Utils";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, StyleSheet } from "react-native-web";
 import {
@@ -10,13 +9,13 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
-import { getData } from "../config/Utils";
 import {
-  checkConfirmPassword,
-  checkKey,
-  checkName,
-  checkPassword,
-} from "../components/Errors";
+  getSettingsDetails,
+  deleteUser,
+  updateUser,
+} from "../components/FetchSettings";
+import { getData } from "../config/Utils";
+import { handleSettings } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -38,26 +37,32 @@ const Settings = ({ navigation }) => {
   const [oneTimeKeyError, setOneTimeKeyError] = useState("");
   const [email, setEmail] = useState("");
 
-  const handleSettings = (type) => {
+  const setDetailsOrSuspend = (type) => {
+    getData("@email", setEmail);
     switch (type) {
-      case "NAME":
-        checkName(newName, setNameError);
-        settingsRequests();
-        setModalVisible(!modalVisible);
-        break;
-      case "PASSWORD":
-        checkPassword(oldPassword, setOldPasswordError);
-        checkPassword(newPassword, setNewPasswordError);
-        checkConfirmPassword(
-          newPassword,
-          confirmPassword,
-          setConfirmPasswordError
+      case "DETAILS":
+        return <Text>{details}</Text>;
+      case "SUSPEND":
+        return (
+          <View>
+            <View style={styles.InsideModalView}>
+              <Pressable
+                style={styles.SettingButton}
+                //onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={global.ButtonText}>Suspend</Text>
+              </Pressable>
+            </View>
+            <View style={styles.InsideModalView}>
+              <Pressable
+                style={styles.SettingButton}
+                //onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={global.ButtonText}>Active</Text>
+              </Pressable>
+            </View>
+          </View>
         );
-        settingsRequests();
-        setModalVisible(!modalVisible);
-        break;
-      case "DELETE":
-        checkKey(oneTimeKey, setOneTimeKeyError);
       default:
         break;
     }
@@ -121,27 +126,6 @@ const Settings = ({ navigation }) => {
         break;
       case "SECURITY":
         break;
-      case "SUSPEND":
-        return (
-          <View>
-            <View style={styles.InsideModalView}>
-              <Pressable
-                style={styles.SettingButton}
-                //onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={global.ButtonText}>Suspend</Text>
-              </Pressable>
-            </View>
-            <View style={styles.InsideModalView}>
-              <Pressable
-                style={styles.SettingButton}
-                //onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={global.ButtonText}>Active</Text>
-              </Pressable>
-            </View>
-          </View>
-        );
       case "DELETE":
         return (
           <View>
@@ -173,77 +157,13 @@ const Settings = ({ navigation }) => {
     }
   };
 
-  const getSettingsDetails = () => {
-    fetch(
-      "https://localhost:8010/data/get/" + email + "/CONFIGURATION@" + email,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setDetails(removeNonAscii(JSON.stringify(responseJson.dataAttributes)));
-      })
-      .catch((error) => {
-        console.log("error: " + error);
-      });
-  };
-
   const settingsRequests = () => {
     switch (type) {
       case "DELETE":
-        return fetch("https://localhost:8010/users/delete/" + oneTimeKey, {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-          },
-        })
-          .then((response) => {
-            if (response.ok) {
-              alert("The account has been deleted.");
-            } else {
-              alert("Deletion failed.");
-            }
-            return response.json(type);
-          })
-          .then((responseJson) => {
-            console.log(responseJson);
-          })
-          .catch((error) => {
-            console.log("error: " + error);
-          });
+        return deleteUser(oneTimeKey);
       default:
         let jsonBody = getJsonBodyByType();
-        return fetch("https://localhost:8010/users/update", {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            jsonBody,
-          }),
-        })
-          .then((response) => {
-            if (response.ok) {
-              alert("The update was successful.");
-            } else {
-              alert("The update failed.");
-            }
-            return response.json(type);
-          })
-          .then((responseJson) => {
-            console.log(responseJson);
-          })
-          .catch((error) => {
-            console.log("error: " + error);
-          });
+        return updateUser(jsonBody);
     }
   };
 
@@ -340,7 +260,7 @@ const Settings = ({ navigation }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() => {
-                setModalVisible(true), setType("SUSPEND");
+                setDetailsModalVisible(true), setType("SUSPEND");
               }}
             >
               <MaterialCommunityIcons
@@ -353,7 +273,9 @@ const Settings = ({ navigation }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() => {
-                setDetailsModalVisible(true), getSettingsDetails();
+                setDetailsModalVisible(true),
+                  setType("DETAILS"),
+                  getSettingsDetails(email, setDetails);
               }}
             >
               <MaterialCommunityIcons
@@ -396,7 +318,20 @@ const Settings = ({ navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      handleSettings(type);
+                      handleSettings(
+                        type,
+                        newName,
+                        setNameError,
+                        oldPassword,
+                        setOldPasswordError,
+                        newPassword,
+                        setNewPasswordError,
+                        confirmPassword,
+                        setConfirmPasswordError,
+                        oneTimeKey,
+                        setOneTimeKeyError
+                      ),
+                        settingsRequests();
                     }}
                     style={global.CloseButton}
                   >
@@ -412,7 +347,7 @@ const Settings = ({ navigation }) => {
               </View>
             </View>
           </Modal>
-          <Modal //Details Modal
+          <Modal //Suspend and Details Modal
             style={global.ModalContainer}
             animationType="fade"
             transparent={true}
@@ -424,7 +359,7 @@ const Settings = ({ navigation }) => {
             <View style={global.ModalView}>
               <View style={styles.ModalSettingsContainer}>
                 <View style={styles.TopModalSettingsView}>
-                  <Text>{details}</Text>
+                  {setDetailsOrSuspend(type)}
                 </View>
                 <View style={global.BottomModalView}>
                   <Pressable

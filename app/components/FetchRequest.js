@@ -105,8 +105,6 @@ export function addRequest(uid, dataAttr) {
     .then((response) => {
       if (response.ok) {
         alert("The request has been sent.");
-      } else {
-        alert("There is an already pending request.");
       }
       return response.json(type);
     })
@@ -166,8 +164,6 @@ export function addConfigurationRequest(uid, dataAttr) {
     .then((response) => {
       if (response.ok) {
         alert("The request has been sent.");
-      } else {
-        alert("There is an already pending request.");
       }
       return response.json(type);
     })
