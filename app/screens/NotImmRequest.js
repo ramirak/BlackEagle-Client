@@ -3,42 +3,31 @@ import { Pressable, Text, Modal, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, FlatList, TextInput, StyleSheet } from "react-native-web";
 import { Picker } from "@react-native-picker/picker";
-import Checkbox from "expo-checkbox";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
 import { handleRefresh, removeNonAscii } from "../config/Utils";
-import { checkCmdParam, checkUrl } from "../components/Errors";
+import { checkCmdParam } from "../components/Errors";
 import {
   addRequest,
   deleteData,
   getSpecificData,
-  addConfigurationRequest,
-  deleteUrl,
 } from "../components/FetchRequest";
 import { GoBackButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-// History, Command, Configuration and Lockdown requests page
+// Command and Lockdown requests page
 const NotImmRequest = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [specificData, setSpecificData] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfigVisible, setModalConfigVisible] = useState(false);
-  const [browser, setBrowser] = useState("");
   const [cmdType, setCmpType] = useState("");
   const [cmdParam, setCmdParam] = useState("");
-  const [fakenews, setFakenews] = useState(false);
-  const [gambling, setGambling] = useState(false);
-  const [porn, setPorn] = useState(false);
-  const [social, setSocial] = useState(false);
-  const [specificUrl, setSpecificUrl] = useState("");
-  const [additionalSitesOP, setAdditionalSitesOP] = useState("Add");
   const [cmdParamError, setCmdParamError] = useState("");
-  const [specificUrlError, setSpecificUrlError] = useState("");
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
@@ -58,21 +47,6 @@ const NotImmRequest = ({ route, navigation }) => {
       });
     setRefresh(false);
   }, [refresh]); //, pageCurrent]);
-
-  const deleteByType = (dataId) => {
-    if (type == "CONFIGURATION") {
-      deleteUrl(
-        dataId,
-        type,
-        fakenews,
-        gambling,
-        porn,
-        social,
-        specificUrl,
-        additionalSitesOP
-      );
-    } else deleteData(dataId, setRefresh);
-  };
 
   const setDataText = () => {
     let decodedData = base64.decode(specificData.toString());
@@ -104,87 +78,14 @@ const NotImmRequest = ({ route, navigation }) => {
             <Text style={global.ErrorMsg}>{cmdParamError}</Text>
           </View>
         );
-      case "HISTORY":
-        return (
-          <View>
-            <Picker
-              style={global.TextInput}
-              selectedValue={browser}
-              onValueChange={(itemValue, itemIndex) => setBrowser(itemValue)}
-            >
-              <Picker.Item label="Chrome" value="Chrome" />
-              <Picker.Item label="Opera" value="Opera" />
-              <Picker.Item label="Brave" value="Brave" />
-              <Picker.Item label="Edge" value="Edge" />
-            </Picker>
-          </View>
-        );
-      case "CONFIGURATION":
-        return (
-          <ScrollView>
-            <View style={styles.CheckboxContainer}>
-              <View style={styles.CheckboxSection}>
-                <Checkbox
-                  style={styles.Checkbox}
-                  value={fakenews}
-                  onValueChange={setFakenews}
-                />
-                <Text style={sizes.FilterTextSize}>Fakenews</Text>
-              </View>
-              <View style={styles.CheckboxSection}>
-                <Checkbox
-                  style={styles.Checkbox}
-                  value={gambling}
-                  onValueChange={setGambling}
-                />
-                <Text style={sizes.FilterTextSize}>Gambling</Text>
-              </View>
-              <View style={styles.CheckboxSection}>
-                <Checkbox
-                  style={styles.Checkbox}
-                  value={porn}
-                  onValueChange={setPorn}
-                />
-                <Text style={sizes.FilterTextSize}>Porn</Text>
-              </View>
-              <View style={styles.CheckboxSection}>
-                <Checkbox
-                  style={styles.Checkbox}
-                  value={social}
-                  onValueChange={setSocial}
-                />
-                <Text style={sizes.FilterTextSize}>Social</Text>
-              </View>
-              <View>
-                <TextInput
-                  style={global.TextInputInModal}
-                  placeholder="Specific URL"
-                  placeholderTextColor={colors.primary}
-                  onChangeText={(specificUrl) => setSpecificUrl(specificUrl)}
-                />
-              </View>
-              <Text style={global.ErrorMsg}>{specificUrlError}</Text>
-            </View>
-          </ScrollView>
-        );
-      default:
+      default: //LOCKDOWN
         break;
     }
   };
 
   const checkRequestButton = () => {
     switch (type) {
-      case "HISTORY":
-        return (
-          <Pressable
-            onPress={() => setModalConfigVisible(true)}
-            style={styles.AddRequestButton}
-          >
-            <Text style={global.ButtonText}>Download browser history</Text>
-          </Pressable>
-        );
       case "COMMAND":
-      case "CONFIGURATION":
         return (
           <Pressable
             onPress={() => setModalConfigVisible(true)}
@@ -219,17 +120,6 @@ const NotImmRequest = ({ route, navigation }) => {
       };
       checkCmdParam(cmdParam, setCmdParamError);
       addRequest(uid, dataAttr);
-    } else if (type == "CONFIGURATION") {
-      dataAttr = {
-        FAKENEWS: fakenews,
-        GAMBLING: gambling,
-        PORN: porn,
-        SOCIAL: social,
-        ADDITIONAL_SITES: specificUrl,
-        ADDITIONAL_SITES_OPERATION: additionalSitesOP,
-      };
-      checkUrl(specificUrl, setSpecificUrlError);
-      addConfigurationRequest(uid, dataAttr);
     } else {
       dataAttr = { REQUEST_TYPE: type };
       addRequest(uid, dataAttr);
@@ -260,17 +150,6 @@ const NotImmRequest = ({ route, navigation }) => {
       <View style={global.RightContainer}>
         <View>
           <GoBackButton navigation={navigation} uid={uid} name={name} />
-          <Pressable
-            style={global.RefreshButton}
-            onPress={() => handleRefresh(setRefresh)}
-          >
-            <FontAwesome
-              style={global.icon}
-              name="refresh"
-              size={sizes.refreshIconSize}
-              color={colors.primary}
-            />
-          </Pressable>
         </View>
         <View style={global.HeaderMenu}>
           <Text style={global.HeaderText}>
@@ -281,7 +160,17 @@ const NotImmRequest = ({ route, navigation }) => {
           <View style={global.ArrowView}>
             <Pressable
               style={global.ArrowButton}
-              onPress={() => handlePreviousPage()}
+              //onPress={() => handlePreviousPage()}
+            >
+              <MaterialIcons
+                name="delete-sweep"
+                size={sizes.iconSize}
+                color={colors.primary}
+              />
+            </Pressable>
+            <Pressable
+              style={global.ArrowButton}
+              //onPress={() => handlePreviousPage()}
             >
               <MaterialIcons
                 name="navigate-before"
@@ -291,11 +180,22 @@ const NotImmRequest = ({ route, navigation }) => {
             </Pressable>
             <Pressable
               style={global.ArrowButton}
-              onPress={() => handleNextPage()}
+              //onPress={() => handleNextPage()}
             >
               <MaterialIcons
                 name="navigate-next"
                 size={sizes.PagingArrowIconSize}
+                color={colors.primary}
+              />
+            </Pressable>
+            <Pressable
+              style={global.ArrowButton}
+              onPress={() => handleRefresh(setRefresh)}
+            >
+              <FontAwesome
+                style={global.icon}
+                name="refresh"
+                size={sizes.refreshIconSize}
                 color={colors.primary}
               />
             </Pressable>
@@ -318,7 +218,9 @@ const NotImmRequest = ({ route, navigation }) => {
                 </Text>
                 <Pressable
                   style={global.IconButton}
-                  onPress={() => deleteByType(item.dataId)}
+                  onPress={() => {
+                    deleteData(item.dataId, setRefresh);
+                  }}
                 >
                   <FontAwesome
                     name="trash-o"
@@ -350,7 +252,7 @@ const NotImmRequest = ({ route, navigation }) => {
               </View>
             </View>
           </Modal>
-          <Modal /* Modal for COMMAND, HISTORY and CONFIGURATION components */
+          <Modal /* Modal for COMMAND components */
             style={global.ModalConfigContainer}
             animationType="fade"
             transparent={true}
@@ -405,16 +307,6 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     margin: 5,
     paddingLeft: 10,
-  },
-  CheckboxContainer: {
-    flex: 1,
-  },
-  CheckboxSection: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  Checkbox: {
-    margin: 8,
   },
 });
 

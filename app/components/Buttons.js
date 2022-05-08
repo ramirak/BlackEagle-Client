@@ -8,13 +8,11 @@ import colors from "../config/colors";
 export function SmallNaviButton({ navigation, page, text, email }) {
   return (
     <Pressable
-    style={global.SmallButton}
-    onPress={() =>
-      navigation.navigate(page, { email: email })
-    }
-  >
-    <Text style={global.SmallButtonText}>{text}</Text>
-  </Pressable>
+      style={global.SmallButton}
+      onPress={() => navigation.navigate(page, { email: email })}
+    >
+      <Text style={global.SmallButtonText}>{text}</Text>
+    </Pressable>
   );
 }
 

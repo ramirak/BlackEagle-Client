@@ -163,7 +163,7 @@ const Settings = ({ navigation }) => {
         return deleteUser(oneTimeKey);
       default:
         let jsonBody = getJsonBodyByType();
-        return updateUser(jsonBody);
+        return updateUser(jsonBody.userId.name);
     }
   };
 

@@ -7,6 +7,7 @@ import ParentMenu from "../components/ParentMenu";
 import { getData } from "../config/Utils";
 import { checkSession, deleteChild } from "../components/FetchRequest";
 import { AddChildButton } from "../components/Buttons";
+import { settingsComponent } from "../screens/Settings";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -15,6 +16,8 @@ const Interface = ({ navigation }) => {
   const [data, setData] = useState("");
   const [name, setName] = useState("");
   const [refresh, setRefresh] = useState(true);
+  const [editModal, setEditModal] = useState(false);
+  const [nameError, setNameError] = useState("");
   const [email, setEmail] = useState("");
 
   useEffect(() => {
@@ -82,7 +85,9 @@ const Interface = ({ navigation }) => {
                     <View style={styles.ListRightButtons}>
                       <Pressable
                         style={global.IconButton}
-                        onPress={() => navigation.navigate("Homepage")}
+                        onPress={() => {
+                          setEditModal(!editModal);
+                        }}
                       >
                         <MaterialIcons
                           name="edit"

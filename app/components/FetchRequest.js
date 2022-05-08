@@ -148,51 +148,22 @@ export function deleteData(dataId, setRefresh) {
     });
 }
 
-export function addConfigurationRequest(uid, dataAttr) {
-  fetch("https://localhost:8010/data/update/" + uid, {
-    method: "POST",
+export function deleteAllData(uid, type, setRefresh) {
+  fetch("https://localhost:8010/data/deleteAll/" + uid + "/" + type, {
+    method: "DELETE",
     credentials: "include",
     headers: {
-      Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      dataType: "CONFIGURATION",
-      dataAttributes: dataAttr,
-    }),
   })
-    .then((response) => {
-      if (response.ok) {
-        alert("The request has been sent.");
-      }
-      return response.json(type);
-    })
-    .then((responseJson) => {
-      console.log(responseJson);
-    })
+    .then((response) => response.json())
+    .then(() => setRefresh(true))
     .catch((error) => {
       console.log("error: " + error);
     });
 }
 
-export function deleteUrl(
-  dataId,
-  type,
-  fakenews,
-  gambling,
-  porn,
-  social,
-  specificUrl,
-  additionalSitesOP
-) {
-  let dataAttr = {
-    FAKENEWS: fakenews,
-    GAMBLING: gambling,
-    PORN: porn,
-    SOCIAL: social,
-    ADDITIONAL_SITES: specificUrl,
-    ADDITIONAL_SITES_OPERATION: additionalSitesOP,
-  };
+export function configUpdate(dataId, dataAttr) {
   fetch("https://localhost:8010/data/update", {
     method: "PUT",
     credentials: "include",
@@ -202,7 +173,7 @@ export function deleteUrl(
     },
     body: JSON.stringify({
       DATAID: "CONFIGURATION@" + dataId,
-      DATATYPE: type,
+      DATATYPE: "CONFIGURATION",
       dataAttributes: dataAttr,
     }),
   })
@@ -212,7 +183,6 @@ export function deleteUrl(
       } else {
         alert("The update failed.");
       }
-      return response.json(type);
     })
     .then((responseJson) => {
       console.log(responseJson);

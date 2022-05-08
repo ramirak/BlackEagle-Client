@@ -44,19 +44,6 @@ const Notifications = ({ navigation }) => {
     <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />
       <View style={global.RightContainer}>
-        <View>
-          <Pressable
-            style={global.RefreshButton}
-            onPress={() => handleRefresh()}
-          >
-            <FontAwesome
-              style={global.icon}
-              name="refresh"
-              size={sizes.refreshIconSize}
-              color={colors.primary}
-            />
-          </Pressable>
-        </View>
         <View style={global.HeaderMenu}>
           <Text style={global.HeaderText}>My Notifications</Text>
         </View>
@@ -92,7 +79,8 @@ const Notifications = ({ navigation }) => {
               renderItem={({ item }) => (
                 <Pressable style={global.ButtonList}>
                   <Text style={global.ListItemText}>
-                    {item.type} : {item.timeOfEvent} : {item.eventAttributes.IP_ADDR}
+                    {item.type} : {item.timeOfEvent} :{" "}
+                    {item.eventAttributes.IP_ADDR}
                   </Text>
                 </Pressable>
               )}

