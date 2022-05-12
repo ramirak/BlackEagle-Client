@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Pressable } from "react-native";
+import { Pressable, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
@@ -7,7 +7,8 @@ import ParentMenu from "../components/ParentMenu";
 import { getData } from "../config/Utils";
 import { checkSession, deleteChild } from "../components/FetchRequest";
 import { AddChildButton } from "../components/Buttons";
-import { settingsComponent } from "../screens/Settings";
+import { checkName } from "../components/Errors";
+//import { updateUser } from "../components/FetchSettings";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -15,6 +16,7 @@ import sizes from "../config/sizes";
 const Interface = ({ navigation }) => {
   const [data, setData] = useState("");
   const [name, setName] = useState("");
+  const [newName, setNewName] = useState("");
   const [refresh, setRefresh] = useState(true);
   const [editModal, setEditModal] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -41,6 +43,21 @@ const Interface = ({ navigation }) => {
     setRefresh(false);
   }, [refresh]);
 
+  const editName = () => {
+    return (
+      <View>
+        <View>
+          <TextInput
+            style={global.TextInputSettings}
+            placeholder="New name"
+            placeholderTextColor={colors.primary}
+            onChangeText={(newName) => setNewName(newName)}
+          />
+        </View>
+        <Text style={global.ErrorMsg}>{nameError}</Text>
+      </View>
+    );
+  };
   return (
     <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} email={email} />
@@ -111,6 +128,38 @@ const Interface = ({ navigation }) => {
               )}
             />
           </View>
+          <Modal
+            style={global.ModalContainer}
+            animationType="fade"
+            transparent={true}
+            visible={editModal}
+            onRequestClose={() => {
+              setEditModal(!editModal);
+            }}
+          >
+            <View style={global.ModalView}>
+              <View style={global.ModalSettingsContainer}>
+                <View style={global.TopModalSettingsView}>{editName()}</View>
+                <View style={global.BottomModalView}>
+                  <Pressable
+                    onPress={() => {
+                      checkName(name, setNameError);
+                      //settingsRequests(); //TODO
+                    }}
+                    style={global.CloseButton}
+                  >
+                    <Text style={global.ButtonText}>Send</Text>
+                  </Pressable>
+                  <Pressable
+                    style={global.CloseButton}
+                    onPress={() =>  setEditModal(!editModal)}
+                  >
+                    <Text style={global.ButtonText}>Close</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
       </View>
     </SafeAreaView>

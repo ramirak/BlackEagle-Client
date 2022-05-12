@@ -229,10 +229,32 @@ export default global = StyleSheet.create({
   BottomModalView: {
     flexDirection: "row",
   },
+  ModalSettingsContainer: {
+    flex: 0.5,
+    flexDirection: "col",
+    width: "30%",
+    borderWidth: 2,
+    borderRadius: 5,
+    shadowRadius: 20,
+    borderColor: colors.primary,
+    backgroundColor: colors.secondary,
+  },
+  TopModalSettingsView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  TextInputSettings: {
+    height: 35,
+    borderWidth: 2,
+    borderRadius: 2,
+    fontWeight: "500",
+    textAlign: "center",
+    borderColor: colors.primary,
+  },
   CloseButton: {
     flex: 1,
     height: 50,
-    borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
     borderRightColor: "white",

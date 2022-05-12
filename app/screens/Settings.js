@@ -76,7 +76,7 @@ const Settings = ({ navigation }) => {
           <View>
             <View>
               <TextInput
-                style={styles.TextInputSettings}
+                style={global.TextInputSettings}
                 placeholder="New name"
                 placeholderTextColor={colors.primary}
                 onChangeText={(newName) => setNewName(newName)}
@@ -90,7 +90,7 @@ const Settings = ({ navigation }) => {
           <View>
             <View style={styles.TextInputView}>
               <TextInput
-                style={styles.TextInputSettings}
+                style={global.TextInputSettings}
                 placeholder="Old password"
                 secureTextEntry={true}
                 placeholderTextColor={colors.primary}
@@ -100,7 +100,7 @@ const Settings = ({ navigation }) => {
             <Text style={global.ErrorMsg}>{oldPasswordError}</Text>
             <View style={styles.TextInputView}>
               <TextInput
-                style={styles.TextInputSettings}
+                style={global.TextInputSettings}
                 placeholder="New password"
                 secureTextEntry={true}
                 placeholderTextColor={colors.primary}
@@ -110,7 +110,7 @@ const Settings = ({ navigation }) => {
             <Text style={global.ErrorMsg}>{newPasswordError}</Text>
             <View style={styles.TextInputView}>
               <TextInput
-                style={styles.TextInputSettings}
+                style={global.TextInputSettings}
                 placeholder="Confirm new password"
                 secureTextEntry={true}
                 placeholderTextColor={colors.primary}
@@ -142,7 +142,7 @@ const Settings = ({ navigation }) => {
             </View>
             <View>
               <TextInput
-                style={styles.TextInputSettings}
+                style={global.TextInputSettings}
                 placeholder="One time key"
                 placeholderTextColor={colors.primary}
                 onChangeText={(oneTimeKey) => setOneTimeKey(oneTimeKey)}
@@ -311,8 +311,8 @@ const Settings = ({ navigation }) => {
             }}
           >
             <View style={global.ModalView}>
-              <View style={styles.ModalSettingsContainer}>
-                <View style={styles.TopModalSettingsView}>
+              <View style={global.ModalSettingsContainer}>
+                <View style={global.TopModalSettingsView}>
                   {settingsComponent(type)}
                 </View>
                 <View style={global.BottomModalView}>
@@ -379,21 +379,6 @@ const Settings = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  ModalSettingsContainer: {
-    flex: 0.5,
-    flexDirection: "col",
-    width: "30%",
-    borderWidth: 2,
-    borderRadius: 5,
-    shadowRadius: 20,
-    borderColor: colors.primary,
-    backgroundColor: colors.secondary,
-  },
-  TopModalSettingsView: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   TextInfo: {
     fontSize: 15,
     textAlign: "center",
@@ -416,14 +401,6 @@ const styles = StyleSheet.create({
   },
   TextInputView: {
     padding: 2,
-  },
-  TextInputSettings: {
-    height: 35,
-    borderWidth: 2,
-    borderRadius: 2,
-    fontWeight: "500",
-    textAlign: "center",
-    borderColor: colors.primary,
   },
 });
 
