@@ -50,15 +50,13 @@ export function addChild(childName, setRefresh) {
     }),
   })
     .then((response) => {
-      if (response.status == "507") {
+      if (response.status == "507")
         alert("You can only create up to 5 devices");
-      } else if (response.status == "400") {
-        alert("Name is required");
-      } else {
+      else if (response.status == "400") alert("Name is required");
+      else
         alert(
           "Your device authentication details is being downloaded.\nPlease keep it in a secure loaction!"
         );
-      }
       return response.json();
     })
     .then((responseJson) => {
@@ -107,9 +105,6 @@ export function addRequest(uid, dataAttr) {
         alert("The request has been sent.");
       }
       return response.json(type);
-    })
-    .then((responseJson) => {
-      console.log(responseJson);
     })
     .catch((error) => {
       console.log("error: " + error);
@@ -178,14 +173,8 @@ export function configUpdate(dataId, dataAttr) {
     }),
   })
     .then((response) => {
-      if (response.ok) {
-        alert("The update was successful.");
-      } else {
-        alert("The update failed.");
-      }
-    })
-    .then((responseJson) => {
-      console.log(responseJson);
+      if (response.ok) alert("The update was successful.");
+      else alert("The update failed.");
     })
     .catch((error) => {
       console.log("error: " + error);

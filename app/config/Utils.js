@@ -29,6 +29,33 @@ export const storeData = async (value) => {
   } catch (e) {}
 }
 
+export function getJsonBodyByType(type, newName, newPassword, email) {
+  let regName = null,
+    regPassword = null,
+    regOptionalPassword = null;
+  if (type == "NAME") {
+    regName = newName;
+  } else if (type == "PASSWORD") {
+    (regPassword = newPassword), (regOptionalPassword = newPassword);
+  }
+  let jsonTemplate = {
+    userId: {
+      uid: email,
+      name: regName,
+      password: {
+        password: regPassword,
+        optionalPassword: regOptionalPassword,
+        creationTime: null,
+        active: null,
+      },
+    },
+    role: null,
+    active: null,
+    deviceCount: null,
+  };
+  return jsonTemplate;
+}
+
 /*
   export function checkPage(dataCounter) {
     if (dataCounter % 10 == 5 || dataCounter % 10 == 0)

@@ -14,7 +14,7 @@ import {
   deleteUser,
   updateUser,
 } from "../components/FetchSettings";
-import { getData } from "../config/Utils";
+import { getData, getJsonBodyByType } from "../config/Utils";
 import { handleSettings } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -165,33 +165,6 @@ const Settings = ({ navigation }) => {
         let jsonBody = getJsonBodyByType();
         return updateUser(jsonBody.userId.name);
     }
-  };
-
-  const getJsonBodyByType = () => {
-    let regName = null,
-      regPassword = null,
-      regOptionalPassword = null;
-    if (type == "NAME") {
-      regName = newName;
-    } else if (type == "PASSWORD") {
-      (regPassword = newPassword), (regOptionalPassword = newPassword);
-    }
-    let jsonTemplate = {
-      userId: {
-        uid: email,
-        name: regName,
-        password: {
-          password: regPassword,
-          optionalPassword: regOptionalPassword,
-          creationTime: null,
-          active: null,
-        },
-      },
-      role: null,
-      active: null,
-      deviceCount: null,
-    };
-    return jsonTemplate;
   };
 
   return (
@@ -357,8 +330,8 @@ const Settings = ({ navigation }) => {
             }}
           >
             <View style={global.ModalView}>
-              <View style={styles.ModalSettingsContainer}>
-                <View style={styles.TopModalSettingsView}>
+              <View style={global.ModalSettingsContainer}>
+                <View style={global.TopModalSettingsView}>
                   {setDetailsOrSuspend(type)}
                 </View>
                 <View style={global.BottomModalView}>

@@ -4,11 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
-import { getData } from "../config/Utils";
+import { getData, getJsonBodyByType } from "../config/Utils";
+import { updateUser } from "../components/FetchSettings";
 import { checkSession, deleteChild } from "../components/FetchRequest";
 import { AddChildButton } from "../components/Buttons";
 import { checkName } from "../components/Errors";
-//import { updateUser } from "../components/FetchSettings";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -58,6 +58,7 @@ const Interface = ({ navigation }) => {
       </View>
     );
   };
+
   return (
     <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} email={email} />
@@ -143,8 +144,8 @@ const Interface = ({ navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      checkName(name, setNameError);
-                      //settingsRequests(); //TODO
+                      checkName(newName, setNameError);
+                      updateUser(getJsonBodyByType("NAME", newName, "", ), "NAME");
                     }}
                     style={global.CloseButton}
                   >
@@ -152,7 +153,7 @@ const Interface = ({ navigation }) => {
                   </Pressable>
                   <Pressable
                     style={global.CloseButton}
-                    onPress={() =>  setEditModal(!editModal)}
+                    onPress={() => setEditModal(!editModal)}
                   >
                     <Text style={global.ButtonText}>Close</Text>
                   </Pressable>

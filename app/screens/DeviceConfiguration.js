@@ -110,7 +110,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
       ADDITIONAL_SITES: specificUrl,
       ADDITIONAL_SITES_OPERATION: additionalSitesOP,
     };
-    //checkUrl(specificUrl, setSpecificUrlError);
+    checkUrl(specificUrl, setSpecificUrlError);
     configUpdate(uid, dataAttr);
   };
 
