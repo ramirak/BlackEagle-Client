@@ -1,8 +1,9 @@
 import { React, useState, useEffect } from "react";
-import { Pressable, Text, Modal, ScrollView } from "react-native";
+import { Pressable, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, FlatList, TextInput, StyleSheet } from "react-native-web";
+import { View, TextInput, StyleSheet } from "react-native-web";
 import Checkbox from "expo-checkbox";
+import { RadioButton } from "react-native-paper";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
 import { handleRefresh } from "../config/Utils";
@@ -21,8 +22,9 @@ const DeviceConfiguration = ({ route, navigation }) => {
   const [porn, setPorn] = useState(false);
   const [social, setSocial] = useState(false);
   const [specificUrl, setSpecificUrl] = useState("");
-  const [additionalSitesOP, setAdditionalSitesOP] = useState("Add");
+  const [additionalSitesOP, setAdditionalSitesOP] = useState("ADD");
   const [specificUrlError, setSpecificUrlError] = useState("");
+  const [checked, setChecked] = useState(true);
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
@@ -38,11 +40,11 @@ const DeviceConfiguration = ({ route, navigation }) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
+        setChecked(responseJson.dataAttributes.IS_ACTIVE === "true");
         setFakenews(responseJson.dataAttributes.FAKENEWS === "true");
         setPorn(responseJson.dataAttributes.PORN === "true");
         setSocial(responseJson.dataAttributes.SOCIAL === "true");
         setGambling(responseJson.dataAttributes.GAMBLING === "true");
-
         setData(responseJson.dataAttributes);
       });
     setRefresh(false);
@@ -51,6 +53,20 @@ const DeviceConfiguration = ({ route, navigation }) => {
   const setAddRequestComponent = () => {
     return (
       <ScrollView>
+        <View style={styles.RadioButtonStyle}>
+          <RadioButton
+            value="true"
+            status={checked === true ? "checked" : false}
+            onPress={() => setChecked(true)}
+          />
+          <Text style={sizes.FilterTextSize}>Active</Text>
+          <RadioButton
+            value="false"
+            status={checked === false ? "checked" : true}
+            onPress={() => setChecked(false)}
+          />
+          <Text style={sizes.FilterTextSize}>Suspend</Text>
+        </View>
         <View style={styles.CheckboxContainer}>
           <View style={styles.CheckboxSection}>
             <Checkbox
@@ -103,14 +119,15 @@ const DeviceConfiguration = ({ route, navigation }) => {
 
   const defineConfigAttributes = () => {
     let dataAttr = {
-      FAKENEWS: fakenews,
-      GAMBLING: gambling,
-      PORN: porn,
-      SOCIAL: social,
+      IS_ACTIVE: checked.toString(),
+      FAKENEWS: fakenews.toString(),
+      GAMBLING: gambling.toString(),
+      PORN: porn.toString(),
+      SOCIAL: social.toString(),
       ADDITIONAL_SITES: specificUrl,
       ADDITIONAL_SITES_OPERATION: additionalSitesOP,
     };
-    checkUrl(specificUrl, setSpecificUrlError);
+    //checkUrl(specificUrl, setSpecificUrlError);
     configUpdate(uid, dataAttr);
   };
 
@@ -175,9 +192,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
             style={styles.AddRequestButton}
             onPress={() => defineConfigAttributes()}
           >
-            <Text style={global.ButtonText}>
-              Add {type.toLowerCase()} request
-            </Text>
+            <Text style={global.ButtonText}>Save</Text>
           </Pressable>
         </View>
       </View>
@@ -200,6 +215,10 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     margin: 5,
     paddingLeft: 10,
+  },
+  RadioButtonStyle: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   CheckboxContainer: {
     flex: 1,

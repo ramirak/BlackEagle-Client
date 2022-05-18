@@ -31,7 +31,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Immediately Request", {
+                navigation.navigate("Requests", {
                   uid: uid,
                   type: "SCREENSHOT",
                   name: name,
@@ -48,7 +48,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Immediately Request", {
+                navigation.navigate("Requests", {
                   uid: uid,
                   type: "KEYLOG",
                   name: name,
@@ -66,7 +66,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Immediately Request", {
+                navigation.navigate("Requests", {
                   uid: uid,
                   type: "CAMERA",
                   name: name,
@@ -85,7 +85,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Immediately Request", {
+                navigation.navigate("Requests", {
                   uid: uid,
                   type: "AUDIO",
                   name: name,
@@ -102,7 +102,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Not Immediately Request", {
+                navigation.navigate("Requests", {
                   uid: uid,
                   type: "LOCKDOWN",
                   name: name,
@@ -119,7 +119,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Not Immediately Request", {
+                navigation.navigate("Requests", {
                   uid: uid,
                   type: "COMMAND",
                   name: name,
@@ -138,7 +138,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Immediately Request", {
+                navigation.navigate("Requests", {
                   uid: uid,
                   type: "LOCATION",
                   name: name,
@@ -155,7 +155,7 @@ const ControlOptions = ({ navigation, route }) => {
             <Pressable
               style={global.MenuButton}
               onPress={() =>
-                navigation.navigate("Immediately Request", {
+                navigation.navigate("Requests", {
                   uid: uid,
                   type: "NETLOG",
                   name: name,

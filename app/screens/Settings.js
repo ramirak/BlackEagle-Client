@@ -2,12 +2,7 @@ import { React, useState } from "react";
 import { Pressable, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, StyleSheet } from "react-native-web";
-import {
-  AntDesign,
-  Ionicons,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
 import {
   getSettingsDetails,
@@ -37,35 +32,9 @@ const Settings = ({ navigation }) => {
   const [oneTimeKeyError, setOneTimeKeyError] = useState("");
   const [email, setEmail] = useState("");
 
-  const setDetailsOrSuspend = (type) => {
+  const viewDetails = (type) => {
     getData("@email", setEmail);
-    switch (type) {
-      case "DETAILS":
-        return <Text>{details}</Text>;
-      case "SUSPEND":
-        return (
-          <View>
-            <View style={styles.InsideModalView}>
-              <Pressable
-                style={styles.SettingButton}
-                //onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={global.ButtonText}>Suspend</Text>
-              </Pressable>
-            </View>
-            <View style={styles.InsideModalView}>
-              <Pressable
-                style={styles.SettingButton}
-                //onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={global.ButtonText}>Active</Text>
-              </Pressable>
-            </View>
-          </View>
-        );
-      default:
-        break;
-    }
+    if (type == "DETAILS") return <Text>{details}</Text>;
   };
 
   const settingsComponent = (type) => {
@@ -122,10 +91,6 @@ const Settings = ({ navigation }) => {
             <Text style={global.ErrorMsg}>{confirmPasswordError}</Text>
           </View>
         );
-      case "NOTIFICATION":
-        break;
-      case "SECURITY":
-        break;
       case "DELETE":
         return (
           <View>
@@ -202,47 +167,8 @@ const Settings = ({ navigation }) => {
               />
               <Text style={global.MenuButtonText}>Update Password</Text>
             </Pressable>
-            <Pressable
-              style={global.MenuButton}
-              onPress={() => {
-                setModalVisible(true), setType("NOTIFICATION");
-              }}
-            >
-              <Ionicons
-                name="md-notifications-circle"
-                size={sizes.iconSize}
-                color={colors.primary}
-              />
-              <Text style={global.MenuButtonText}>Notification Settings</Text>
-            </Pressable>
           </View>
           <View style={global.MenuRow}>
-            <Pressable
-              style={global.MenuButton}
-              onPress={() => {
-                setModalVisible(true), setType("SECURITY");
-              }}
-            >
-              <MaterialIcons
-                name="security"
-                size={sizes.iconSize}
-                color={colors.primary}
-              />
-              <Text style={global.MenuButtonText}>Security</Text>
-            </Pressable>
-            <Pressable
-              style={global.MenuButton}
-              onPress={() => {
-                setDetailsModalVisible(true), setType("SUSPEND");
-              }}
-            >
-              <MaterialCommunityIcons
-                name="account-cancel-outline"
-                size={sizes.iconSize}
-                color={colors.primary}
-              />
-              <Text style={global.MenuButtonText}>Suspend Account</Text>
-            </Pressable>
             <Pressable
               style={global.MenuButton}
               onPress={() => {
@@ -258,8 +184,6 @@ const Settings = ({ navigation }) => {
               />
               <Text style={global.MenuButtonText}>Account Details</Text>
             </Pressable>
-          </View>
-          <View style={global.MenuRow}>
             <Pressable
               style={global.MenuButton}
               onPress={() => {
@@ -320,7 +244,7 @@ const Settings = ({ navigation }) => {
               </View>
             </View>
           </Modal>
-          <Modal //Suspend and Details Modal
+          <Modal //Details Modal
             style={global.ModalContainer}
             animationType="fade"
             transparent={true}
@@ -332,7 +256,7 @@ const Settings = ({ navigation }) => {
             <View style={global.ModalView}>
               <View style={global.ModalSettingsContainer}>
                 <View style={global.TopModalSettingsView}>
-                  {setDetailsOrSuspend(type)}
+                  {viewDetails(type)}
                 </View>
                 <View style={global.BottomModalView}>
                   <Pressable
@@ -357,9 +281,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     letterSpacing: 0.5,
     fontWeight: "bold",
+    padding: 5,
   },
   InsideModalView: {
-    padding: 3,
     alignItems: "center",
     justifyContent: "center",
   },

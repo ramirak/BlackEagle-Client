@@ -101,10 +101,9 @@ export function addRequest(uid, dataAttr) {
     }),
   })
     .then((response) => {
-      if (response.ok) {
-        alert("The request has been sent.");
-      }
-      return response.json(type);
+      if (response.ok) alert("The request has been sent.");
+      else if (response.status == "409")
+        alert("An early request has already been sent");
     })
     .catch((error) => {
       console.log("error: " + error);
@@ -158,7 +157,7 @@ export function deleteAllData(uid, type, setRefresh) {
     });
 }
 
-export function configUpdate(dataId, dataAttr) {
+export function configUpdate(uid, dataAttr) {
   fetch("https://localhost:8010/data/update", {
     method: "PUT",
     credentials: "include",
@@ -167,12 +166,13 @@ export function configUpdate(dataId, dataAttr) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      DATAID: "CONFIGURATION@" + dataId,
-      DATATYPE: "CONFIGURATION",
+      dataId: "CONFIGURATION@" + uid,
+      dataType: "CONFIGURATION",
       dataAttributes: dataAttr,
     }),
   })
     .then((response) => {
+      console.log(uid);
       if (response.ok) alert("The update was successful.");
       else alert("The update failed.");
     })

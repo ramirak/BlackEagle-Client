@@ -13,8 +13,7 @@ import Register from "./app/screens/Register";
 import Interface from "./app/screens/Interface";
 import Settings from "./app/screens/Settings";
 import ControlOptions from "./app/screens/ControlOptions";
-import ImmediatelyRequest from "./app/screens/ImmediatelyRequest";
-import NotImmRequest from "./app/screens/NotImmRequest";
+import Requests from "./app/screens/Requests";
 import DeviceConfiguration from "./app/screens/DeviceConfiguration";
 import Notifications from "./app/screens/Notifications";
 import Help from "./app/screens/Help";
@@ -23,7 +22,6 @@ import Upgrade from "./app/screens/Upgrade";
 import fonts from "./app/config/fonts";
 import AppDownload from "./app/screens/AppDownload";
 import sizes from "./app/config/sizes";
-
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
@@ -62,14 +60,7 @@ export default function App() {
         <Stack.Screen name="Interface" component={Interface} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Control Options" component={ControlOptions} />
-        <Stack.Screen
-          name="Immediately Request"
-          component={ImmediatelyRequest}
-        />
-        <Stack.Screen
-          name="Not Immediately Request"
-          component={NotImmRequest}
-        />
+        <Stack.Screen name="Requests" component={Requests} />
         <Stack.Screen
           name="Device Configuration"
           component={DeviceConfiguration}
