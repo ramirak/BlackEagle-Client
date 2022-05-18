@@ -6,7 +6,7 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
-import { handleRefresh, removeNonAscii } from "../config/Utils";
+import { handleNextPage, handlePreviousPage, handleRefresh, removeNonAscii } from "../config/Utils";
 import {
   addRequest,
   getSpecificData,
@@ -35,10 +35,12 @@ const Requests = ({ route, navigation }) => {
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
+  const [page, setPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(5);
 
   useEffect(() => {
     if (!refresh) return;
-    fetch("https://localhost:8010/data/getAll/" + uid + "/" + type, {
+    fetch("https://localhost:8010/data/getAll/" + uid + "/" + type + "?page=" + page + "&size=" + maxPage, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -50,7 +52,7 @@ const Requests = ({ route, navigation }) => {
         setData(responseJson);
       });
     setRefresh(false);
-  }, [refresh]); //, pageCurrent]);
+  }, [refresh, page]);
 
   const setComponentType = () => {
     switch (type) {
@@ -238,47 +240,56 @@ const Requests = ({ route, navigation }) => {
         </View>
         <View style={global.RightMenu}>
           <View style={global.ArrowView}>
-            <Pressable
-              style={global.ArrowButton}
-              onPress={() => deleteAllData(uid, type.toUpperCase(), setRefresh)}
-            >
-              <MaterialIcons
-                name="delete-sweep"
-                size={sizes.iconSize}
-                color={colors.primary}
-              />
-            </Pressable>
-            <Pressable
-              style={global.ArrowButton}
-              //onPress={() => handlePreviousPage()}
-            >
-              <MaterialIcons
-                name="navigate-before"
-                size={sizes.PagingArrowIconSize}
-                color={colors.primary}
-              />
-            </Pressable>
-            <Pressable
-              style={global.ArrowButton}
-              //onPress={() => handleNextPage()}
-            >
-              <MaterialIcons
-                name="navigate-next"
-                size={sizes.PagingArrowIconSize}
-                color={colors.primary}
-              />
-            </Pressable>
-            <Pressable
-              style={global.ArrowButton}
-              onPress={() => handleRefresh(setRefresh)}
-            >
-              <FontAwesome
-                style={global.icon}
-                name="refresh"
-                size={sizes.refreshIconSize}
-                color={colors.primary}
-              />
-            </Pressable>
+            <View>
+              <Pressable
+                style={global.ArrowButton}
+                onPress={() => deleteAllData(uid, type.toUpperCase(), setRefresh)}
+              >
+                <MaterialIcons
+                  name="delete-sweep"
+                  size={sizes.iconSize}
+                  color={colors.primary}
+                />
+              </Pressable>
+            </View>
+            <View>
+              <Pressable
+                style={global.ArrowButton}
+                onPress={() => { handlePreviousPage(page, setPage), handleRefresh(setRefresh) }}
+              >
+                <MaterialIcons
+                  name="navigate-before"
+                  size={sizes.PagingArrowIconSize}
+                  color={colors.primary}
+                />
+              </Pressable>
+            </View>
+            <Text style={{fontSize:18, fontWeight:"bold"}}>{page + 1}</Text>
+            <View>
+              <Pressable
+                style={global.ArrowButton}
+                onPress={() => { handleNextPage(page, setPage, data.length, maxPage), handleRefresh(setRefresh) }}
+              >
+                <MaterialIcons
+                  name="navigate-next"
+                  size={sizes.PagingArrowIconSize}
+                  color={colors.primary}
+                />
+              </Pressable>
+            </View>
+            <View>
+              <Pressable
+                style={global.ArrowButton}
+                onPress={() => handleRefresh(setRefresh)}
+              >
+                <FontAwesome
+                  style={global.icon}
+                  name="refresh"
+                  size={sizes.refreshIconSize}
+                  color={colors.primary}
+                />
+              </Pressable>
+            </View>
           </View>
           <FlatList
             keyExtractor={(item, index) => {

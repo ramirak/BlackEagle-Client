@@ -160,7 +160,9 @@ export default global = StyleSheet.create({
   },
   ArrowView: {
     flexDirection: "row",
-    height: 25,
+    justifyContent: "space-evenly",
+    marginTop:5,
+    marginBottom:15,
     backgroundColor: colors.borderRightColor,
   },
   ButtonList: {

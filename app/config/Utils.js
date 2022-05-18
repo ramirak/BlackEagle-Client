@@ -26,7 +26,7 @@ export const getData = async (key, setEmail) => {
 export const storeData = async (value) => {
   try {
     await AsyncStorage.setItem("@email", value);
-  } catch (e) {}
+  } catch (e) { }
 }
 
 export function getJsonBodyByType(type, newName, newPassword, email) {
@@ -56,19 +56,11 @@ export function getJsonBodyByType(type, newName, newPassword, email) {
   return jsonTemplate;
 }
 
-/*
-  export function checkPage(dataCounter) {
-    if (dataCounter % 10 == 5 || dataCounter % 10 == 0)
-      setPageCurrent(pageCurrent + 1);
-  }
+export function handlePreviousPage(page, setPage) {
+  setPage(page - 1 < 0 ? 0 : page - 1);
+}
 
-  export function handlePreviousPage() {
-    setPageCurrent(pageCurrent - 1 < 1 ? 1 : pageCurrent - 1);
-    console.log("previous page clicked", pageCurrent);
-  }
-
-   export function handleNextPage {
-    setPageCurrent(pageCurrent + 1);
-    console.log("next page clicked", pageCurrent);
-  }
-*/
+export function handleNextPage(page, setPage, size, maxSize) {
+  if (size / maxSize > page)
+    setPage(page + 1);
+}
