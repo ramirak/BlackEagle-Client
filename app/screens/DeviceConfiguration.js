@@ -4,9 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, FlatList, StyleSheet } from "react-native-web";
 import Checkbox from "expo-checkbox";
 import { RadioButton } from "react-native-paper";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
-import { handleRefresh } from "../config/Utils";
 import { checkUrl } from "../components/Errors";
 import { configUpdate } from "../components/FetchRequest";
 import { GoBackButton } from "../components/Buttons";
@@ -46,9 +45,13 @@ const DeviceConfiguration = ({ route, navigation }) => {
         setSocial(responseJson.dataAttributes.SOCIAL === "true");
         setGambling(responseJson.dataAttributes.GAMBLING === "true");
         setData(responseJson.dataAttributes);
-        let str = (responseJson.dataAttributes.ADDITIONAL_SITES).replace(/[\[\,/\"\]]/g, "").replaceAll("0.0.0.0", "").trim();
-        if (str.length > 0)
-          setUrlList(str.split(" "));
+        let str = responseJson.dataAttributes.ADDITIONAL_SITES.replace(
+          /[\[\,/\"\]]/g,
+          ""
+        )
+          .replaceAll("0.0.0.0", "")
+          .trim();
+        if (str.length > 0) setUrlList(str.split(" "));
       });
     setRefresh(false);
   }, [refresh]);
@@ -56,7 +59,9 @@ const DeviceConfiguration = ({ route, navigation }) => {
   const setAddRequestComponent = () => {
     return (
       <ScrollView>
-        <View><Text style={global.TextHeaderSettings}>Device Status</Text></View>
+        <View>
+          <Text style={global.TextHeaderSettings}>Device Status</Text>
+        </View>
         <View style={styles.RadioButtonStyle}>
           <RadioButton
             value="true"
@@ -71,11 +76,13 @@ const DeviceConfiguration = ({ route, navigation }) => {
           />
           <Text style={sizes.FilterTextSize}>Suspend</Text>
         </View>
-        <View><Text style={global.TextHeaderSettings}>Filter Categories</Text></View>
-        <View style={styles.CheckboxContainer}>
+        <View>
+          <Text style={global.TextHeaderSettings}>Filter Categories</Text>
+        </View>
+        <View style={{ flex: 1 }}>
           <View style={styles.CheckboxSection}>
             <Checkbox
-              style={styles.Checkbox}
+              style={{ margin: 8 }}
               value={fakenews}
               onValueChange={setFakenews}
             />
@@ -83,7 +90,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
           </View>
           <View style={styles.CheckboxSection}>
             <Checkbox
-              style={styles.Checkbox}
+              style={{ margin: 8 }}
               value={gambling}
               onValueChange={setGambling}
             />
@@ -91,7 +98,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
           </View>
           <View style={styles.CheckboxSection}>
             <Checkbox
-              style={styles.Checkbox}
+              style={{ margin: 8 }}
               value={porn}
               onValueChange={setPorn}
             />
@@ -99,13 +106,15 @@ const DeviceConfiguration = ({ route, navigation }) => {
           </View>
           <View style={styles.CheckboxSection}>
             <Checkbox
-              style={styles.Checkbox}
+              style={{ margin: 8 }}
               value={social}
               onValueChange={setSocial}
             />
             <Text style={sizes.FilterTextSize}>Social</Text>
           </View>
-          <View><Text style={global.TextHeaderSettings}>Custom blacklist</Text></View>
+          <View>
+            <Text style={global.TextHeaderSettings}>Custom blacklist</Text>
+          </View>
           <View>
             <TextInput
               style={global.TextInputInModal}
@@ -127,7 +136,9 @@ const DeviceConfiguration = ({ route, navigation }) => {
                 <Text style={global.ListItemText}>{item}</Text>
                 <Pressable
                   style={global.IconButton}
-                  onPress={() => {defineConfigAttributes("REMOVE", item)}}
+                  onPress={() => {
+                    defineConfigAttributes("REMOVE", item);
+                  }}
                 >
                   <FontAwesome
                     name="trash-o"
@@ -154,7 +165,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
       ADDITIONAL_SITES_OPERATION: additionalSitesOP,
     };
     //checkUrl(specificUrl, setSpecificUrlError);
-    configUpdate(uid, dataAttr);
+    configUpdate(uid, dataAttr, setRefresh);
   };
 
   return (
@@ -173,7 +184,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
           {setAddRequestComponent()}
           <Pressable
             style={styles.AddRequestButton}
-            onPress={() => defineConfigAttributes("ADD",specificUrl)}
+            onPress={() => defineConfigAttributes("ADD", specificUrl)}
           >
             <Text style={global.ButtonText}>Save</Text>
           </Pressable>
@@ -203,15 +214,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  CheckboxContainer: {
-    flex: 1,
-  },
   CheckboxSection: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  Checkbox: {
-    margin: 8,
   },
 });
 

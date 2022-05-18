@@ -1,19 +1,3 @@
-export function handleRegister({
-  email,
-  setEmailError,
-  name,
-  setNameError,
-  password,
-  setPasswordError,
-  confirmPassword,
-  setConfirmPasswordError,
-}) {
-  checkEmail(email, setEmailError);
-  checkName(name, setNameError);
-  checkPassword(password, setPasswordError);
-  checkConfirmPassword(password, confirmPassword, setConfirmPasswordError);
-}
-
 export function handleLogin(email, setEmailError, password, setPasswordError) {
   checkEmail(email, setEmailError);
   checkPassword(password, setPasswordError);

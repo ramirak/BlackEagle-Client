@@ -3,8 +3,13 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-//import { registerNow } from "../components/FetchRequest";
-import { handleRegister } from "../components/Errors";
+import { registerNow } from "../components/FetchRequest";
+import {
+  checkEmail,
+  checkName,
+  checkPassword,
+  checkConfirmPassword,
+} from "../components/Errors";
 import { SmallNaviButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -96,13 +101,11 @@ const Register = ({ navigation }) => {
           style={global.LoginAndRegisterButton}
           onPress={() => {
             registerNow(email, name, password, navigation),
-              handleRegister(
-                email,
-                setEmailError,
-                name,
-                setNameError,
+              checkEmail(email, setEmailError),
+              checkName(name, setNameError),
+              checkPassword(password, setPasswordError),
+              checkConfirmPassword(
                 password,
-                setPasswordError,
                 confirmPassword,
                 setConfirmPasswordError
               );
@@ -119,34 +122,6 @@ const Register = ({ navigation }) => {
       </View>
     </SafeAreaView>
   );
-};
-
-const registerNow = (email, name, password, navigation) => {
-  fetch("https://localhost:8010/users/register", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      userId: {
-        uid: email,
-        password: {
-          password: password,
-        },
-      },
-      role: "PLAYER",
-      name: name,
-    }),
-  })
-    .then((response) => {
-      if (response.ok) navigation.navigate("Login");
-      else throw new Error(response.status);
-    })
-    .catch((error) => {
-      console.log("error: " + error);
-    });
 };
 
 export default Register;

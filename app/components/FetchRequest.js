@@ -11,7 +11,35 @@ export function checkSession(navigation) {
       }
     })
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
+    });
+}
+
+export function registerNow(email, name, password, navigation) {
+  fetch("https://localhost:8010/users/register", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: {
+        uid: email,
+        password: {
+          password: password,
+        },
+      },
+      role: "PLAYER",
+      name: name,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) navigation.navigate("Login");
+      else throw new Error(response.status);
+    })
+    .catch((error) => {
+      console.log(error);
     });
 }
 
@@ -33,7 +61,7 @@ export function LoginNow(email, password, navigation) {
       else throw new Error(response.status);
     })
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
     });
 }
 
@@ -68,7 +96,7 @@ export function addChild(childName, setRefresh) {
     })
     .then(() => setRefresh(true))
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
     });
 }
 
@@ -83,7 +111,7 @@ export function deleteChild(id, setRefresh) {
     .then((response) => response.json())
     .then(() => setRefresh(true))
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
     });
 }
 
@@ -106,7 +134,7 @@ export function addRequest(uid, dataAttr) {
         alert("An early request has already been sent");
     })
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
     });
 }
 
@@ -123,7 +151,7 @@ export function getSpecificData(uid, dataId, setSpecificData) {
       setSpecificData(responseJson.dataAttributes.DATA);
     })
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
     });
 }
 
@@ -138,7 +166,7 @@ export function deleteData(dataId, setRefresh) {
     .then((response) => response.json())
     .then(() => setRefresh(true))
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
     });
 }
 
@@ -153,11 +181,11 @@ export function deleteAllData(uid, type, setRefresh) {
     .then((response) => response.json())
     .then(() => setRefresh(true))
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
     });
 }
 
-export function configUpdate(uid, dataAttr) {
+export function configUpdate(uid, dataAttr, setRefresh) {
   fetch("https://localhost:8010/data/update", {
     method: "PUT",
     credentials: "include",
@@ -172,11 +200,11 @@ export function configUpdate(uid, dataAttr) {
     }),
   })
     .then((response) => {
-      console.log(uid);
       if (response.ok) alert("The update was successful.");
       else alert("The update failed.");
     })
+    .then(() => setRefresh(true))
     .catch((error) => {
-      console.log("error: " + error);
+      console.log(error);
     });
 }
