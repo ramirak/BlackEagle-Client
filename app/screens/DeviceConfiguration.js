@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Pressable, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, TextInput, StyleSheet } from "react-native-web";
+import { View, TextInput, FlatList, StyleSheet } from "react-native-web";
 import Checkbox from "expo-checkbox";
 import { RadioButton } from "react-native-paper";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
@@ -22,6 +22,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
   const [porn, setPorn] = useState(false);
   const [social, setSocial] = useState(false);
   const [specificUrl, setSpecificUrl] = useState("");
+  const [urlList, setUrlList] = useState([]);
   const [additionalSitesOP, setAdditionalSitesOP] = useState("ADD");
   const [specificUrlError, setSpecificUrlError] = useState("");
   const [checked, setChecked] = useState(true);
@@ -46,9 +47,11 @@ const DeviceConfiguration = ({ route, navigation }) => {
         setSocial(responseJson.dataAttributes.SOCIAL === "true");
         setGambling(responseJson.dataAttributes.GAMBLING === "true");
         setData(responseJson.dataAttributes);
+        let str = (responseJson.dataAttributes.ADDITIONAL_SITES).replace(/[[\,/"]]/g,"").replaceAll("0.0.0.0","");
+        setUrlList(str.split(" "));
       });
     setRefresh(false);
-  }, [refresh]); //, pageCurrent]);
+  }, [refresh]);
 
   const setAddRequestComponent = () => {
     return (
@@ -111,7 +114,27 @@ const DeviceConfiguration = ({ route, navigation }) => {
           <Text style={global.ErrorMsg}>{specificUrlError}</Text>
         </View>
         <View>
-          <Text>{JSON.stringify(data.ADDITIONAL_SITES)}</Text>
+          <FlatList
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+            data={urlList}
+            renderItem={({ item }) => (
+              <Pressable style={global.ButtonList}>
+                <Text style={global.ListItemText}>{item}</Text>
+                <Pressable
+                  style={global.IconButton}
+                  onPress={() => deleteData(item.dataId, setRefresh)}
+                >
+                  <FontAwesome
+                    name="trash-o"
+                    size={sizes.iconSize}
+                    color={colors.primary}
+                  />
+                </Pressable>
+              </Pressable>
+            )}
+          />
         </View>
       </ScrollView>
     );
@@ -152,26 +175,6 @@ const DeviceConfiguration = ({ route, navigation }) => {
               <MaterialIcons
                 name="delete-sweep"
                 size={sizes.iconSize}
-                color={colors.primary}
-              />
-            </Pressable>
-            <Pressable
-              style={global.ArrowButton}
-              //onPress={() => handlePreviousPage()}
-            >
-              <MaterialIcons
-                name="navigate-before"
-                size={sizes.PagingArrowIconSize}
-                color={colors.primary}
-              />
-            </Pressable>
-            <Pressable
-              style={global.ArrowButton}
-              //onPress={() => handleNextPage()}
-            >
-              <MaterialIcons
-                name="navigate-next"
-                size={sizes.PagingArrowIconSize}
                 color={colors.primary}
               />
             </Pressable>
