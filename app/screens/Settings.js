@@ -96,7 +96,7 @@ const Settings = ({ navigation }) => {
           <View>
             <View style={styles.InsideModalView}>
               <Text style={styles.TextInfo}>
-                Click on "Get key" and enter the key you received in the email.
+                Send one time key to your email account
               </Text>
               <Pressable
                 style={styles.SettingButton}
@@ -256,7 +256,7 @@ const Settings = ({ navigation }) => {
             <View style={global.ModalView}>
               <View style={global.ModalSettingsContainer}>
                 <View style={global.TopModalSettingsView}>
-                  {viewDetails(type)}
+                  <Text style={{fontWeight:"bold",fontSize:15}}>{viewDetails(type)}</Text>
                 </View>
                 <View style={global.BottomModalView}>
                   <Pressable

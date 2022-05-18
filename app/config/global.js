@@ -254,6 +254,10 @@ export default global = StyleSheet.create({
     textAlign: "center",
     borderColor: colors.primary,
   },
+  TextHeaderSettings:{
+    fontWeight:"bold",
+    margin:5,
+  },
   CloseButton: {
     flex: 1,
     height: 50,

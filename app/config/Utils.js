@@ -61,6 +61,6 @@ export function handlePreviousPage(page, setPage) {
 }
 
 export function handleNextPage(page, setPage, size, maxSize) {
-  if (size / maxSize > page)
+  if (parseInt(size / maxSize, 10) > page)
     setPage(page + 1);
 }

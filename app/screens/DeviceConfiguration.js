@@ -23,7 +23,6 @@ const DeviceConfiguration = ({ route, navigation }) => {
   const [social, setSocial] = useState(false);
   const [specificUrl, setSpecificUrl] = useState("");
   const [urlList, setUrlList] = useState([]);
-  const [additionalSitesOP, setAdditionalSitesOP] = useState("ADD");
   const [specificUrlError, setSpecificUrlError] = useState("");
   const [checked, setChecked] = useState(true);
   const { uid } = route.params;
@@ -47,8 +46,9 @@ const DeviceConfiguration = ({ route, navigation }) => {
         setSocial(responseJson.dataAttributes.SOCIAL === "true");
         setGambling(responseJson.dataAttributes.GAMBLING === "true");
         setData(responseJson.dataAttributes);
-        let str = (responseJson.dataAttributes.ADDITIONAL_SITES).replace(/[[\,/"]]/g,"").replaceAll("0.0.0.0","");
-        setUrlList(str.split(" "));
+        let str = (responseJson.dataAttributes.ADDITIONAL_SITES).replace(/[\[\,/\"\]]/g, "").replaceAll("0.0.0.0", "").trim();
+        if (str.length > 0)
+          setUrlList(str.split(" "));
       });
     setRefresh(false);
   }, [refresh]);
@@ -56,6 +56,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
   const setAddRequestComponent = () => {
     return (
       <ScrollView>
+        <View><Text style={global.TextHeaderSettings}>Device Status</Text></View>
         <View style={styles.RadioButtonStyle}>
           <RadioButton
             value="true"
@@ -70,6 +71,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
           />
           <Text style={sizes.FilterTextSize}>Suspend</Text>
         </View>
+        <View><Text style={global.TextHeaderSettings}>Filter Categories</Text></View>
         <View style={styles.CheckboxContainer}>
           <View style={styles.CheckboxSection}>
             <Checkbox
@@ -103,17 +105,18 @@ const DeviceConfiguration = ({ route, navigation }) => {
             />
             <Text style={sizes.FilterTextSize}>Social</Text>
           </View>
+          <View><Text style={global.TextHeaderSettings}>Custom blacklist</Text></View>
           <View>
             <TextInput
               style={global.TextInputInModal}
-              placeholder="Specific URL"
+              placeholder="blocked domain"
               placeholderTextColor={colors.primary}
               onChangeText={(specificUrl) => setSpecificUrl(specificUrl)}
             />
           </View>
           <Text style={global.ErrorMsg}>{specificUrlError}</Text>
         </View>
-        <View>
+        <View style={{ margin: 10 }}>
           <FlatList
             keyExtractor={(item, index) => {
               return index.toString();
@@ -124,7 +127,7 @@ const DeviceConfiguration = ({ route, navigation }) => {
                 <Text style={global.ListItemText}>{item}</Text>
                 <Pressable
                   style={global.IconButton}
-                  onPress={() => deleteData(item.dataId, setRefresh)}
+                  onPress={() => {defineConfigAttributes("REMOVE", item)}}
                 >
                   <FontAwesome
                     name="trash-o"
@@ -140,14 +143,14 @@ const DeviceConfiguration = ({ route, navigation }) => {
     );
   };
 
-  const defineConfigAttributes = () => {
+  const defineConfigAttributes = (additionalSitesOP, url) => {
     let dataAttr = {
       IS_ACTIVE: checked.toString(),
       FAKENEWS: fakenews.toString(),
       GAMBLING: gambling.toString(),
       PORN: porn.toString(),
       SOCIAL: social.toString(),
-      ADDITIONAL_SITES: specificUrl,
+      ADDITIONAL_SITES: url,
       ADDITIONAL_SITES_OPERATION: additionalSitesOP,
     };
     //checkUrl(specificUrl, setSpecificUrlError);
@@ -167,33 +170,10 @@ const DeviceConfiguration = ({ route, navigation }) => {
           </Text>
         </View>
         <View style={global.RightMenu}>
-          <View style={global.ArrowView}>
-            <Pressable
-              style={global.ArrowButton}
-              //onPress={() => handlePreviousPage()}
-            >
-              <MaterialIcons
-                name="delete-sweep"
-                size={sizes.iconSize}
-                color={colors.primary}
-              />
-            </Pressable>
-            <Pressable
-              style={global.ArrowButton}
-              onPress={() => handleRefresh(setRefresh)}
-            >
-              <FontAwesome
-                style={global.icon}
-                name="refresh"
-                size={sizes.refreshIconSize}
-                color={colors.primary}
-              />
-            </Pressable>
-          </View>
           {setAddRequestComponent()}
           <Pressable
             style={styles.AddRequestButton}
-            onPress={() => defineConfigAttributes()}
+            onPress={() => defineConfigAttributes("ADD",specificUrl)}
           >
             <Text style={global.ButtonText}>Save</Text>
           </Pressable>
