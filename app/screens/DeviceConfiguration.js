@@ -164,8 +164,8 @@ const DeviceConfiguration = ({ route, navigation }) => {
       ADDITIONAL_SITES: url,
       ADDITIONAL_SITES_OPERATION: additionalSitesOP,
     };
-    //checkUrl(specificUrl, setSpecificUrlError);
-    configUpdate(uid, dataAttr, setRefresh);
+    if (checkUrl(specificUrl, setSpecificUrlError))
+      configUpdate(uid, dataAttr, setRefresh);
   };
 
   return (

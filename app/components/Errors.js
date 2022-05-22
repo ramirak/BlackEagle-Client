@@ -78,22 +78,41 @@ export function checkConfirmPassword(
   confirmPassword,
   setConfirmPasswordError
 ) {
-  if (confirmPassword != password)
+  if (confirmPassword != password) {
     setConfirmPasswordError("Confirmed password and password are not the same");
-  else setConfirmPasswordError("");
+    return false;
+  } else {
+    setConfirmPasswordError("");
+    return true;
+  }
 }
 
 export function checkKey(password, setPasswordError) {
-  if (password == "") setPasswordError("Key cannot be empty");
-  else setPasswordError("");
+  if (password == "") {
+    setPasswordError("Key cannot be empty");
+    return false;
+  } else {
+    setPasswordError("");
+    return true;
+  }
 }
 
 export function checkCmdParam(cmdParam, setCmdParamError) {
-  if (cmdParam == "") setCmdParamError("Param cannot be empty");
-  else setCmdParamError("");
+  if (cmdParam == "") {
+    setCmdParamError("Param cannot be empty");
+    return false;
+  } else {
+    setCmdParamError("");
+    return true;
+  }
 }
 
 export function checkUrl(specificUrl, setSpecificUrlError) {
-  if (specificUrl == "") setSpecificUrlError("Url cannot be empty");
-  else setSpecificUrlError("");
+  if (specificUrl == "") {
+    setSpecificUrlError("Url cannot be empty");
+    return false;
+  } else {
+    setSpecificUrlError("");
+    return true;
+  }
 }

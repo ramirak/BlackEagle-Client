@@ -6,7 +6,12 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import base64 from "react-native-base64";
 import ParentMenu from "../components/ParentMenu";
-import { handleNextPage, handlePreviousPage, handleRefresh, removeNonAscii } from "../config/Utils";
+import {
+  handleNextPage,
+  handlePreviousPage,
+  handleRefresh,
+  removeNonAscii,
+} from "../config/Utils";
 import {
   addRequest,
   getSpecificData,
@@ -40,13 +45,23 @@ const Requests = ({ route, navigation }) => {
 
   useEffect(() => {
     if (!refresh) return;
-    fetch("https://localhost:8010/data/getAll/" + uid + "/" + type + "?page=" + page + "&size=" + maxPage, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-      },
-    })
+    fetch(
+      "https://localhost:8010/data/getAll/" +
+        uid +
+        "/" +
+        type +
+        "?page=" +
+        page +
+        "&size=" +
+        maxPage,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((responseJson) => {
         setData(responseJson);
@@ -113,7 +128,9 @@ const Requests = ({ route, navigation }) => {
         let decodedData = base64.decode(specificData.toString());
         return (
           <ScrollView>
-            <Text style={styles.TextInfo}>{removeNonAscii(decodedData).replace(/"/g, "")}</Text>
+            <Text style={styles.TextInfo}>
+              {removeNonAscii(decodedData).replace(/"/g, "")}
+            </Text>
           </ScrollView>
         );
       }
@@ -185,8 +202,7 @@ const Requests = ({ route, navigation }) => {
       COMMAND_TYPE: cmdType,
       COMMAND_PARAMETER: cmdParam,
     };
-    checkCmdParam(cmdParam, setCmdParamError);
-    addRequest(uid, dataAttr);
+    if (checkCmdParam(cmdParam, setCmdParamError)) addRequest(uid, dataAttr);
   };
 
   const checkRequestButton = () => {
@@ -243,7 +259,9 @@ const Requests = ({ route, navigation }) => {
             <View>
               <Pressable
                 style={global.ArrowButton}
-                onPress={() => deleteAllData(uid, type.toUpperCase(), setRefresh)}
+                onPress={() =>
+                  deleteAllData(uid, type.toUpperCase(), setRefresh)
+                }
               >
                 <MaterialIcons
                   name="delete-sweep"
@@ -255,7 +273,9 @@ const Requests = ({ route, navigation }) => {
             <View>
               <Pressable
                 style={global.ArrowButton}
-                onPress={() => { handlePreviousPage(page, setPage), handleRefresh(setRefresh) }}
+                onPress={() => {
+                  handlePreviousPage(page, setPage), handleRefresh(setRefresh);
+                }}
               >
                 <MaterialIcons
                   name="navigate-before"
@@ -264,11 +284,14 @@ const Requests = ({ route, navigation }) => {
                 />
               </Pressable>
             </View>
-            <Text style={{fontSize:18, fontWeight:"bold"}}>{page + 1}</Text>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>{page + 1}</Text>
             <View>
               <Pressable
                 style={global.ArrowButton}
-                onPress={() => { handleNextPage(page, setPage, data.length, maxPage), handleRefresh(setRefresh) }}
+                onPress={() => {
+                  handleNextPage(page, setPage, data.length, maxPage),
+                    handleRefresh(setRefresh);
+                }}
               >
                 <MaterialIcons
                   name="navigate-next"
