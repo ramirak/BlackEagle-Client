@@ -10,7 +10,12 @@ import {
   updateUser,
 } from "../components/FetchSettings";
 import { getData, getJsonBodyByType } from "../config/Utils";
-import { handleSettings } from "../components/Errors";
+import {
+  checkName,
+  checkPassword,
+  checkConfirmPassword,
+  checkEmail,
+} from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -23,18 +28,35 @@ const Settings = ({ navigation }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [oneTimeKey, setOneTimeKey] = useState("");
   const [details, setDetails] = useState("");
+  const [email, setEmail] = useState("");
   const [nameError, setNameError] = useState("");
   const [oldPasswordError, setOldPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const [oneTimeKeyError, setOneTimeKeyError] = useState("");
-  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
 
   const viewDetails = (type) => {
     getData("@email", setEmail);
     if (type == "DETAILS") return <Text>{details}</Text>;
+  };
+
+  const checkSettingsForm = (type) => {
+    if (type == "NAME" && checkName(newName, setNameError)) settingsRequests();
+    else if (
+      type == "PASSWORD" &&
+      checkPassword(oldPassword, setOldPasswordError) &&
+      checkPassword(newPassword, setNewPasswordError) &&
+      checkConfirmPassword(
+        newPassword,
+        confirmPassword,
+        setConfirmPasswordError
+      )
+    )
+      settingsRequests();
+    else if (type == "DELETE" && checkEmail(email, setEmailError))
+      settingsRequests();
   };
 
   const settingsComponent = (type) => {
@@ -96,24 +118,18 @@ const Settings = ({ navigation }) => {
           <View>
             <View style={styles.InsideModalView}>
               <Text style={styles.TextInfo}>
-                Send one time key to your email account
+               Enter email to delete your account
               </Text>
-              <Pressable
-                style={styles.SettingButton}
-                //onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={global.ButtonText}>Get key</Text>
-              </Pressable>
             </View>
             <View>
               <TextInput
                 style={global.TextInputSettings}
-                placeholder="One time key"
+                placeholder="Email"
                 placeholderTextColor={colors.primary}
-                onChangeText={(oneTimeKey) => setOneTimeKey(oneTimeKey)}
+                onChangeText={(email) => setEmail(email)}
               />
             </View>
-            <Text style={global.ErrorMsg}>{oneTimeKeyError}</Text>
+            <Text style={global.ErrorMsg}>{emailError}</Text>
           </View>
         );
       default: {
@@ -131,7 +147,6 @@ const Settings = ({ navigation }) => {
         return updateUser(jsonBody.userId.name);
     }
   };
-
   return (
     <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />
@@ -214,22 +229,7 @@ const Settings = ({ navigation }) => {
                 </View>
                 <View style={global.BottomModalView}>
                   <Pressable
-                    onPress={() => {
-                      handleSettings(
-                        type,
-                        newName,
-                        setNameError,
-                        oldPassword,
-                        setOldPasswordError,
-                        newPassword,
-                        setNewPasswordError,
-                        confirmPassword,
-                        setConfirmPasswordError,
-                        oneTimeKey,
-                        setOneTimeKeyError
-                      ),
-                        settingsRequests();
-                    }}
+                    onPress={() => checkSettingsForm()}
                     style={global.CloseButton}
                   >
                     <Text style={global.ButtonText}>Send</Text>
@@ -256,7 +256,9 @@ const Settings = ({ navigation }) => {
             <View style={global.ModalView}>
               <View style={global.ModalSettingsContainer}>
                 <View style={global.TopModalSettingsView}>
-                  <Text style={{fontWeight:"bold",fontSize:15}}>{viewDetails(type)}</Text>
+                  <Text style={{ fontWeight: "bold", fontSize: 15 }}>
+                    {viewDetails(type)}
+                  </Text>
                 </View>
                 <View style={global.BottomModalView}>
                   <Pressable

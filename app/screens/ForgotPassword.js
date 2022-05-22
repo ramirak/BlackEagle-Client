@@ -12,6 +12,10 @@ const ForgotPassword = ({ navigation, route }) => {
   const [emailError, setEmailError] = useState("");
   const { email } = route.params;
 
+  const checkForgotForm = () => {
+    if (checkEmail(email, setEmailError)) resetPassword(email, navigation);
+  };
+
   const resetPassword = (email, navigation) => {
     fetch("https://localhost:8010/users/reset/" + email, {
       method: "GET",
@@ -22,14 +26,15 @@ const ForgotPassword = ({ navigation, route }) => {
       },
     })
       .then((response) => {
-        if (response.ok) navigation.navigate("Key Via Email", { email: "email" });
+        if (response.ok)
+          navigation.navigate("Key Via Email", { email: "email" });
         else checkEmail(email, setEmailError);
       })
       .catch((error) => {
         console.log("error: " + error);
       });
   };
-  
+
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
       <View style={global.SecondLoginView}>
@@ -54,7 +59,7 @@ const ForgotPassword = ({ navigation, route }) => {
           <Text style={global.ErrorMsg}>{emailError}</Text>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => resetPassword(email, navigation)}
+            onPress={() => checkForgotForm()}
           >
             <Text style={global.ButtonText}>Password Reset</Text>
           </Pressable>

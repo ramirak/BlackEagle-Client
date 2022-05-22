@@ -15,6 +15,18 @@ const NewPassword = ({ navigation, route }) => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const { email } = route.params;
 
+  const checkNewPassForm = () => {
+    if (
+      handleNewPassword(
+        password,
+        setPasswordError,
+        confirmPassword,
+        setConfirmPasswordError
+      )
+    )
+      updateNewPassword(email, password, navigation);
+  };
+
   const updateNewPassword = (email, password, navigation) => {
     fetch("https://localhost:8010/users/" + email + "/" + password, {
       method: "POST",
@@ -30,13 +42,6 @@ const NewPassword = ({ navigation, route }) => {
     })
       .then((response) => {
         if (response.ok) navigation.navigate("Login");
-        else
-          handleNewPassword(
-            password,
-            setPasswordError,
-            confirmPassword,
-            setConfirmPasswordError
-          );
       })
       .catch((error) => {
         console.log("error: " + error);
@@ -87,7 +92,7 @@ const NewPassword = ({ navigation, route }) => {
           <Text style={global.ErrorMsg}>{confirmPasswordError}</Text>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => [updateNewPassword(email, password, navigation)]}
+            onPress={() => checkNewPassForm}
           >
             <Text style={global.ButtonText}>Change Password</Text>
           </Pressable>

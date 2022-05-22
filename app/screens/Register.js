@@ -25,6 +25,16 @@ const Register = ({ navigation }) => {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
+  const checkRegisterForm = () => {
+    if (
+      checkEmail(email, setEmailError) &&
+      checkName(name, setNameError) &&
+      checkPassword(password, setPasswordError) &&
+      checkConfirmPassword(password, confirmPassword, setConfirmPasswordError)
+    )
+      registerNow(email, name, password, navigation);
+  };
+
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
       <Text style={global.LoginAndRegisterHeaderText}>New User</Text>
@@ -100,15 +110,7 @@ const Register = ({ navigation }) => {
         <Pressable
           style={global.LoginAndRegisterButton}
           onPress={() => {
-            registerNow(email, name, password, navigation),
-              checkEmail(email, setEmailError),
-              checkName(name, setNameError),
-              checkPassword(password, setPasswordError),
-              checkConfirmPassword(
-                password,
-                confirmPassword,
-                setConfirmPasswordError
-              );
+            checkRegisterForm();
           }}
         >
           <Text style={global.ButtonText}>Register</Text>

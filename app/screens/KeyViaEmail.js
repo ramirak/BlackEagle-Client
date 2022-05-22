@@ -13,6 +13,11 @@ const KeyViaEmail = ({ navigation, route }) => {
   const [passwordError, setPasswordError] = useState("");
   const { email } = route.params;
 
+  const checkKeyForm = () => {
+    if (checkKey(oneTimeKey, setOneTimeKey))
+      verifyKey(email, password, oneTimeKey, navigation);
+  };
+
   const verifyKey = (email, navigation) => {
     fetch("https://localhost:8010/users/reset/" + email + oneTimeKey, {
       method: "POST",
@@ -23,12 +28,11 @@ const KeyViaEmail = ({ navigation, route }) => {
       },
       body: JSON.stringify({
         email: email,
-        oneTimeKey: oneTimeKey
+        oneTimeKey: oneTimeKey,
       }),
     })
       .then((response) => {
         if (response.ok) navigation.navigate("New Password");
-        else checkKey(password, setPasswordError);
       })
       .catch((error) => {
         console.log("error: " + error);
@@ -59,7 +63,7 @@ const KeyViaEmail = ({ navigation, route }) => {
           <Text style={global.ErrorMsg}>{passwordError}</Text>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => [verifyKey(email, password, oneTimeKey, navigation)]}
+            onPress={() => checkKeyForm()}
           >
             <Text style={global.ButtonText}>Verify</Text>
           </Pressable>

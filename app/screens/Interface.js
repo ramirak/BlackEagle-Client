@@ -43,6 +43,11 @@ const Interface = ({ navigation }) => {
     setRefresh(false);
   }, [refresh]);
 
+  const checkChildName = () => {
+    if (checkName(name, setNameError))
+      updateUser(getJsonBodyByType("NAME", newName, ""), "NAME");
+  };
+
   const editName = () => {
     return (
       <View>
@@ -144,8 +149,7 @@ const Interface = ({ navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      checkName(newName, setNameError);
-                      updateUser(getJsonBodyByType("NAME", newName, "", ), "NAME");
+                      checkChildName();
                     }}
                     style={global.CloseButton}
                   >

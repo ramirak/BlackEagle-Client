@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { checkSession, LoginNow } from "../components/FetchRequest";
-import { handleLogin } from "../components/Errors";
+import { checkEmail, checkPassword } from "../components/Errors";
 import { SmallNaviButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -19,6 +19,14 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     checkSession(navigation);
   }, []);
+
+  const checkLoginForm = () => {
+    if (
+      checkEmail(email, setEmailError) &&
+      checkPassword(password, setPasswordError)
+    )
+      LoginNow(email, password, navigation);
+  };
 
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
@@ -60,7 +68,7 @@ const Login = ({ navigation }) => {
         <Pressable
           style={global.LoginAndRegisterButton}
           onPress={() => {
-            LoginNow(email, password, navigation), handleLogin(email, setEmailError, password, setPasswordError);
+            checkLoginForm();
           }}
         >
           <Text style={global.ButtonText}>Login</Text>
