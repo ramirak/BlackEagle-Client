@@ -8,12 +8,11 @@ import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-const NewPassword = ({ navigation, route }) => {
+const NewPassword = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const { email } = route.params;
 
   const checkNewPassForm = () => {
     if (
@@ -24,11 +23,11 @@ const NewPassword = ({ navigation, route }) => {
         setConfirmPasswordError
       )
     )
-      updateNewPassword(email, password, navigation);
+      updateNewPassword(password, navigation);
   };
 
-  const updateNewPassword = (email, password, navigation) => {
-    fetch("https://localhost:8010/users/" + email + "/" + password, {
+  const updateNewPassword = (password, navigation) => {
+    fetch("https://localhost:8010/users/resetPassword", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -36,7 +35,6 @@ const NewPassword = ({ navigation, route }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        uid: email,
         password: password,
       }),
     })

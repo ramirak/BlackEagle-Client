@@ -8,26 +8,22 @@ import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
-const ForgotPassword = ({ navigation, route }) => {
+const ForgotPassword = ({ navigation }) => {
+  const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const { email } = route.params;
 
   const checkForgotForm = () => {
     if (checkEmail(email, setEmailError)) resetPassword(email, navigation);
   };
 
   const resetPassword = (email, navigation) => {
-    fetch("https://localhost:8010/users/reset/" + email, {
+    fetch("https://localhost:8010/users/sendOTK/" + email, {
       method: "GET",
       credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
     })
       .then((response) => {
         if (response.ok)
-          navigation.navigate("Key Via Email", { email: "email" });
+          navigation.navigate("Key Via Email", { email: email });
         else checkEmail(email, setEmailError);
       })
       .catch((error) => {

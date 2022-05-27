@@ -13,23 +13,36 @@ export function getSettingsDetails(email, setDetails) {
   )
     .then((response) => response.json())
     .then((responseJson) => {
-      let detailsStr = "Registered Account: " + responseJson.dataAttributes.REGISTERED_ACCOUNT + "\n" +
-      "Current Disk Quota: " + responseJson.dataAttributes.CURRENT_DISK_QUOTA + " / " + responseJson.dataAttributes.MAX_DISK_QUOTA + "\n" +
-      "Current Number of Devices: " + responseJson.dataAttributes.CURRENT_NUM_DEVICES + " / " + responseJson.dataAttributes.MAX_ALLOWED_DEVICES;
+      let detailsStr =
+        "Registered Account: " +
+        responseJson.dataAttributes.REGISTERED_ACCOUNT +
+        "\n" +
+        "Current Disk Quota: " +
+        responseJson.dataAttributes.CURRENT_DISK_QUOTA +
+        " / " +
+        responseJson.dataAttributes.MAX_DISK_QUOTA +
+        "\n" +
+        "Current Number of Devices: " +
+        responseJson.dataAttributes.CURRENT_NUM_DEVICES +
+        " / " +
+        responseJson.dataAttributes.MAX_ALLOWED_DEVICES;
       setDetails(removeNonAscii(detailsStr));
-      })      
+    })
     .catch((error) => {
       console.log("error: " + error);
     });
 }
 
-export function deleteUser(oneTimeKey) {
-  fetch("https://localhost:8010/users/delete/" + oneTimeKey, {
+export function deleteUser(oldPassword) {
+  fetch("https://localhost:8010/users/delete", {
     method: "DELETE",
     credentials: "include",
     headers: {
       Accept: "application/json",
     },
+    body: JSON.stringify({
+      password: oldPassword,
+    }),
   })
     .then((response) => {
       if (response.ok) {

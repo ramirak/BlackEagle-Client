@@ -12,18 +12,18 @@ export function handleNewPassword({
 }
 
 export function checkEmail(email, setEmailError) {
-  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+  //let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
   if (email.length === "") {
     setEmailError("email address must be enter");
     return false;
-  } else if (reg.test(email) === false) {
-    setEmailError("enter valid email address");
-    return false;
-  } else if (reg.test(email) === true) {
+  }
+ // } else if (reg.test(email) === false) {
+ //   setEmailError("enter valid email address");
+ //   return false;
+  //} else if (reg.test(email) === true) {
     setEmailError("");
     return true;
-  }
 }
 
 export function checkName(name, setNameError) {
@@ -55,18 +55,18 @@ export function checkPassword(password, setPasswordError) {
   } else if (password.indexOf(" ") >= 0) {
     setPasswordError("Password cannot contain spaces");
     return false;
-  } else if (uppercaseRegExp.test(password)) {
-    setPasswordError("Password must cointain at least 1 uppercase letter ");
-    return false;
-  } else if (lowercaseRegExp.test(password)) {
-    setPasswordError("Password must cointain at least 1 lowercase letter ");
-    return false;
-  } else if (digitsRegExp.test(password)) {
-    setPasswordError("Password must cointain at least 1 digit");
-    return false;
-  } else if (specialCharRegExp.test(password)) {
-    setPasswordError("Password must cointain at least 1 special letter");
-    return false;
+  //} else if (uppercaseRegExp.test(password)) {
+  //  setPasswordError("Password must cointain at least 1 uppercase letter ");
+  //  return false;
+  //} else if (lowercaseRegExp.test(password)) {
+  //  setPasswordError("Password must cointain at least 1 lowercase letter ");
+  //  return false;
+  //} else if (digitsRegExp.test(password)) {
+  //  setPasswordError("Password must cointain at least 1 digit");
+ //   return false;
+  //} else if (specialCharRegExp.test(password)) {
+  // setPasswordError("Password must cointain at least 1 special letter");
+ //  return false;
   } else {
     setPasswordError("");
     return true;

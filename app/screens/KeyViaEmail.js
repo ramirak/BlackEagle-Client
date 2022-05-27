@@ -14,12 +14,13 @@ const KeyViaEmail = ({ navigation, route }) => {
   const { email } = route.params;
 
   const checkKeyForm = () => {
-    if (checkKey(oneTimeKey, setOneTimeKey))
-      verifyKey(email, password, oneTimeKey, navigation);
+    if (checkKey(oneTimeKey, setPasswordError))
+      verifyKey(email, navigation);
   };
 
   const verifyKey = (email, navigation) => {
-    fetch("https://localhost:8010/users/reset/" + email + oneTimeKey, {
+    console.log("@@@@@@ KeyViaEmail" + email + oneTimeKey)
+    fetch("https://localhost:8010/login", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -27,8 +28,8 @@ const KeyViaEmail = ({ navigation, route }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: email,
-        oneTimeKey: oneTimeKey,
+        uid: email,
+        password: oneTimeKey,
       }),
     })
       .then((response) => {
@@ -57,6 +58,7 @@ const KeyViaEmail = ({ navigation, route }) => {
               style={global.TextInput}
               placeholder="One Time Key"
               placeholderTextColor="#003f5c"
+              secureTextEntry={true}
               onChangeText={(oneTimeKey) => setOneTimeKey(oneTimeKey)}
             />
           </View>

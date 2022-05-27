@@ -14,7 +14,6 @@ import {
   checkName,
   checkPassword,
   checkConfirmPassword,
-  checkEmail,
 } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -34,8 +33,6 @@ const Settings = ({ navigation }) => {
   const [oldPasswordError, setOldPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const [emailError, setEmailError] = useState("");
-
 
   const viewDetails = (type) => {
     getData("@email", setEmail);
@@ -55,7 +52,10 @@ const Settings = ({ navigation }) => {
       )
     )
       settingsRequests();
-    else if (type == "DELETE" && checkEmail(email, setEmailError))
+    else if (
+      type == "DELETE" &&
+      checkPassword(oldPassword, setOldPasswordError)
+    )
       settingsRequests();
   };
 
@@ -118,18 +118,19 @@ const Settings = ({ navigation }) => {
           <View>
             <View style={styles.InsideModalView}>
               <Text style={styles.TextInfo}>
-               Enter email to delete your account
+                Enter password to delete your account
               </Text>
             </View>
             <View>
               <TextInput
                 style={global.TextInputSettings}
-                placeholder="Email"
+                placeholder="Password"
+                secureTextEntry={true}
                 placeholderTextColor={colors.primary}
-                onChangeText={(email) => setEmail(email)}
+                onChangeText={(oldPassword) => setOldPassword(oldPassword)}
               />
             </View>
-            <Text style={global.ErrorMsg}>{emailError}</Text>
+            <Text style={global.ErrorMsg}>{oldPasswordError}</Text>
           </View>
         );
       default: {
@@ -141,7 +142,7 @@ const Settings = ({ navigation }) => {
   const settingsRequests = () => {
     switch (type) {
       case "DELETE":
-        return deleteUser(oneTimeKey);
+        return deleteUser(oldPassword);
       default:
         let jsonBody = getJsonBodyByType();
         return updateUser(jsonBody.userId.name);
