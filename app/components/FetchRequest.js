@@ -65,6 +65,23 @@ export function LoginNow(email, password, navigation) {
     });
 }
 
+export function getAccount(setParentName) {
+  fetch("https://localhost:8010/users/getAccount", {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      setParentName(responseJson.name);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 export function addChild(childName, setRefresh) {
   fetch("https://localhost:8010/device/add", {
     method: "POST",

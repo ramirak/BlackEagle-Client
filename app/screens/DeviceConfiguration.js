@@ -6,7 +6,6 @@ import Checkbox from "expo-checkbox";
 import { RadioButton } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
-import { checkUrl } from "../components/Errors";
 import { configUpdate } from "../components/FetchRequest";
 import { GoBackButton } from "../components/Buttons";
 import global from "../config/global";
@@ -22,7 +21,6 @@ const DeviceConfiguration = ({ route, navigation }) => {
   const [social, setSocial] = useState(false);
   const [specificUrl, setSpecificUrl] = useState("");
   const [urlList, setUrlList] = useState([]);
-  const [specificUrlError, setSpecificUrlError] = useState("");
   const [checked, setChecked] = useState(true);
   const { uid } = route.params;
   const { name } = route.params;
@@ -123,7 +121,6 @@ const DeviceConfiguration = ({ route, navigation }) => {
               onChangeText={(specificUrl) => setSpecificUrl(specificUrl)}
             />
           </View>
-          <Text style={global.ErrorMsg}>{specificUrlError}</Text>
         </View>
         <View style={{ margin: 10 }}>
           <FlatList
@@ -164,7 +161,6 @@ const DeviceConfiguration = ({ route, navigation }) => {
       ADDITIONAL_SITES: url,
       ADDITIONAL_SITES_OPERATION: additionalSitesOP,
     };
-    if (checkUrl(specificUrl, setSpecificUrlError))
       configUpdate(uid, dataAttr, setRefresh);
   };
 

@@ -10,11 +10,6 @@ import {
   updateUser,
 } from "../components/FetchSettings";
 import { getData, getJsonBodyByType } from "../config/Utils";
-import {
-  checkName,
-  checkPassword,
-  checkConfirmPassword,
-} from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -29,34 +24,10 @@ const Settings = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [details, setDetails] = useState("");
   const [email, setEmail] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [oldPasswordError, setOldPasswordError] = useState("");
-  const [newPasswordError, setNewPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const viewDetails = (type) => {
     getData("@email", setEmail);
     if (type == "DETAILS") return <Text>{details}</Text>;
-  };
-
-  const checkSettingsForm = (type) => {
-    if (type == "NAME" && checkName(newName, setNameError)) settingsRequests();
-    else if (
-      type == "PASSWORD" &&
-      checkPassword(oldPassword, setOldPasswordError) &&
-      checkPassword(newPassword, setNewPasswordError) &&
-      checkConfirmPassword(
-        newPassword,
-        confirmPassword,
-        setConfirmPasswordError
-      )
-    )
-      settingsRequests();
-    else if (
-      type == "DELETE" &&
-      checkPassword(oldPassword, setOldPasswordError)
-    )
-      settingsRequests();
   };
 
   const settingsComponent = (type) => {
@@ -73,7 +44,6 @@ const Settings = ({ navigation }) => {
                 onChangeText={(newName) => setNewName(newName)}
               />
             </View>
-            <Text style={global.ErrorMsg}>{nameError}</Text>
           </View>
         );
       case "PASSWORD":
@@ -88,7 +58,6 @@ const Settings = ({ navigation }) => {
                 onChangeText={(oldPassword) => setOldPassword(oldPassword)}
               />
             </View>
-            <Text style={global.ErrorMsg}>{oldPasswordError}</Text>
             <View style={styles.TextInputView}>
               <TextInput
                 style={global.TextInputSettings}
@@ -98,7 +67,6 @@ const Settings = ({ navigation }) => {
                 onChangeText={(newPassword) => setNewPassword(newPassword)}
               />
             </View>
-            <Text style={global.ErrorMsg}>{newPasswordError}</Text>
             <View style={styles.TextInputView}>
               <TextInput
                 style={global.TextInputSettings}
@@ -110,7 +78,6 @@ const Settings = ({ navigation }) => {
                 }
               />
             </View>
-            <Text style={global.ErrorMsg}>{confirmPasswordError}</Text>
           </View>
         );
       case "DELETE":
@@ -130,7 +97,6 @@ const Settings = ({ navigation }) => {
                 onChangeText={(oldPassword) => setOldPassword(oldPassword)}
               />
             </View>
-            <Text style={global.ErrorMsg}>{oldPasswordError}</Text>
           </View>
         );
       default: {
@@ -142,10 +108,10 @@ const Settings = ({ navigation }) => {
   const settingsRequests = () => {
     switch (type) {
       case "DELETE":
-        return deleteUser(oldPassword);
+        return deleteUser(oldPassword, navigation);
       default:
-        let jsonBody = getJsonBodyByType();
-        return updateUser(jsonBody.userId.name);
+        let jsonBody = getJsonBodyByType(type, newName, oldPassword, newPassword);
+        return updateUser(jsonBody, type);
     }
   };
   return (
@@ -230,7 +196,7 @@ const Settings = ({ navigation }) => {
                 </View>
                 <View style={global.BottomModalView}>
                   <Pressable
-                    onPress={() => checkSettingsForm()}
+                    onPress={() => settingsRequests()}
                     style={global.CloseButton}
                   >
                     <Text style={global.ButtonText}>Send</Text>

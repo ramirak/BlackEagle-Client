@@ -11,20 +11,6 @@ import sizes from "../config/sizes";
 const NewPassword = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  const checkNewPassForm = () => {
-    if (
-      handleNewPassword(
-        password,
-        setPasswordError,
-        confirmPassword,
-        setConfirmPasswordError
-      )
-    )
-      updateNewPassword(password, navigation);
-  };
 
   const updateNewPassword = (password, navigation) => {
     fetch("https://localhost:8010/users/resetPassword", {
@@ -69,7 +55,6 @@ const NewPassword = ({ navigation }) => {
               onEndEditing={(e) => handleValidPassword(e.nativeEvent.Text)}
             />
           </View>
-          <Text style={global.ErrorMsg}>{passwordError}</Text>
           <View>
             <Ionicons
               style={global.Icon}
@@ -87,10 +72,9 @@ const NewPassword = ({ navigation }) => {
               }
             />
           </View>
-          <Text style={global.ErrorMsg}>{confirmPasswordError}</Text>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => checkNewPassForm}
+            onPress={() => updateNewPassword(password, navigation)}
           >
             <Text style={global.ButtonText}>Change Password</Text>
           </Pressable>

@@ -5,10 +5,13 @@ import { StyleSheet, Text, View, TextInput, FlatList } from "react-native-web";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
 import { getData, getJsonBodyByType } from "../config/Utils";
-import { updateUser } from "../components/FetchSettings";
-import { checkSession, deleteChild } from "../components/FetchRequest";
+import { updateChild } from "../components/FetchSettings";
+import {
+  checkSession,
+  getAccount,
+  deleteChild,
+} from "../components/FetchRequest";
 import { AddChildButton } from "../components/Buttons";
-import { checkName } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -17,14 +20,16 @@ const Interface = ({ navigation }) => {
   const [data, setData] = useState("");
   const [name, setName] = useState("");
   const [newName, setNewName] = useState("");
+  const [parentName, setParentName] = useState("");
   const [refresh, setRefresh] = useState(true);
   const [editModal, setEditModal] = useState(false);
-  const [nameError, setNameError] = useState("");
   const [email, setEmail] = useState("");
+  const [deviceId, setDeviceId] = useState("");
 
   useEffect(() => {
     checkSession(navigation);
     getData("@email", setEmail);
+    getAccount(setParentName);
     if (!refresh) return;
     fetch("https://localhost:8010/device/getAll", {
       method: "GET",
@@ -41,12 +46,11 @@ const Interface = ({ navigation }) => {
         console.log("error: " + error);
       });
     setRefresh(false);
-  }, [refresh]);
+  }, [refresh, parentName]);
 
-  const checkChildName = () => {
-    if (checkName(name, setNameError))
-      updateUser(getJsonBodyByType("NAME", newName, ""), "NAME");
-  };
+  //const checkChildName = () => {
+  //    updateUser(getJsonBodyByType("NAME", newName, "", ""), "NAME");
+  //};
 
   const editName = () => {
     return (
@@ -59,7 +63,6 @@ const Interface = ({ navigation }) => {
             onChangeText={(newName) => setNewName(newName)}
           />
         </View>
-        <Text style={global.ErrorMsg}>{nameError}</Text>
       </View>
     );
   };
@@ -69,7 +72,9 @@ const Interface = ({ navigation }) => {
       <ParentMenu navigation={navigation} email={email} />
       <View style={global.RightContainer}>
         <View style={global.HeaderMenu}>
-          <Text style={global.HeaderText}>My children devices</Text>
+          <Text style={global.HeaderText}>
+            {"Hey " + parentName + " - Your devices"}
+          </Text>
         </View>
         <View style={global.RightMenu}>
           <View style={styles.AddChildView}>
@@ -109,6 +114,7 @@ const Interface = ({ navigation }) => {
                       <Pressable
                         style={global.IconButton}
                         onPress={() => {
+                          setDeviceId(item.userId.uid);
                           setEditModal(!editModal);
                         }}
                       >
@@ -149,7 +155,9 @@ const Interface = ({ navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      checkChildName();
+                      updateChild(
+                        getJsonBodyByType("DEVICE_NAME", newName, deviceId, "")
+                      );
                     }}
                     style={global.CloseButton}
                   >

@@ -21,36 +21,39 @@ export const getData = async (key, setEmail) => {
   } catch (e) {
     // error reading value
   }
-}
+};
 
 export const storeData = async (value) => {
   try {
     await AsyncStorage.setItem("@email", value);
-  } catch (e) { }
-}
+  } catch (e) {}
+};
 
-export function getJsonBodyByType(type, newName, newPassword, email) {
+export function getJsonBodyByType(type, newName, oldPassword, newPassword) {
   let regName = null,
     regPassword = null,
-    regOptionalPassword = null;
+    regOptionalPassword = null,
+    regUid = null;
   if (type == "NAME") {
     regName = newName;
   } else if (type == "PASSWORD") {
-    (regPassword = newPassword), (regOptionalPassword = newPassword);
+    (regPassword = newPassword), (regOptionalPassword = oldPassword);
+  } else if (type == "DEVICE_NAME") {
+    regName = newName;
+    regUid = oldPassword;
   }
   let jsonTemplate = {
     userId: {
-      uid: email,
-      name: regName,
+      uid: regUid,
       password: {
         password: regPassword,
         optionalPassword: regOptionalPassword,
         creationTime: null,
-        active: null,
+        active: true,
       },
     },
     role: null,
-    active: null,
+    name: regName,
     deviceCount: null,
   };
   return jsonTemplate;
@@ -61,6 +64,5 @@ export function handlePreviousPage(page, setPage) {
 }
 
 export function handleNextPage(page, setPage, size, maxSize) {
-  if (parseInt(size / maxSize, 10) > page)
-    setPage(page + 1);
+  if (parseInt(size / maxSize, 10) > page) setPage(page + 1);
 }

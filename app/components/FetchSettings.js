@@ -33,12 +33,12 @@ export function getSettingsDetails(email, setDetails) {
     });
 }
 
-export function deleteUser(oldPassword) {
+export function deleteUser(oldPassword, navigation) {
   fetch("https://localhost:8010/users/delete", {
-    method: "DELETE",
+    method: "POST",
     credentials: "include",
     headers: {
-      Accept: "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       password: oldPassword,
@@ -47,13 +47,32 @@ export function deleteUser(oldPassword) {
     .then((response) => {
       if (response.ok) {
         alert("The account has been deleted.");
+        navigation.navigate("Homepage");
       } else {
         alert("Deletion failed.");
       }
-      return response.json(type);
     })
-    .then((responseJson) => {
-      console.log(responseJson);
+    .catch((error) => {
+      console.log("error: " + error);
+    });
+}
+
+export function updateChild(jsonBody) {
+  fetch("https://localhost:8010/device/update", {
+    method: "PUT",
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(jsonBody),
+  })
+    .then((response) => {
+      if (response.ok) {
+        alert("The update was successful.");
+      } else {
+        alert("The update failed.");
+      }
     })
     .catch((error) => {
       console.log("error: " + error);
@@ -68,9 +87,7 @@ export function updateUser(jsonBody, type) {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      jsonBody,
-    }),
+    body: JSON.stringify(jsonBody),
   })
     .then((response) => {
       if (response.ok) {
@@ -80,9 +97,6 @@ export function updateUser(jsonBody, type) {
       }
       console.log(response.json);
       return response.json(type);
-    })
-    .then((responseJson) => {
-      console.log(responseJson);
     })
     .catch((error) => {
       console.log("error: " + error);
