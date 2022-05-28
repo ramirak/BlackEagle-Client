@@ -7,12 +7,23 @@ import ParentMenu from "../components/ParentMenu";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
+import Moment from 'moment';
+import {
+  checkPage,
+  handleNextPage,
+  handlePreviousPage,
+  handleRefresh,
+} from "../config/Utils";
 
 const Notifications = ({ navigation }) => {
   const [Notification, setNotification] = useState([]);
+  const [refresh, setRefresh] = useState(true);
+  const [page, setPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(5);
 
   useEffect(() => {
-    fetch("https://localhost:8010/events/getAll?page=0", {
+    if (!refresh) return;
+    fetch("https://localhost:8010/events/getAll?page=" + page + "&size=" + maxPage, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -26,7 +37,9 @@ const Notifications = ({ navigation }) => {
       .catch((error) => {
         console.log("error: " + error);
       });
-  }, []);
+      setRefresh(false);
+  }, [refresh, page]);
+  Moment.locale('en');
 
   return (
     <SafeAreaView style={global.PageContainer}>
@@ -37,26 +50,40 @@ const Notifications = ({ navigation }) => {
         </View>
         <View style={global.RightMenu}>
           <View style={global.ArrowView}>
-            <Pressable
-              style={global.ArrowButton}
-              //onPress={() => handlePreviousPage()}
-            >
-              <MaterialIcons
-                name="navigate-before"
-                size={sizes.PagingArrowIconSize}
-                color={colors.primary}
-              />
-            </Pressable>
-            <Pressable
-              style={global.ArrowButton}
-              //onPress={() => handleNextPage()}
-            >
-              <MaterialIcons
-                name="navigate-next"
-                size={sizes.PagingArrowIconSize}
-                color={colors.primary}
-              />
-            </Pressable>
+            <View>
+            </View>
+            <View>
+              <Pressable
+                style={global.ArrowButton}
+                onPress={() => {
+                  handlePreviousPage(page, setPage), handleRefresh(setRefresh);
+                }}
+              >
+                <MaterialIcons
+                  name="navigate-before"
+                  size={sizes.PagingArrowIconSize}
+                  color={colors.primary}
+                />
+              </Pressable>
+            </View>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>{page + 1}</Text>
+            <View>
+              <Pressable
+                style={global.ArrowButton}
+                onPress={() => {
+                  handleNextPage(page, setPage, Notification.length, maxPage),
+                    handleRefresh(setRefresh);
+                }}
+              >
+                <MaterialIcons
+                  name="navigate-next"
+                  size={sizes.PagingArrowIconSize}
+                  color={colors.primary}
+                />
+              </Pressable>
+            </View>
+            <View>
+            </View>
           </View>
           <View style={global.ListView}>
             <FlatList
@@ -67,8 +94,7 @@ const Notifications = ({ navigation }) => {
               renderItem={({ item }) => (
                 <Pressable style={global.ButtonList}>
                   <Text style={global.ListItemText}>
-                    {item.type} : {item.timeOfEvent} :{" "}
-                    {item.eventAttributes.IP_ADDR}
+                    {item.type} : {Moment(item.timeOfEvent).format('dddd MMM YYYY HH:mm:ss')}   IP: {item.eventAttributes.IP_ADDR}
                   </Text>
                 </Pressable>
               )}

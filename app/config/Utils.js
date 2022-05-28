@@ -26,7 +26,7 @@ export const getData = async (key, setEmail) => {
 export const storeData = async (value) => {
   try {
     await AsyncStorage.setItem("@email", value);
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export function getJsonBodyByType(type, newName, oldPassword, newPassword) {
@@ -64,5 +64,5 @@ export function handlePreviousPage(page, setPage) {
 }
 
 export function handleNextPage(page, setPage, size, maxSize) {
-  if (parseInt(size / maxSize, 10) > page) setPage(page + 1);
+  if (size > maxSize - 1) setPage(page + 1);
 }

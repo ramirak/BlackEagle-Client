@@ -22,6 +22,7 @@ import { GoBackButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
+import Moment from 'moment';
 
 // Screenshot, Keylog, Camera, Audio, Lockdown, Location and History requests page
 
@@ -39,18 +40,19 @@ const Requests = ({ route, navigation }) => {
   const { name } = route.params;
   const { type } = route.params;
 
+  Moment.locale('en');
 
   useEffect(() => {
     if (!refresh) return;
     fetch(
       "https://localhost:8010/data/getAll/" +
-        uid +
-        "/" +
-        type +
-        "?page=" +
-        page +
-        "&size=" +
-        maxPage,
+      uid +
+      "/" +
+      type +
+      "?page=" +
+      page +
+      "&size=" +
+      maxPage,
       {
         method: "GET",
         credentials: "include",
@@ -174,7 +176,7 @@ const Requests = ({ route, navigation }) => {
   };
 
   const defineCmdAttributes = () => {
-    if(cmdType != "" && cmdType != "tasklist" &&  cmdParam == "") {
+    if (cmdType != "" && cmdType != "tasklist" && cmdParam == "") {
       alert("Param is required");
       return;
     }
@@ -303,7 +305,7 @@ const Requests = ({ route, navigation }) => {
                 }}
               >
                 <Text style={global.ListItemText}>
-                  {item.dataType} : {item.createdTimestamp} : {item.dataId}
+                  {item.dataType} : {Moment(item.createdTimestamp).format('dddd MMM YYYY HH:mm:ss')} : {item.dataId}
                 </Text>
                 <Pressable
                   style={global.IconButton}

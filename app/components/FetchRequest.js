@@ -67,7 +67,7 @@ export function LoginNow(email, password, navigation) {
     .then((response) => {
       if (response.ok) navigation.navigate("Second Login", { email: email });
       else if (response.status == "403")
-        alert("Invalid email format or password");
+        alert("Failed to authenticate");
     })
     .catch((error) => {
       console.log(error);
