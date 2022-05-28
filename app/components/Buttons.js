@@ -1,7 +1,7 @@
 import { React } from "react";
 import { Pressable } from "react-native";
 import { Text, StyleSheet } from "react-native-web";
-import { addChild } from "./FetchRequest";
+import { checkChildName } from "../config/Utils";
 import global from "../config/global";
 import colors from "../config/colors";
 
@@ -16,12 +16,13 @@ export function SmallNaviButton({ navigation, page, text, email }) {
   );
 }
 
+
 export function AddChildButton({ name, setName, setRefresh }) {
   return (
     <Pressable
       style={global.SendButton}
       onPress={() => {
-        addChild(name, setRefresh), setName("");
+        checkChildName(name, setName, setRefresh);
       }}
     >
       <Text style={global.ButtonText}>Add Child</Text>

@@ -78,7 +78,7 @@ export function updateChild(jsonBody) {
     });
 }
 
-export function updateUser(jsonBody) {
+export function updateUser(jsonBody, setModalVisible) {
   fetch("https://localhost:8010/users/update", {
     method: "PUT",
     credentials: "include",
@@ -89,13 +89,18 @@ export function updateUser(jsonBody) {
     body: JSON.stringify(jsonBody),
   })
     .then((response) => {
-      if (response.ok) alert("The update was successful.");
-      else if (response.status == "406") alert("Invalid password");
-      else if (response.status == "401")
-        alert("Password and Optional password are not equal");
-      else if (response.status == "409")
+      if (response.ok) alert("The update was successful");
+      else if (response.status == "406") {
+        alert("Invalid new password");
+        setModalVisible(true);
+      } else if (response.status == "401") {
+        alert("Invalid old password");
+        setModalVisible(true);
+      } else if (response.status == "409") {
         alert("The password has been used before");
-      })
+        setModalVisible(true);
+      }
+    })
     .catch((error) => {
       console.log("error: " + error);
     });

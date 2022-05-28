@@ -11,6 +11,12 @@ const NewPassword = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const checkNewPasswordForm = () => {
+    if (password != "" && confirmPassword != "" && password == confirmPassword)
+      updateNewPassword(password, navigation);
+    else alert("All fields are required and password should be confirmed");
+  };
+
   const updateNewPassword = (password, navigation) => {
     fetch("https://localhost:8010/users/resetPassword", {
       method: "POST",
@@ -25,8 +31,7 @@ const NewPassword = ({ navigation }) => {
     })
       .then((response) => {
         if (response.ok) navigation.navigate("Login");
-        else if (response.status == "406")
-        alert("Invalid password");
+        else if (response.status == "406") alert("Invalid password");
       })
       .catch((error) => {
         console.log("error: " + error);
@@ -74,7 +79,7 @@ const NewPassword = ({ navigation }) => {
           </View>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => updateNewPassword(password, navigation)}
+            onPress={() => checkNewPasswordForm()}
           >
             <Text style={global.ButtonText}>Change Password</Text>
           </Pressable>

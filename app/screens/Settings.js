@@ -116,14 +116,18 @@ const Settings = ({ navigation }) => {
           oldPassword,
           newPassword
         );
-        if (type == "NAME" && jsonBody.name != ""){
-          setModalVisible(!modalVisible)
-          return updateUser(jsonBody);
-        } else if (type == "PASSWORD" && jsonBody.userId.password.optionalPassword != "" && jsonBody.userId.password.password != ""){
-          setModalVisible(!modalVisible)
-          return updateUser(jsonBody);
-        }
-        else alert("All fields are required");
+        if (type == "NAME" && jsonBody.name != "") {
+          setModalVisible(!modalVisible);
+          return updateUser(jsonBody, setModalVisible);
+        } else if (
+          type == "PASSWORD" &&
+          oldPassword != "" &&
+          newPassword != "" &&
+          newPassword == confirmPassword
+        ) {
+          return updateUser(jsonBody, setModalVisible);
+        } else
+          alert("All fields are required and password should be confirmed");
     }
   };
 

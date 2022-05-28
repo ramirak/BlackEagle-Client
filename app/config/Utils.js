@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { addChild } from "../components/FetchRequest";
 
 export function handleRefresh(setRefresh) {
   setRefresh(true);
@@ -28,6 +29,11 @@ export const storeData = async (value) => {
     await AsyncStorage.setItem("@email", value);
   } catch (e) { }
 };
+
+export function checkChildName(name, setName, setRefresh) {
+  if (name != "") return addChild(name, setName, setRefresh);
+  return alert("Name is required");
+}
 
 export function getJsonBodyByType(type, newName, oldPassword, newPassword) {
   let regName = null,

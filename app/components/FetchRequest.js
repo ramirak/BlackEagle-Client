@@ -1,5 +1,4 @@
 import fileDownload from "js-file-download";
-import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
 
 export function checkSession(navigation) {
   fetch("https://localhost:8010/users/sessionCheck", {
@@ -91,7 +90,7 @@ export function getAccount(setParentName) {
     });
 }
 
-export function addChild(childName, setRefresh) {
+export function addChild(childName, setName, setRefresh) {
   fetch("https://localhost:8010/device/add", {
     method: "POST",
     credentials: "include",
@@ -119,7 +118,7 @@ export function addChild(childName, setRefresh) {
       });
       fileDownload(deviceLoginDetails, "auth.json");
     })
-    .then(() => setRefresh(true))
+    .then(() => {setRefresh(true), setName("")})
     .catch((error) => {
       console.log(error);
     });

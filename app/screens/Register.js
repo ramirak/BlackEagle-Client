@@ -15,6 +15,18 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const checkRegisterForm = () => {
+    if (
+      email != "" &&
+      name != "" &&
+      password != "" &&
+      confirmPassword != "" &&
+      password == confirmPassword
+    )
+      registerNow(email, name, password, navigation);
+    else alert("All fields are required and password should be confirmed");
+  };
+
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
       <Text style={global.LoginAndRegisterHeaderText}>New User</Text>
@@ -86,7 +98,7 @@ const Register = ({ navigation }) => {
         <Pressable
           style={global.LoginAndRegisterButton}
           onPress={() => {
-              registerNow(email, name, password, navigation);
+            checkRegisterForm();
           }}
         >
           <Text style={global.ButtonText}>Register</Text>
@@ -100,13 +112,11 @@ const Register = ({ navigation }) => {
         <View style={{ textAlign: "left" }}>
           <Text style={styles.TextHeader}>{"\n"}You must enter:</Text>
           <Text>
-            1. Valid email address format.{"\n"}
-            2. Not empty name.{"\n"}
-            3. Password length of at least 10 characters.{"\n"}
-            4. Password with at least one uppercase.{"\n"}
-            5. Password with at least one lowercase.{"\n"}
-            6. Password with at least one number.{"\n"}
-            7. Password with at least one special character.
+            * Valid email address format.{"\n"}* Not empty name.{"\n"}* Password
+            length of at least 10 characters.{"\n"}* Password with at least one
+            uppercase.{"\n"}* Password with at least one lowercase.{"\n"}*
+            Password with at least one number.{"\n"}* Password with at least one
+            special character.
           </Text>
         </View>
       </View>
