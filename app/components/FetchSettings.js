@@ -68,9 +68,8 @@ export function updateChild(jsonBody) {
     body: JSON.stringify(jsonBody),
   })
     .then((response) => {
-      if (response.ok) {
-        alert("The update was successful.");
-      } else {
+      if (response.ok) alert("The update was successful.");
+      else {
         alert("The update failed.");
       }
     })
@@ -79,7 +78,7 @@ export function updateChild(jsonBody) {
     });
 }
 
-export function updateUser(jsonBody, type) {
+export function updateUser(jsonBody) {
   fetch("https://localhost:8010/users/update", {
     method: "PUT",
     credentials: "include",
@@ -90,14 +89,13 @@ export function updateUser(jsonBody, type) {
     body: JSON.stringify(jsonBody),
   })
     .then((response) => {
-      if (response.ok) {
-        alert("The update was successful.");
-      } else {
-        alert("The update failed.");
-      }
-      console.log(response.json);
-      return response.json(type);
-    })
+      if (response.ok) alert("The update was successful.");
+      else if (response.status == "406") alert("Invalid password");
+      else if (response.status == "401")
+        alert("Password and Optional password are not equal");
+      else if (response.status == "409")
+        alert("The password has been used before");
+      })
     .catch((error) => {
       console.log("error: " + error);
     });

@@ -3,23 +3,16 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { Ionicons } from "@expo/vector-icons";
-import { checkKey } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
 const KeyViaEmail = ({ navigation, route }) => {
   const [oneTimeKey, setOneTimeKey] = useState("");
-  const [passwordError, setPasswordError] = useState("");
   const { email } = route.params;
 
-  const checkKeyForm = () => {
-    if (checkKey(oneTimeKey, setPasswordError))
-      verifyKey(email, navigation);
-  };
-
   const verifyKey = (email, navigation) => {
-    console.log("@@@@@@ KeyViaEmail" + email + oneTimeKey)
+    //console.log("@@@@@@ KeyViaEmail" + email + oneTimeKey);
     fetch("https://localhost:8010/login", {
       method: "POST",
       credentials: "include",
@@ -34,6 +27,8 @@ const KeyViaEmail = ({ navigation, route }) => {
     })
       .then((response) => {
         if (response.ok) navigation.navigate("New Password");
+        else if (response.status == "403")
+          alert("Wrong password or password has expired");
       })
       .catch((error) => {
         console.log("error: " + error);
@@ -62,10 +57,9 @@ const KeyViaEmail = ({ navigation, route }) => {
               onChangeText={(oneTimeKey) => setOneTimeKey(oneTimeKey)}
             />
           </View>
-          <Text style={global.ErrorMsg}>{passwordError}</Text>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => checkKeyForm()}
+            onPress={() => verifyKey(email, navigation)}
           >
             <Text style={global.ButtonText}>Verify</Text>
           </Pressable>

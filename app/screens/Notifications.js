@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, FlatList } from "react-native-web";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import ParentMenu from "../components/ParentMenu";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -10,7 +10,6 @@ import sizes from "../config/sizes";
 
 const Notifications = ({ navigation }) => {
   const [Notification, setNotification] = useState([]);
-  //const [pageCurrent, setpageCurrent] = useState(1);
 
   useEffect(() => {
     fetch("https://localhost:8010/events/getAll?page=0", {
@@ -27,19 +26,8 @@ const Notifications = ({ navigation }) => {
       .catch((error) => {
         console.log("error: " + error);
       });
-  }, []); // <-- Makes pageCurrent a dependency
+  }, []);
 
-  /*
-  const handlePreviousPage = () => {
-    console.log("previous page clicked", pageCurrent);
-    setpageCurrent(pageCurrent - 1 < 1 ? 1 : pageCurrent - 1);
-  };
-
-  const handleNextPage = () => {
-    console.log("next page clicked", pageCurrent);
-    setpageCurrent(pageCurrent + 1);
-  };
-*/
   return (
     <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />

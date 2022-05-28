@@ -48,9 +48,11 @@ const Interface = ({ navigation }) => {
     setRefresh(false);
   }, [refresh, parentName]);
 
-  //const checkChildName = () => {
-  //    updateUser(getJsonBodyByType("NAME", newName, "", ""), "NAME");
-  //};
+  const updateChildRequest = () => {
+    let jsonBody = getJsonBodyByType("DEVICE_NAME", newName, deviceId, "");
+    if (jsonBody.name != "") return updateChild(jsonBody);
+    return alert("Name is required");
+  };
 
   const editName = () => {
     return (
@@ -155,9 +157,9 @@ const Interface = ({ navigation }) => {
                 <View style={global.BottomModalView}>
                   <Pressable
                     onPress={() => {
-                      updateChild(
-                        getJsonBodyByType("DEVICE_NAME", newName, deviceId, "")
-                      );
+                      updateChildRequest(),
+                        setEditModal(!editModal),
+                        setRefresh(true);
                     }}
                     style={global.CloseButton}
                   >

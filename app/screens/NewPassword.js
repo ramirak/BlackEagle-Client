@@ -3,7 +3,6 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { Ionicons } from "@expo/vector-icons";
-import { handleNewPassword } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -26,6 +25,8 @@ const NewPassword = ({ navigation }) => {
     })
       .then((response) => {
         if (response.ok) navigation.navigate("Login");
+        else if (response.status == "406")
+        alert("Invalid password");
       })
       .catch((error) => {
         console.log("error: " + error);
@@ -52,7 +53,6 @@ const NewPassword = ({ navigation }) => {
               placeholderTextColor="#003f5c"
               secureTextEntry={true}
               onChangeText={(password) => setPassword(password)}
-              onEndEditing={(e) => handleValidPassword(e.nativeEvent.Text)}
             />
           </View>
           <View>

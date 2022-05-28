@@ -110,10 +110,23 @@ const Settings = ({ navigation }) => {
       case "DELETE":
         return deleteUser(oldPassword, navigation);
       default:
-        let jsonBody = getJsonBodyByType(type, newName, oldPassword, newPassword);
-        return updateUser(jsonBody, type);
+        let jsonBody = getJsonBodyByType(
+          type,
+          newName,
+          oldPassword,
+          newPassword
+        );
+        if (type == "NAME" && jsonBody.name != ""){
+          setModalVisible(!modalVisible)
+          return updateUser(jsonBody);
+        } else if (type == "PASSWORD" && jsonBody.userId.password.optionalPassword != "" && jsonBody.userId.password.password != ""){
+          setModalVisible(!modalVisible)
+          return updateUser(jsonBody);
+        }
+        else alert("All fields are required");
     }
   };
+
   return (
     <SafeAreaView style={global.PageContainer}>
       <ParentMenu navigation={navigation} />
@@ -196,7 +209,9 @@ const Settings = ({ navigation }) => {
                 </View>
                 <View style={global.BottomModalView}>
                   <Pressable
-                    onPress={() => settingsRequests()}
+                    onPress={() => {
+                      settingsRequests();
+                    }}
                     style={global.CloseButton}
                   >
                     <Text style={global.ButtonText}>Send</Text>

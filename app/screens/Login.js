@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { checkSession, LoginNow } from "../components/FetchRequest";
-import { checkEmail, checkPassword } from "../components/Errors";
 import { SmallNaviButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -13,20 +12,10 @@ import sizes from "../config/sizes";
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     checkSession(navigation);
   }, []);
-
-  const checkLoginForm = () => {
-    if (
-      checkEmail(email, setEmailError) &&
-      checkPassword(password, setPasswordError)
-    )
-      LoginNow(email, password, navigation);
-  };
 
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
@@ -47,7 +36,6 @@ const Login = ({ navigation }) => {
             onChangeText={(email) => setEmail(email)}
           />
         </View>
-        <Text style={global.ErrorMsg}>{emailError}</Text>
         <View>
           <Ionicons
             style={global.Icon}
@@ -64,11 +52,10 @@ const Login = ({ navigation }) => {
             onChangeText={(password) => setPassword(password)}
           />
         </View>
-        <Text style={global.ErrorMsg}>{passwordError}</Text>
         <Pressable
           style={global.LoginAndRegisterButton}
           onPress={() => {
-            checkLoginForm();
+            LoginNow(email, password, navigation);
           }}
         >
           <Text style={global.ButtonText}>Login</Text>

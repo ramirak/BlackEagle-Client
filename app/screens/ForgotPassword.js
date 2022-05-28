@@ -3,18 +3,12 @@ import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, TextInput, Text } from "react-native-web";
 import { MaterialIcons } from "@expo/vector-icons";
-import { checkEmail } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
 
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-
-  const checkForgotForm = () => {
-    if (checkEmail(email, setEmailError)) resetPassword(email, navigation);
-  };
 
   const resetPassword = (email, navigation) => {
     fetch("https://localhost:8010/users/sendOTK/" + email, {
@@ -22,9 +16,9 @@ const ForgotPassword = ({ navigation }) => {
       credentials: "include",
     })
       .then((response) => {
-        if (response.ok)
-          navigation.navigate("Key Via Email", { email: email });
-        else checkEmail(email, setEmailError);
+        if (response.ok) navigation.navigate("Key Via Email", { email: email });
+        else if (response.status == "406")
+        alert("Invalid email format");
       })
       .catch((error) => {
         console.log("error: " + error);
@@ -52,10 +46,9 @@ const ForgotPassword = ({ navigation }) => {
               onChangeText={(email) => setEmail(email)}
             />
           </View>
-          <Text style={global.ErrorMsg}>{emailError}</Text>
           <Pressable
             style={global.LoginAndRegisterButton}
-            onPress={() => checkForgotForm()}
+            onPress={() => resetPassword(email, navigation)}
           >
             <Text style={global.ButtonText}>Password Reset</Text>
           </Pressable>

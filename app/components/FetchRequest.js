@@ -1,4 +1,5 @@
 import fileDownload from "js-file-download";
+import { isSearchBarAvailableForCurrentPlatform } from "react-native-screens";
 
 export function checkSession(navigation) {
   fetch("https://localhost:8010/users/sessionCheck", {
@@ -15,7 +16,12 @@ export function checkSession(navigation) {
     });
 }
 
-export function registerNow(email, name, password, navigation) {
+export function registerNow(
+  email,
+  name,
+  password,
+  navigation
+) {
   fetch("https://localhost:8010/users/register", {
     method: "POST",
     credentials: "include",
@@ -35,8 +41,10 @@ export function registerNow(email, name, password, navigation) {
     }),
   })
     .then((response) => {
-      if (response.ok) navigation.navigate("Login");
-      else throw new Error(response.status);
+      if (response.status == "409") alert("The email is already in use");
+      else if (response.status == "406")
+        alert("Invalid email format or password");
+      else if (response.ok) navigation.navigate("Login");
     })
     .catch((error) => {
       console.log(error);
@@ -58,7 +66,8 @@ export function LoginNow(email, password, navigation) {
   })
     .then((response) => {
       if (response.ok) navigation.navigate("Second Login", { email: email });
-      else throw new Error(response.status);
+      else if (response.status == "403")
+        alert("Invalid email format or password");
     })
     .catch((error) => {
       console.log(error);
@@ -97,7 +106,6 @@ export function addChild(childName, setRefresh) {
     .then((response) => {
       if (response.status == "507")
         alert("You can only create up to 5 devices");
-      else if (response.status == "400") alert("Name is required");
       else
         alert(
           "Your device authentication details is being downloaded.\nPlease keep it in a secure loaction!"

